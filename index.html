@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>上海越剧演出售票日报 — 2026年7月2日</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');
@@ -471,7 +472,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 18px 20px 44px 20px;
+    padding: 18px 20px;
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 16px;
@@ -550,7 +551,7 @@
     min-width: 110px;
   }
   .perf-price {
-    position: absolute; bottom: 16px; right: 20px;
+    margin-top: 4px;
     text-align: right;
     font-size: 14px; font-weight: 700;
     color: var(--gold-light);
@@ -629,14 +630,14 @@
     .perf-card {
       grid-template-columns: 1fr;
       gap: 12px;
-      padding-bottom: 64px;
+      padding-bottom: 18px;
     }
     .perf-side {
       flex-direction: row; flex-wrap: wrap;
       align-items: center; justify-content: flex-start;
     }
     .perf-price {
-      bottom: 16px; right: auto; left: 20px;
+      margin-top: 6px;
       text-align: left;
     }
     .perf-title { font-size: 16px; }
@@ -685,752 +686,699 @@
 </style>
 </head>
 <body>
-
 <header class="header">
-  <div class="header-icon">🎭</div>
-  <h1>上海越剧演出售票日报</h1>
-  <p class="subtitle">每日监控 · 大麦网 + 东方演出网 + 剧院官方 + 全国巡演</p>
-  <span class="date-badge">📅 2026年7月2日 星期四</span>
+<div class="header-icon">🎭</div>
+<h1>上海越剧演出售票日报</h1>
+<p class="subtitle">每日监控 · 大麦网 + 东方演出网 + 剧院官方 + 全国巡演</p>
+<span class="date-badge">📅 2026年7月2日 星期四</span>
 </header>
-
 <div class="container">
-
-  <!-- ===== 🎟️ 我的演出提醒 ===== -->
-  <div id="my-shows-banner" class="empty-state">
-    <div class="banner-header">
+<!-- ===== 🎟️ 我的演出提醒 ===== -->
+<div class="empty-state" id="my-shows-banner">
+<div class="banner-header">
       🎟️ 我的演出提醒
       <span id="my-shows-count" style="font-size:12px;color:var(--text-dim);margin-left:4px;"></span>
+</div>
+<div class="banner-body" id="my-shows-list"></div>
+</div>
+<!-- ===== 日历组件 ===== -->
+<div id="calendar-section">
+<div class="cal-header">
+<span class="cal-title" id="cal-month-label">2026年7月</span>
+<div class="cal-nav-btns">
+<button class="cal-nav-btn" id="cal-prev" title="上个月">‹</button>
+<button class="cal-nav-btn" id="cal-next" title="下个月">›</button>
+</div>
+</div>
+<div class="cal-filter-note" id="cal-filter-note">
+<span id="cal-filter-text">已筛选</span>
+<button class="cal-clear-btn" id="cal-clear-btn">清除筛选 ✕</button>
+</div>
+<div class="cal-weekdays">
+<span>日</span><span>一</span><span>二</span><span>三</span>
+<span>四</span><span>五</span><span>六</span>
+</div>
+<div class="cal-group-legend">
+<span class="legend-dot"><span class="mini-dot one">一</span> 一团</span>
+<span class="legend-dot"><span class="mini-dot two">二</span> 红楼团</span>
+<span class="legend-dot"><span class="mini-dot three">三</span> 青年团</span>
+</div>
+<div class="cal-grid" id="cal-grid"></div>
+</div>
+<!-- Tooltip -->
+<div class="cal-tooltip" id="cal-tooltip"></div>
+<!-- ===== STATS ===== -->
+<div class="stats-bar">
+<div class="stat">
+<div class="stat-num">29</div>
+<div class="stat-label">近期演出场次</div>
+</div>
+<div class="stat">
+<div class="stat-num">4</div>
+<div class="stat-label">⭐ 陆志艳场次</div>
+</div>
+<div class="stat">
+<div class="stat-num" id="stat-bought">0</div>
+<div class="stat-label">🎟️ 已购场次</div>
+</div>
+<div class="stat">
+<div class="stat-num">6</div>
+<div class="stat-label">涉及城市</div>
+</div>
+</div>
+<!-- ===== 🔥 紧急提醒 ===== -->
+<div class="alert alert-urgent">
+<div class="alert-header">
+<span class="alert-icon">🔥</span> 近期高优提醒
     </div>
-    <div class="banner-body" id="my-shows-list"></div>
-  </div>
-
-  <!-- ===== 日历组件 ===== -->
-  <div id="calendar-section">
-    <div class="cal-header">
-      <span class="cal-title" id="cal-month-label">2026年7月</span>
-      <div class="cal-nav-btns">
-        <button class="cal-nav-btn" id="cal-prev" title="上个月">‹</button>
-        <button class="cal-nav-btn" id="cal-next" title="下个月">›</button>
-      </div>
-    </div>
-    <div class="cal-filter-note" id="cal-filter-note">
-      <span id="cal-filter-text">已筛选</span>
-      <button class="cal-clear-btn" id="cal-clear-btn">清除筛选 ✕</button>
-    </div>
-    <div class="cal-weekdays">
-      <span>日</span><span>一</span><span>二</span><span>三</span>
-      <span>四</span><span>五</span><span>六</span>
-    </div>
-    <div class="cal-group-legend">
-      <span class="legend-dot"><span class="mini-dot one">一</span> 一团</span>
-      <span class="legend-dot"><span class="mini-dot two">二</span> 红楼团</span>
-      <span class="legend-dot"><span class="mini-dot three">三</span> 青年团</span>
-    </div>
-    <div class="cal-grid" id="cal-grid"></div>
-  </div>
-
-  <!-- Tooltip -->
-  <div class="cal-tooltip" id="cal-tooltip"></div>
-
-  <!-- ===== STATS ===== -->
-  <div class="stats-bar">
-    <div class="stat">
-      <div class="stat-num">29</div>
-      <div class="stat-label">近期演出场次</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">4</div>
-      <div class="stat-label">⭐ 陆志艳场次</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" id="stat-bought">0</div>
-      <div class="stat-label">🎟️ 已购场次</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">6</div>
-      <div class="stat-label">涉及城市</div>
-    </div>
-  </div>
-
-  <!-- ===== 🔥 紧急提醒 ===== -->
-  <div class="alert alert-urgent">
-    <div class="alert-header">
-      <span class="alert-icon">🔥</span> 近期高优提醒
-    </div>
-    <div class="alert-body">
-      · <strong>⭐ 陆志艳近期演出：</strong>7月9日广州红线女《红楼梦》（饰林黛玉）→ 7月25日临港《虞美人》（饰无邪）→ 8月8日北大《舞台姐妹》（饰竺春花）→ 9月12日杭州蝴蝶剧场《舞台姐妹》（饰竺春花）。<br>
-      · 宛平剧院《红楼梦》《梁山伯与祝英台》（7/13-14）已全面开票，可选座。<br>
+<div class="alert-body">
+      · <strong>⭐ 陆志艳近期演出：</strong>7月9日广州红线女《红楼梦》（饰林黛玉）→ 7月25日临港《虞美人》（饰无邪）→ 8月8日北大《舞台姐妹》（饰竺春花）→ 9月12日杭州蝴蝶剧场《舞台姐妹》（饰竺春花）。<br/>
+      · 宛平剧院《红楼梦》《梁山伯与祝英台》（7/13-14）已全面开票，可选座。<br/>
       · 上海天蟾逸夫《红楼梦》《梁祝》（7/28-29）早鸟优惠已截止，恢复原价 ¥80-380。
     </div>
-  </div>
-
-  <!-- ===== 🆕 今日新动态 ===== -->
-  <div class="alert alert-new">
-    <div class="alert-header">
-      <span class="alert-icon">🆕</span> 今日新动态
+</div>
+<!-- ===== 🆕 今日新动态 ===== -->
+<div class="alert alert-new">
+<div class="alert-header">
+<span class="alert-icon">🆕</span> 今日新动态
     </div>
-    <div class="alert-body">
-      · <strong>监控范围扩大！</strong>新增临港演艺中心、太仓大剧院、杭州蝴蝶剧场，并全面覆盖上海越剧院在全国各地的所有演出。<br>
-      · <strong>上海越剧院2026“京津冀”巡演</strong>12场已全部开票：8/8-9/6，覆盖北京、天津、廊坊三城及国家大剧院。<br>
-      · <strong>新发现陆志艳场次：</strong>7月9日广州红线女大剧院《红楼梦》（饰林黛玉）、7月25日临港演艺中心《虞美人》（饰 无邪）。<br>
+<div class="alert-body">
+      · <strong>监控范围扩大！</strong>新增临港演艺中心、太仓大剧院、杭州蝴蝶剧场，并全面覆盖上海越剧院在全国各地的所有演出。<br/>
+      · <strong>上海越剧院2026“京津冀”巡演</strong>12场已全部开票：8/8-9/6，覆盖北京、天津、廊坊三城及国家大剧院。<br/>
+      · <strong>新发现陆志艳场次：</strong>7月9日广州红线女大剧院《红楼梦》（饰林黛玉）、7月25日临港演艺中心《虞美人》（饰 无邪）。<br/>
       · 浙江小百花青春越剧《九斤姑娘》7/18-19将在杭州蝴蝶剧场首演，李云霄领衔。
     </div>
-  </div>
-
-  <!-- ===== ⭐ 陆志艳特别关注区 ===== -->
-  <div class="star-section">
-    <div class="star-badge">⭐ 特别关注 · 陆志艳（上海越剧院王派花旦，师承单仰萍）— 共4场</div>
-
-    <div class="perf-card star" data-id="lzy-01" data-date="2026-07-09" data-title="越剧《红楼梦》" data-venue="广州红线女大剧院" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》 <em>徐王版 · 2026广州艺术季</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月9日（周四）19:30</span>
-          <span><span class="meta-icon">📍</span>广州红线女大剧院</span>
-          <span><span class="meta-icon">🏙️</span>广州</span>
+</div>
+<!-- ===== ⭐ 陆志艳特别关注区 ===== -->
+<div class="star-section">
+<div class="star-badge">⭐ 特别关注 · 陆志艳（上海越剧院王派花旦，师承单仰萍）— 共4场</div>
+<div class="perf-card star" data-date="2026-07-09" data-id="lzy-01" data-time="19:30" data-title="越剧《红楼梦》" data-venue="广州红线女大剧院">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》 <em>徐王版 · 2026广州艺术季</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月9日（周四）19:30</span>
+<span><span class="meta-icon">📍</span>广州红线女大剧院</span>
+<span><span class="meta-icon">🏙️</span>广州</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>俞果（贾宝玉）、<strong style="color:#ffd700;">陆志艳</strong>（林黛玉）<br/>
+<strong>演出单位：</strong>上海越剧院三团 · 广州艺术季重点展演
         </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>俞果（贾宝玉）、<strong style="color:#ffd700;">陆志艳</strong>（林黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 广州艺术季重点展演
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">🎭 7折中</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 480<br><small>套票 ¥499(380×2) / ¥669(480×2)</small></div>
-    </div>
-
-
-    <div class="perf-card star" data-id="lzy-02" data-date="2026-07-25" data-title="新编历史故事剧《虞美人》" data-venue="上海临港演艺中心" data-time="14:30" style="margin-top:12px;">
-      <div class="perf-info">
-        <div class="perf-title">新编历史故事剧《虞美人》 <em>经典复排 · 王派传承</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月25日（周六）14:30</span>
-          <span><span class="meta-icon">📍</span>上海临港演艺中心</span>
-          <span><span class="meta-icon">🏙️</span>上海 · 临港</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>忻雅琴（虞姬）、王柔桑（项羽）、吴群（张良）、吴佳燕（范增）、<strong style="color:#ffd700;">陆志艳</strong>（无邪）<br>
-          <strong>演出单位：</strong>上海越剧院 · 纪念越剧诞生120周年 · 复排剧目
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">🆕 新发现</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 380</div>
-    </div>
-
-    <div class="perf-card star" data-id="lzy-03" data-date="2026-08-08" data-title="越剧《舞台姐妹》" data-venue="北京大学百周年纪念讲堂" data-time="19:00" style="margin-top:12px;">
-      <div class="perf-info">
-        <div class="perf-title">越剧《舞台姐妹》 <em>纪念越剧诞生120周年 · 师生传承版</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月8日（周六）19:00</span>
-          <span><span class="meta-icon">📍</span>北京大学百周年纪念讲堂</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>竺春花：单仰萍、<strong style="color:#ffd700;">陆志艳</strong> | 邢月红：俞果<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 时长约170分钟（含中场休息15分钟）
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">校内 ¥40 — 240<br><small>校外 ¥80 — 380</small></div>
-    </div>
-
-    <div class="perf-card star" data-id="lzy-04" data-date="2026-09-12" data-title="越剧《舞台姐妹》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30" style="margin-top:12px;">
-      <div class="perf-info">
-        <div class="perf-title">越剧《舞台姐妹》 <em>百越文创第五届越剧优秀剧目邀请展 · 全本传承版</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>9月12日（周六）19:30</span>
-          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
-          <span><span class="meta-icon">🏙️</span>杭州</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>俞果（邢月红）、<strong style="color:#ffd700;">陆志艳</strong>（竺春花）<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 百越文创第五届越剧优秀剧目邀请展 · 时长约150分钟
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-star">⭐ 陆志艳</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥180 — 380<br><small>包厢另询</small></div>
-    </div>
-
-  </div>
-
-  <!-- ===== 📋 近期演出 ===== -->
-  <h2 class="section-title"><span class="section-icon">📋</span> 近期演出一览</h2>
-
-  <div class="date-divider">7 月</div>
-  <div class="perf-grid">
-
-    <div class="perf-card" data-id="p01" data-date="2026-07-01" data-title="越剧小戏三出" data-venue="上海宛平剧院-小剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧小戏《渔光曲》《自古英雄出少年》《新生》</div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月1日（周三）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院-小剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>冯军/王婉娜/姚磊、赵一兰/姚磊/张艾嘉、李旭丹/裘隆/冯军等<br>
-          <strong>演出单位：</strong>上海越剧院
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-past">已开演</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥100 — 200</div>
-    </div>
-
-
-    <div class="perf-card" data-id="p03" data-date="2026-07-10" data-title="越剧《梁山伯与祝英台》" data-venue="广州红线女大剧院" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《梁山伯与祝英台》 <em>范傅版 · 2026广州艺术季</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月10日（周五）19:30</span>
-          <span><span class="meta-icon">📍</span>广州红线女大剧院</span>
-          <span><span class="meta-icon">🏙️</span>广州</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 广州艺术季
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 480<br><small>套票 ¥499 / ¥669</small></div>
-    </div>
-
-
-    <div class="perf-card" data-id="p05" data-date="2026-07-13" data-title="越剧《红楼梦》" data-venue="上海宛平剧院·大剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》</div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月13日（周一）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·大剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王婉娜（贾宝玉）、李旭丹（林黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中可选座</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 380</div>
-    </div>
-
-    <div class="perf-card" data-id="p06" data-date="2026-07-14" data-title="越剧《梁山伯与祝英台》" data-venue="上海宛平剧院·大剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《梁山伯与祝英台》</div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月14日（周二）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·大剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王舒雯（梁山伯）、王婕（祝英台）、吴群（祝公远）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中可选座</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 380</div>
-    </div>
-
-    <div class="perf-card" data-id="p07" data-date="2026-07-18" data-title="青春越剧《九斤姑娘》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">青春越剧《九斤姑娘》 <em>首演 · 浙江小百花越剧院</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月18日（周六）19:30</span>
-          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
-          <span><span class="meta-icon">🏙️</span>杭州</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>李云霄领衔主演<br>
-          <strong>演出单位：</strong>浙江小百花越剧院 · 7月3日18:00开票
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">🆕 新发现</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">以浙里票务为准</div>
-    </div>
-
-    <div class="perf-card" data-id="p08" data-date="2026-07-19" data-title="青春越剧《九斤姑娘》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">青春越剧《九斤姑娘》 <em>首演 · 浙江小百花越剧院</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月19日（周日）19:30</span>
-          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
-          <span><span class="meta-icon">🏙️</span>杭州</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>李云霄领衔主演<br>
-          <strong>演出单位：</strong>浙江小百花越剧院
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">以浙里票务为准</div>
-    </div>
-
-    <div class="perf-card" data-id="p09" data-date="2026-07-22" data-title="小剧场越剧《张骞使西·三别三行》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">小剧场越剧《张骞使西·三别三行》 <em>丝路史诗</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月22日（周三）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>徐标新（张骞）、徐晓飞（匈奴女）、裘隆（汉武帝）、姚磊、顾爱军<br>
-          <strong>演出单位：</strong>上海越剧院一团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">新开票</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 / 180 / 280</div>
-    </div>
-
-    <div class="perf-card" data-id="p10" data-date="2026-07-23" data-title="小剧场越剧《张骞使西·三别三行》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">小剧场越剧《张骞使西·三别三行》 <em>丝路史诗</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月23日（周四）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>徐标新（张骞）、徐晓飞（匈奴女）、裘隆（汉武帝）<br>
-          <strong>演出单位：</strong>上海越剧院一团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">新开票</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 / 180 / 280</div>
-    </div>
-
-    <div class="perf-card" data-id="p11" data-date="2026-07-28" data-title="越剧《红楼梦》" data-venue="上海天蟾逸夫舞台" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》 <em>尹袁版 · 蟾桂常青系列</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月28日（周二）19:15</span>
-          <span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>郭茜云（贾宝玉）、俞景岚（林黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院一团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 380<br><small>早鸟已截止</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p12" data-date="2026-07-29" data-title="越剧《梁山伯与祝英台》" data-venue="上海天蟾逸夫舞台" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《梁山伯与祝英台》 <em>袁范版 · 蟾桂常青系列</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月29日（周三）19:15</span>
-          <span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>斯钰林（梁山伯）、徐晓飞（祝英台）、金烨（祝公远）<br>
-          <strong>演出单位：</strong>上海越剧院一团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 380<br><small>早鸟已截止</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p13" data-date="2026-07-31" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月31日（周五）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王柔桑（嵇康）、吴佳燕（广陵仙子）、陈慧迪（长乐亭主）、潘锡丹、孙嘉蔚<br>
-          <strong>演出单位：</strong>上海越剧院
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">新开票</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 / 180 / 280</div>
-    </div>
-
-  </div>
-
-  <!-- ---- 8月 ---- -->
-  <div class="date-divider">8 月</div>
-  <div class="perf-grid">
-
-    <div class="perf-card" data-id="p14" data-date="2026-08-01" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月1日（周六）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王柔桑（嵇康）、吴佳燕（广陵仙子）、陈慧迪（长乐亭主）<br>
-          <strong>演出单位：</strong>上海越剧院
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">新开票</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 / 180 / 280</div>
-    </div>
-
-    <div class="perf-card" data-id="p15" data-date="2026-08-03" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">小剧场越剧《再生·缘》 <em>沉浸式 · 全场无座</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月3日（周一）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·戏·聚空间</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>忻雅琴（孟丽君）、王清（皇帝）、王柔桑（皇甫少华）<br>
-          <strong>演出单位：</strong>上海越剧院
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">新开票</span>
-        <span class="tag tag-status">沉浸式</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥180<br><small>单一票价</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p16" data-date="2026-08-04" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">小剧场越剧《再生·缘》 <em>沉浸式</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月4日（周二）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院·戏·聚空间</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>忻雅琴（孟丽君）、王清（皇帝）、王柔桑（皇甫少华）<br>
-          <strong>演出单位：</strong>上海越剧院
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <span class="tag tag-status">沉浸式</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥180<br><small>单一票价</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p17" data-date="2026-08-09" data-title="越剧《孟丽君》" data-venue="北京大学百周年纪念讲堂" data-time="19:00">
-      <div class="perf-info">
-        <div class="perf-title">越剧《孟丽君》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月9日（周日）19:00</span>
-          <span><span class="meta-icon">📍</span>北京大学百周年纪念讲堂</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>单仰萍/忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团 · 时长150分钟
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">校内 ¥40-240<br><small>校外 ¥80-380</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p18" data-date="2026-08-11" data-title="越剧《西厢记》" data-venue="北京吉祥大戏院" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《西厢记》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月11日（周二）19:30</span>
-          <span><span class="meta-icon">📍</span>北京吉祥大戏院</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>陈慧迪（崔莺莺）、王婉娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">以戏院公布为准</div>
-    </div>
-
-    <div class="perf-card" data-id="p19" data-date="2026-08-12" data-title="越剧《孔雀东南飞》" data-venue="北京吉祥大戏院" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《孔雀东南飞》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月12日（周三）19:30</span>
-          <span><span class="meta-icon">📍</span>北京吉祥大戏院</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王柔桑（焦仲卿）、盛舒扬（刘兰芝）、吴佳燕（焦母）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">以戏院公布为准</div>
-    </div>
-
-    <div class="perf-card" data-id="p20" data-date="2026-08-15" data-title="越剧《红楼梦》" data-venue="天津中国大戏院" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月15日（周六）19:15</span>
-          <span><span class="meta-icon">📍</span>天津中国大戏院</span>
-          <span><span class="meta-icon">🏙️</span>天津</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>杨婷娜（贾宝玉）、单仰萍/忻雅琴（林黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团（全女班）
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥50 — 580<br><small>文惠价</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p21" data-date="2026-08-16" data-title="越剧《西厢记》" data-venue="天津中国大戏院" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《西厢记》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月16日（周日）19:15</span>
-          <span><span class="meta-icon">📍</span>天津中国大戏院</span>
-          <span><span class="meta-icon">🏙️</span>天津</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>陈慧迪（崔莺莺）、杨婷娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥50 — 580<br><small>文惠价</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p22" data-date="2026-08-18" data-title="越剧《孔雀东南飞》" data-venue="河北廊坊壹佰剧院" data-time="19:00">
-      <div class="perf-info">
-        <div class="perf-title">越剧《孔雀东南飞》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月18日（周二）19:00</span>
-          <span><span class="meta-icon">📍</span>河北廊坊壹佰剧院</span>
-          <span><span class="meta-icon">🏙️</span>廊坊</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王舒雯（焦仲卿）、王婕（刘兰芝）、吴佳燕（焦母）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">以场馆公布为准</div>
-    </div>
-
-    <div class="perf-card" data-id="p23" data-date="2026-08-19" data-title="越剧《孟丽君》" data-venue="河北廊坊壹佰剧院" data-time="19:00">
-      <div class="perf-info">
-        <div class="perf-title">越剧《孟丽君》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月19日（周三）19:00</span>
-          <span><span class="meta-icon">📍</span>河北廊坊壹佰剧院</span>
-          <span><span class="meta-icon">🏙️</span>廊坊</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">以场馆公布为准</div>
-    </div>
-
-    <div class="perf-card" data-id="p24" data-date="2026-08-22" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《甄嬛》（上本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月22日（周六）19:30</span>
-          <span><span class="meta-icon">📍</span>北京国家大剧院·戏剧场</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、史燕彬（沈眉庄）、王柔桑（温实初）、裘丹莉（华贵妃）、陈慧迪（安陵容）、王婕（槿汐）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团 · 上下本需分别购票
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-status">分场购票</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥100 — 580<br><small>以国家大剧院官网为准</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p25" data-date="2026-08-23" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《甄嬛》（下本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月23日（周日）19:30</span>
-          <span><span class="meta-icon">📍</span>北京国家大剧院·戏剧场</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、裘丹莉（华贵妃）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团 · 上下本需分别购票
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-status">分场购票</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥100 — 580<br><small>以国家大剧院官网为准</small></div>
-    </div>
-
-  </div>
-
-  <!-- ---- 9月 ---- -->
-  <div class="date-divider">9 月</div>
-  <div class="perf-grid">
-
-    <div class="perf-card" data-id="p26" data-date="2026-09-05" data-title="大型神话越剧《追鱼》" data-venue="北京艺术中心·戏剧场" data-time="14:30">
-      <div class="perf-info">
-        <div class="perf-title">大型神话越剧《追鱼》 <em>京津冀巡演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>9月5日（周六）14:30</span>
-          <span><span class="meta-icon">📍</span>北京艺术中心·戏剧场</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>杨婷娜（张珍）、忻雅琴（鲤鱼精）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团 · 纪念王文娟诞辰100周年复排剧目
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">扫码购票</div>
-    </div>
-
-    <div class="perf-card" data-id="p27" data-date="2026-09-06" data-title="越剧《红楼梦》" data-venue="北京艺术中心·戏剧场" data-time="14:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》 <em>京津冀巡演 · 收官场</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>9月6日（周日）14:30</span>
-          <span><span class="meta-icon">📍</span>北京艺术中心·戏剧场</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>王婉娜（贾宝玉）、李旭丹（林黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">扫码购票</div>
-    </div>
-
-  </div>
-
-  <!-- ===== 📌 备注 ===== -->
-  <h2 class="section-title"><span class="section-icon">📌</span> 备注信息</h2>
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;font-size:14px;color:var(--text-muted);line-height:2;">
-    · 上海越剧院2026年共有<strong style="color:var(--gold-light)">百余场</strong>演出计划，全年聚焦经典传承、宗师纪念（王文娟诞辰100周年）、流派弘扬三大方向。<br>
-    · 新编越剧《华山奇缘》拟于盛夏首演（具体排期待定），将以《沉香太子全传》为基础改编。<br>
-    · 2026年末上海越剧院新址将正式启用，届时举办开幕系列演出。<br>
-    · 上海越剧院第十代青年演员（东方卫视《越动青春》选手）将推出专场演唱会（时间待定）。<br>
-    · 天蟾逸夫舞台购票：大麦网 / 天蟾小程序<br>
-    · 宛平剧院购票：大麦网 / 宛平剧院官网<br>
-    · 海上梨园购票：大麦网 / 豫园海上梨园官方<br>
-    · 临港演艺中心购票：大麦网 / 东方演出网<br>
-    · 杭州蝴蝶剧场购票：浙里票务 / 大麦网<br>
-    · 京津冀巡演：各场馆官方渠道购票（北大讲堂售票处/吉祥官网/天津文惠卡/国家大剧院等）。<br>
-    · <strong style="color:var(--gold-light)">🎟️ 已购标记</strong>保存在浏览器本地，重新打开页面会自动恢复。
-  </div>
-
-  <!-- ===== FOOTER ===== -->
-  <div class="footer">
-    <div class="sources">
-      <span>📌 上海越剧院 shyjy1955.com</span>
-      <span>🎟️ 大麦网 damai.cn</span>
-      <span>📊 东方演出网 df962388.com</span>
-      <span>🏛️ 宛平剧院</span>
-      <span>🎭 天蟾逸夫舞台</span>
-      <span>🦋 杭州蝴蝶剧场</span>
-      <span>🏗️ 临港演艺中心</span>
-      <span>🦋 杭州蝴蝶剧场</span>
-      <span>🏟️ 国家大剧院</span>
-      <span>🎓 北京大学</span>
-    </div>
-    <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-    <p style="margin-top:6px;">数据截至 2026-07-02 09:00 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
-  </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">🎭 7折中</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 480<br/><small>套票 ¥499(380×2) / ¥669(480×2)</small></div></div>
 
 </div>
+<div class="perf-card star" data-date="2026-07-25" data-id="lzy-02" data-time="14:30" data-title="新编历史故事剧《虞美人》" data-venue="上海临港演艺中心" style="margin-top:12px;">
+<div class="perf-info">
+<div class="perf-title">新编历史故事剧《虞美人》 <em>经典复排 · 王派传承</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月25日（周六）14:30</span>
+<span><span class="meta-icon">📍</span>上海临港演艺中心</span>
+<span><span class="meta-icon">🏙️</span>上海 · 临港</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>忻雅琴（虞姬）、王柔桑（项羽）、吴群（张良）、吴佳燕（范增）、<strong style="color:#ffd700;">陆志艳</strong>（无邪）<br/>
+<strong>演出单位：</strong>上海越剧院 · 纪念越剧诞生120周年 · 复排剧目
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">🆕 新发现</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 380</div></div>
 
+</div>
+<div class="perf-card star" data-date="2026-08-08" data-id="lzy-03" data-time="19:00" data-title="越剧《舞台姐妹》" data-venue="北京大学百周年纪念讲堂" style="margin-top:12px;">
+<div class="perf-info">
+<div class="perf-title">越剧《舞台姐妹》 <em>纪念越剧诞生120周年 · 师生传承版</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月8日（周六）19:00</span>
+<span><span class="meta-icon">📍</span>北京大学百周年纪念讲堂</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>竺春花：单仰萍、<strong style="color:#ffd700;">陆志艳</strong> | 邢月红：俞果<br/>
+<strong>演出单位：</strong>上海越剧院三团 · 时长约170分钟（含中场休息15分钟）
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">校内 ¥40 — 240<br/><small>校外 ¥80 — 380</small></div></div>
+
+</div>
+<div class="perf-card star" data-date="2026-09-12" data-id="lzy-04" data-time="19:30" data-title="越剧《舞台姐妹》" data-venue="杭州蝴蝶剧场（小百花越剧场）" style="margin-top:12px;">
+<div class="perf-info">
+<div class="perf-title">越剧《舞台姐妹》 <em>百越文创第五届越剧优秀剧目邀请展 · 全本传承版</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>9月12日（周六）19:30</span>
+<span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
+<span><span class="meta-icon">🏙️</span>杭州</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>俞果（邢月红）、<strong style="color:#ffd700;">陆志艳</strong>（竺春花）<br/>
+<strong>演出单位：</strong>上海越剧院三团 · 百越文创第五届越剧优秀剧目邀请展 · 时长约150分钟
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-star">⭐ 陆志艳</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥180 — 380<br/><small>包厢另询</small></div></div>
+
+</div>
+</div>
+<!-- ===== 📋 近期演出 ===== -->
+<h2 class="section-title"><span class="section-icon">📋</span> 近期演出一览</h2>
+<div class="date-divider">7 月</div>
+<div class="perf-grid">
+<div class="perf-card" data-date="2026-07-01" data-id="p01" data-time="19:15" data-title="越剧小戏三出" data-venue="上海宛平剧院-小剧场">
+<div class="perf-info">
+<div class="perf-title">越剧小戏《渔光曲》《自古英雄出少年》《新生》</div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月1日（周三）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院-小剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>冯军/王婉娜/姚磊、赵一兰/姚磊/张艾嘉、李旭丹/裘隆/冯军等<br/>
+<strong>演出单位：</strong>上海越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-past">已开演</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥100 — 200</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-10" data-id="p03" data-time="19:30" data-title="越剧《梁山伯与祝英台》" data-venue="广州红线女大剧院">
+<div class="perf-info">
+<div class="perf-title">越剧《梁山伯与祝英台》 <em>范傅版 · 2026广州艺术季</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月10日（周五）19:30</span>
+<span><span class="meta-icon">📍</span>广州红线女大剧院</span>
+<span><span class="meta-icon">🏙️</span>广州</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）<br/>
+<strong>演出单位：</strong>上海越剧院三团 · 广州艺术季
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 480<br/><small>套票 ¥499 / ¥669</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-13" data-id="p05" data-time="19:15" data-title="越剧《红楼梦》" data-venue="上海宛平剧院·大剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》</div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月13日（周一）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·大剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王婉娜（贾宝玉）、李旭丹（林黛玉）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中可选座</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 380</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-14" data-id="p06" data-time="19:15" data-title="越剧《梁山伯与祝英台》" data-venue="上海宛平剧院·大剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《梁山伯与祝英台》</div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月14日（周二）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·大剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王舒雯（梁山伯）、王婕（祝英台）、吴群（祝公远）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中可选座</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 380</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-18" data-id="p07" data-time="19:30" data-title="青春越剧《九斤姑娘》" data-venue="杭州蝴蝶剧场（小百花越剧场）">
+<div class="perf-info">
+<div class="perf-title">青春越剧《九斤姑娘》 <em>首演 · 浙江小百花越剧院</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月18日（周六）19:30</span>
+<span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
+<span><span class="meta-icon">🏙️</span>杭州</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>李云霄领衔主演<br/>
+<strong>演出单位：</strong>浙江小百花越剧院 · 7月3日18:00开票
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">🆕 新发现</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">以浙里票务为准</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-19" data-id="p08" data-time="19:30" data-title="青春越剧《九斤姑娘》" data-venue="杭州蝴蝶剧场（小百花越剧场）">
+<div class="perf-info">
+<div class="perf-title">青春越剧《九斤姑娘》 <em>首演 · 浙江小百花越剧院</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月19日（周日）19:30</span>
+<span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
+<span><span class="meta-icon">🏙️</span>杭州</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>李云霄领衔主演<br/>
+<strong>演出单位：</strong>浙江小百花越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">以浙里票务为准</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-22" data-id="p09" data-time="19:15" data-title="小剧场越剧《张骞使西·三别三行》" data-venue="上海宛平剧院·小剧场">
+<div class="perf-info">
+<div class="perf-title">小剧场越剧《张骞使西·三别三行》 <em>丝路史诗</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月22日（周三）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>徐标新（张骞）、徐晓飞（匈奴女）、裘隆（汉武帝）、姚磊、顾爱军<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">新开票</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 / 180 / 280</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-23" data-id="p10" data-time="19:15" data-title="小剧场越剧《张骞使西·三别三行》" data-venue="上海宛平剧院·小剧场">
+<div class="perf-info">
+<div class="perf-title">小剧场越剧《张骞使西·三别三行》 <em>丝路史诗</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月23日（周四）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>徐标新（张骞）、徐晓飞（匈奴女）、裘隆（汉武帝）<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">新开票</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 / 180 / 280</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-28" data-id="p11" data-time="19:15" data-title="越剧《红楼梦》" data-venue="上海天蟾逸夫舞台">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》 <em>尹袁版 · 蟾桂常青系列</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月28日（周二）19:15</span>
+<span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>郭茜云（贾宝玉）、俞景岚（林黛玉）<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 380<br/><small>早鸟已截止</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-29" data-id="p12" data-time="19:15" data-title="越剧《梁山伯与祝英台》" data-venue="上海天蟾逸夫舞台">
+<div class="perf-info">
+<div class="perf-title">越剧《梁山伯与祝英台》 <em>袁范版 · 蟾桂常青系列</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月29日（周三）19:15</span>
+<span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>斯钰林（梁山伯）、徐晓飞（祝英台）、金烨（祝公远）<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 — 380<br/><small>早鸟已截止</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-07-31" data-id="p13" data-time="19:15" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场">
+<div class="perf-info">
+<div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>7月31日（周五）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王柔桑（嵇康）、吴佳燕（广陵仙子）、陈慧迪（长乐亭主）、潘锡丹、孙嘉蔚<br/>
+<strong>演出单位：</strong>上海越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">新开票</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 / 180 / 280</div></div>
+
+</div>
+</div>
+<!-- ---- 8月 ---- -->
+<div class="date-divider">8 月</div>
+<div class="perf-grid">
+<div class="perf-card" data-date="2026-08-01" data-id="p14" data-time="19:15" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场">
+<div class="perf-info">
+<div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月1日（周六）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王柔桑（嵇康）、吴佳燕（广陵仙子）、陈慧迪（长乐亭主）<br/>
+<strong>演出单位：</strong>上海越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">新开票</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80 / 180 / 280</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-03" data-id="p15" data-time="19:15" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间">
+<div class="perf-info">
+<div class="perf-title">小剧场越剧《再生·缘》 <em>沉浸式 · 全场无座</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月3日（周一）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·戏·聚空间</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>忻雅琴（孟丽君）、王清（皇帝）、王柔桑（皇甫少华）<br/>
+<strong>演出单位：</strong>上海越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-new">新开票</span>
+<span class="tag tag-status">沉浸式</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥180<br/><small>单一票价</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-04" data-id="p16" data-time="19:15" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间">
+<div class="perf-info">
+<div class="perf-title">小剧场越剧《再生·缘》 <em>沉浸式</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月4日（周二）19:15</span>
+<span><span class="meta-icon">📍</span>上海宛平剧院·戏·聚空间</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>忻雅琴（孟丽君）、王清（皇帝）、王柔桑（皇甫少华）<br/>
+<strong>演出单位：</strong>上海越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<span class="tag tag-status">沉浸式</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥180<br/><small>单一票价</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-09" data-id="p17" data-time="19:00" data-title="越剧《孟丽君》" data-venue="北京大学百周年纪念讲堂">
+<div class="perf-info">
+<div class="perf-title">越剧《孟丽君》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月9日（周日）19:00</span>
+<span><span class="meta-icon">📍</span>北京大学百周年纪念讲堂</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>单仰萍/忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团 · 时长150分钟
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">校内 ¥40-240<br/><small>校外 ¥80-380</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-11" data-id="p18" data-time="19:30" data-title="越剧《西厢记》" data-venue="北京吉祥大戏院">
+<div class="perf-info">
+<div class="perf-title">越剧《西厢记》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月11日（周二）19:30</span>
+<span><span class="meta-icon">📍</span>北京吉祥大戏院</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>陈慧迪（崔莺莺）、王婉娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">以戏院公布为准</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-12" data-id="p19" data-time="19:30" data-title="越剧《孔雀东南飞》" data-venue="北京吉祥大戏院">
+<div class="perf-info">
+<div class="perf-title">越剧《孔雀东南飞》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月12日（周三）19:30</span>
+<span><span class="meta-icon">📍</span>北京吉祥大戏院</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王柔桑（焦仲卿）、盛舒扬（刘兰芝）、吴佳燕（焦母）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">以戏院公布为准</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-15" data-id="p20" data-time="19:15" data-title="越剧《红楼梦》" data-venue="天津中国大戏院">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月15日（周六）19:15</span>
+<span><span class="meta-icon">📍</span>天津中国大戏院</span>
+<span><span class="meta-icon">🏙️</span>天津</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>杨婷娜（贾宝玉）、单仰萍/忻雅琴（林黛玉）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团（全女班）
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥50 — 580<br/><small>文惠价</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-16" data-id="p21" data-time="19:15" data-title="越剧《西厢记》" data-venue="天津中国大戏院">
+<div class="perf-info">
+<div class="perf-title">越剧《西厢记》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月16日（周日）19:15</span>
+<span><span class="meta-icon">📍</span>天津中国大戏院</span>
+<span><span class="meta-icon">🏙️</span>天津</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>陈慧迪（崔莺莺）、杨婷娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥50 — 580<br/><small>文惠价</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-18" data-id="p22" data-time="19:00" data-title="越剧《孔雀东南飞》" data-venue="河北廊坊壹佰剧院">
+<div class="perf-info">
+<div class="perf-title">越剧《孔雀东南飞》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月18日（周二）19:00</span>
+<span><span class="meta-icon">📍</span>河北廊坊壹佰剧院</span>
+<span><span class="meta-icon">🏙️</span>廊坊</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王舒雯（焦仲卿）、王婕（刘兰芝）、吴佳燕（焦母）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">以场馆公布为准</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-19" data-id="p23" data-time="19:00" data-title="越剧《孟丽君》" data-venue="河北廊坊壹佰剧院">
+<div class="perf-info">
+<div class="perf-title">越剧《孟丽君》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月19日（周三）19:00</span>
+<span><span class="meta-icon">📍</span>河北廊坊壹佰剧院</span>
+<span><span class="meta-icon">🏙️</span>廊坊</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">以场馆公布为准</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-22" data-id="p24" data-time="19:30" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《甄嬛》（上本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月22日（周六）19:30</span>
+<span><span class="meta-icon">📍</span>北京国家大剧院·戏剧场</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、史燕彬（沈眉庄）、王柔桑（温实初）、裘丹莉（华贵妃）、陈慧迪（安陵容）、王婕（槿汐）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团 · 上下本需分别购票
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-status">分场购票</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥100 — 580<br/><small>以国家大剧院官网为准</small></div></div>
+
+</div>
+<div class="perf-card" data-date="2026-08-23" data-id="p25" data-time="19:30" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《甄嬛》（下本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>8月23日（周日）19:30</span>
+<span><span class="meta-icon">📍</span>北京国家大剧院·戏剧场</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、裘丹莉（华贵妃）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团 · 上下本需分别购票
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-status">分场购票</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥100 — 580<br/><small>以国家大剧院官网为准</small></div></div>
+
+</div>
+</div>
+<!-- ---- 9月 ---- -->
+<div class="date-divider">9 月</div>
+<div class="perf-grid">
+<div class="perf-card" data-date="2026-09-05" data-id="p26" data-time="14:30" data-title="大型神话越剧《追鱼》" data-venue="北京艺术中心·戏剧场">
+<div class="perf-info">
+<div class="perf-title">大型神话越剧《追鱼》 <em>京津冀巡演</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>9月5日（周六）14:30</span>
+<span><span class="meta-icon">📍</span>北京艺术中心·戏剧场</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>杨婷娜（张珍）、忻雅琴（鲤鱼精）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团 · 纪念王文娟诞辰100周年复排剧目
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">扫码购票</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-09-06" data-id="p27" data-time="14:30" data-title="越剧《红楼梦》" data-venue="北京艺术中心·戏剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》 <em>京津冀巡演 · 收官场</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>9月6日（周日）14:30</span>
+<span><span class="meta-icon">📍</span>北京艺术中心·戏剧场</span>
+<span><span class="meta-icon">🏙️</span>北京</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王婉娜（贾宝玉）、李旭丹（林黛玉）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-status">京津冀巡演</span>
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">扫码购票</div></div>
+
+</div>
+</div>
+<!-- ===== 📌 备注 ===== -->
+<h2 class="section-title"><span class="section-icon">📌</span> 备注信息</h2>
+<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;font-size:14px;color:var(--text-muted);line-height:2;">
+    · 上海越剧院2026年共有<strong style="color:var(--gold-light)">百余场</strong>演出计划，全年聚焦经典传承、宗师纪念（王文娟诞辰100周年）、流派弘扬三大方向。<br/>
+    · 新编越剧《华山奇缘》拟于盛夏首演（具体排期待定），将以《沉香太子全传》为基础改编。<br/>
+    · 2026年末上海越剧院新址将正式启用，届时举办开幕系列演出。<br/>
+    · 上海越剧院第十代青年演员（东方卫视《越动青春》选手）将推出专场演唱会（时间待定）。<br/>
+    · 天蟾逸夫舞台购票：大麦网 / 天蟾小程序<br/>
+    · 宛平剧院购票：大麦网 / 宛平剧院官网<br/>
+    · 海上梨园购票：大麦网 / 豫园海上梨园官方<br/>
+    · 临港演艺中心购票：大麦网 / 东方演出网<br/>
+    · 杭州蝴蝶剧场购票：浙里票务 / 大麦网<br/>
+    · 京津冀巡演：各场馆官方渠道购票（北大讲堂售票处/吉祥官网/天津文惠卡/国家大剧院等）。<br/>
+    · <strong style="color:var(--gold-light)">🎟️ 已购标记</strong>保存在浏览器本地，重新打开页面会自动恢复。
+  </div>
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+<div class="sources">
+<span>📌 上海越剧院 shyjy1955.com</span>
+<span>🎟️ 大麦网 damai.cn</span>
+<span>📊 东方演出网 df962388.com</span>
+<span>🏛️ 宛平剧院</span>
+<span>🎭 天蟾逸夫舞台</span>
+<span>🦋 杭州蝴蝶剧场</span>
+<span>🏗️ 临港演艺中心</span>
+<span>🦋 杭州蝴蝶剧场</span>
+<span>🏟️ 国家大剧院</span>
+<span>🎓 北京大学</span>
+</div>
+<p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
+<p style="margin-top:6px;">数据截至 2026-07-02 09:00 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+</div>
+</div>
 <script>
 // ============================================================
 //  DATA
@@ -2072,6 +2020,5 @@ function hideStarDuplicates() {
   updateMyShowsBanner();
 })();
 </script>
-
 </body>
 </html>
