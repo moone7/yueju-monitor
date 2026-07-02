@@ -1498,27 +1498,90 @@ function saveBought(set) {
 
 // ============================================================
 //  MIGRATION from v3 (fingerprint-based) → v5 (data-id based)
+//  Tries multiple venue variants because venue names may have
+//  changed (e.g. removed parenthetical suffixes) across updates.
 // ============================================================
 function migrateFromV3() {
   const v3raw = localStorage.getItem("yueju_bought_v3");
   if (!v3raw) return;
-  const v3fps = new Set(JSON.parse(v3raw));
+  let v3fps;
+  try { v3fps = new Set(JSON.parse(v3raw)); } catch(e) { return; }
   if (v3fps.size === 0) return;
-  // Map old fingerprints to current card data-ids
-  const fpToId = {};
-  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(card => {
-    fpToId[card.dataset.fingerprint] = card.dataset.id;
-  });
+
   const current = getBought();
   let migrated = 0;
-  v3fps.forEach(fp => {
-    const id = fpToId[fp];
-    if (id && !current.has(id)) { current.add(id); migrated++; }
+
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+    const id = card.dataset.id;
+    if (current.has(id)) return;
+
+    const date = (card.dataset.date || "").trim();
+    const title = (card.dataset.title || "").trim();
+    const venue = (card.dataset.venue || "").trim();
+
+    // All plausible venue formats the old page might have used
+    const venueVariants = new Set([
+      venue,                                                              // current exact
+      venue.replace(/（.*?）/g, "").trim(),                               // strip Chinese parens
+      venue.replace(/\(.*?\)/g, "").trim(),                               // strip English parens
+      venue.replace(/·.*$/, "").trim(),                                   // strip "·…" suffix
+      venue.replace(/（.*?）/g, "").replace(/·.*$/, "").trim(),          // strip both
+    ]);
+
+    for (const vv of venueVariants) {
+      if (!vv) continue;
+      const raw = date + "|" + title + "|" + vv;
+      let hash = 0;
+      for (let i = 0; i < raw.length; i++) {
+        hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+        hash |= 0;
+      }
+      const fp = "f" + Math.abs(hash).toString(36);
+      if (v3fps.has(fp)) {
+        current.add(id);
+        migrated++;
+        return; // found match, skip other variants
+      }
+    }
   });
+
+  // Phase 2: date-only fallback — if a date has exactly one show,
+  // and the v3 has SOME fingerprint for a show on that date, match it.
+  if (migrated === 0) {
+    // Build date → [id] map for current cards
+    const dateToIds = {};
+    document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+      const d = (card.dataset.date || "").trim();
+      if (!d) return;
+      if (!dateToIds[d]) dateToIds[d] = [];
+      dateToIds[d].push(card.dataset.id);
+    });
+    // For each unique-date show, try matching by date + title hash (no venue)
+    document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+      const id = card.dataset.id;
+      if (current.has(id)) return;
+      const date = (card.dataset.date || "").trim();
+      const title = (card.dataset.title || "").trim();
+      if (!date || !title) return;
+      // Only use date-only fallback when this date has exactly one show
+      if ((dateToIds[date] || []).length !== 1) return;
+      // Try hashing just date+title (no venue) — some old entries may match
+      const raw = date + "|" + title;
+      let hash = 0;
+      for (let i = 0; i < raw.length; i++) {
+        hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+        hash |= 0;
+      }
+      const fp = "f" + Math.abs(hash).toString(36);
+      if (v3fps.has(fp)) {
+        current.add(id);
+        migrated++;
+      }
+    });
+  }
+
   if (migrated > 0) {
     saveBought(current);
-    // Keep v3 as backup, don't delete
-    console.log(`Migrated ${migrated} bought records from v3→v5`);
   }
 }
 
