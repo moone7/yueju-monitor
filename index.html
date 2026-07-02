@@ -608,6 +608,9 @@
     .cal-bought-badge { font-size: 7px; font-weight: 700; padding: 1px 4px; border-radius: 3px; bottom: 2px; right: 2px; }
     .cal-tooltip { max-width: 240px; left: 0; right: 0; margin: 0 auto; }
     .cal-day.has-bought-show .cal-day-num::after { font-size: 8px; }
+    /* Mobile banner: compact sync buttons */
+    #my-shows-banner .banner-header { flex-wrap: wrap; gap: 6px; padding: 10px 14px; font-size: 14px; }
+    .sync-btn { font-size: 11px; padding: 3px 8px; }
   }
 
   /* Extra small screens — ultra-compact */
@@ -1489,15 +1492,44 @@ function stampIdentifiers() {
 }
 
 function getBought() {
-  try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")); }
+  try {
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return new Set(arr.filter(id => id && typeof id === "string"));
+  }
   catch(e) { return new Set(); }
 }
 function saveBought(set) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+  const clean = [...set].filter(id => id && typeof id === "string");
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(clean));
 }
 
-// ============================================================
-//  MIGRATION from v3 (fingerprint-based) → v5 (data-id based)
+// Count bought shows that are in the future (same logic as updateMyShowsBanner)
+function countFutureBought() {
+  const bought = getBought();
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  let count = 0;
+  const seenIds = new Set();
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+    if (card.style.display === "none" || card.offsetParent === null) return;
+    const id = card.dataset.id;
+    if (!id || seenIds.has(id)) return;
+    if (!bought.has(id)) return;
+    const dateStr = card.dataset.date;
+    if (!dateStr) return;
+    const showDate = new Date(dateStr);
+    showDate.setHours(0,0,0,0);
+    const diff = Math.round((showDate - today) / 86400000);
+    if (diff < -1) return;
+    seenIds.add(id);
+    count++;
+  });
+  return count;
+}
+
+function updateBoughtStat() {
+  document.getElementById("stat-bought").textContent = countFutureBought();
+}
 //  Tries multiple venue variants because venue names may have
 //  changed (e.g. removed parenthetical suffixes) across updates.
 // ============================================================
@@ -1615,7 +1647,7 @@ function importBought() {
     }
     const parts = text.split("|");
     if (parts.length < 3) { alert("记录格式无效。"); return; }
-    const remoteIds = parts[2].split(",").filter(Boolean);
+    const remoteIds = [...new Set(parts[2].split(",").filter(Boolean))];
     if (remoteIds.length === 0) { alert("记录为空。"); return; }
     const local = getBought();
     let added = 0;
@@ -1635,7 +1667,7 @@ function importBought() {
     if (!input.startsWith("YUEJU_BOUGHT|")) { alert("记录格式无效。"); return; }
     const parts = input.split("|");
     if (parts.length < 3) { alert("记录格式无效。"); return; }
-    const remoteIds = parts[2].split(",").filter(Boolean);
+    const remoteIds = [...new Set(parts[2].split(",").filter(Boolean))];
     const local = getBought();
     let added = 0;
     remoteIds.forEach(id => { if (!local.has(id)) { local.add(id); added++; } });
