@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>上海越剧演出售票日报 — 2026年7月1日</title>
+<title>上海越剧演出售票日报</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');
 
@@ -32,85 +32,119 @@
     font-family: 'Noto Sans SC', system-ui, sans-serif;
     line-height: 1.7;
     min-height: 100vh;
+    /* Layered background: radial glows + Chinese cloud scroll pattern */
     background-image:
-      radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 65%),
-      radial-gradient(ellipse at 15% 40%, rgba(181,52,58,0.05) 0%, transparent 50%),
-      radial-gradient(ellipse at 85% 60%, rgba(201,169,110,0.04) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 100%, rgba(181,52,58,0.05) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='none'/%3E%3Ccircle cx='40' cy='40' r='1.2' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='0' cy='0' r='1.2' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='80' cy='0' r='1.2' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='0' cy='80' r='1.2' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='80' cy='80' r='1.2' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3C/svg%3E");
-    background-size: auto, auto, auto, auto, 80px 80px;
+      radial-gradient(ellipse at 50% 0%,   rgba(201,169,110,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 30%,  rgba(181,52,58,0.07)   0%, transparent 45%),
+      radial-gradient(ellipse at 90% 50%,  rgba(201,169,110,0.06) 0%, transparent 45%),
+      radial-gradient(ellipse at 20% 80%,  rgba(181,52,58,0.06)   0%, transparent 40%),
+      radial-gradient(ellipse at 80% 90%,  rgba(201,169,110,0.05) 0%, transparent 40%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cdefs%3E%3Cstyle%3Epath%7Bfill:none;stroke:rgba(201%2C169%2C110%2C0.055);stroke-width:0.8%7D%3C/style%3E%3C/defs%3E%3C!-- corner diamond ---%3E%3Crect x='55' y='55' width='10' height='10' transform='rotate(45 60 60)' fill='none' stroke='rgba(201%2C169%2C110%2C0.06)' stroke-width='0.8'/%3E%3C!-- cross lines ---%3E%3Cline x1='60' y1='50' x2='60' y2='44' stroke='rgba(201%2C169%2C110%2C0.05)' stroke-width='0.7'/%3E%3Cline x1='60' y1='70' x2='60' y2='76' stroke='rgba(201%2C169%2C110%2C0.05)' stroke-width='0.7'/%3E%3Cline x1='50' y1='60' x2='44' y2='60' stroke='rgba(201%2C169%2C110%2C0.05)' stroke-width='0.7'/%3E%3Cline x1='70' y1='60' x2='76' y2='60' stroke='rgba(201%2C169%2C110%2C0.05)' stroke-width='0.7'/%3E%3C!-- corner dots ---%3E%3Ccircle cx='0' cy='0' r='1' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='120' cy='0' r='1' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='0' cy='120' r='1' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3Ccircle cx='120' cy='120' r='1' fill='rgba(201%2C169%2C110%2C0.07)'/%3E%3C!-- mid-edge dots ---%3E%3Ccircle cx='60' cy='0' r='0.8' fill='rgba(181%2C52%2C58%2C0.06)'/%3E%3Ccircle cx='60' cy='120' r='0.8' fill='rgba(181%2C52%2C58%2C0.06)'/%3E%3Ccircle cx='0' cy='60' r='0.8' fill='rgba(181%2C52%2C58%2C0.06)'/%3E%3Ccircle cx='120' cy='60' r='0.8' fill='rgba(181%2C52%2C58%2C0.06)'/%3E%3C/svg%3E");
+    background-size: auto, auto, auto, auto, auto, 120px 120px;
   }
 
   /* ===== Header ===== */
   .header {
     text-align: center;
-    padding: 48px 24px 36px;
+    padding: 56px 24px 40px;
     position: relative;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg,
-      rgba(201,169,110,0.04) 0%,
-      transparent 100%
-    );
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.12) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(12,10,8,0.0) 0%, rgba(12,10,8,0.0) 100%);
+    overflow: hidden;
   }
-  /* top decorative band */
+  /* Top gradient band with multiple thin lines */
   .header::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
+    top: 0; left: 0; right: 0;
+    height: 5px;
     background: linear-gradient(90deg,
       transparent 0%,
-      var(--crimson) 15%,
-      var(--gold) 30%,
-      var(--gold-light) 50%,
-      var(--gold) 70%,
-      var(--crimson) 85%,
+      rgba(181,52,58,0.5) 10%,
+      rgba(201,169,110,0.9) 25%,
+      rgba(224,200,142,1) 50%,
+      rgba(201,169,110,0.9) 75%,
+      rgba(181,52,58,0.5) 90%,
       transparent 100%
     );
-    opacity: 0.8;
   }
+  /* Bottom center ornamental line */
   .header::after {
     content: '';
     position: absolute;
     bottom: -1px; left: 50%;
     transform: translateX(-50%);
-    width: 120px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    border-radius: 2px;
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,169,110,0.5), transparent);
   }
-  .header-icon { font-size: 56px; margin-bottom: 16px; filter: drop-shadow(0 2px 8px rgba(201,169,110,0.3)); }
+  /* Left/right decorative flourishes */
+  .header-flourish {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    font-size: 48px; opacity: 0.06;
+    pointer-events: none; user-select: none;
+    font-family: 'Noto Serif SC', serif;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .header-flourish.left  { left: 5%; }
+  .header-flourish.right { right: 5%; }
+  .header-icon {
+    font-size: 64px; margin-bottom: 20px;
+    filter: drop-shadow(0 0 20px rgba(201,169,110,0.35)) drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    display: block; position: relative; z-index: 1;
+  }
   .header h1 {
     font-family: 'Noto Serif SC', serif;
-    font-size: 32px; font-weight: 900;
-    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 100%);
+    font-size: 34px; font-weight: 900;
+    background: linear-gradient(180deg, #f0dfa0 0%, var(--gold-light) 40%, var(--gold) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    letter-spacing: 4px;
+    letter-spacing: 5px;
+    text-shadow: none;
+    position: relative; z-index: 1;
+    filter: drop-shadow(0 2px 8px rgba(201,169,110,0.25));
   }
-  .header .subtitle { color: var(--text-muted); font-size: 14px; margin-top: 8px; letter-spacing: 2px; }
+  .header .subtitle {
+    color: var(--text-muted); font-size: 13px; margin-top: 10px; letter-spacing: 3px;
+    position: relative; z-index: 1;
+  }
   .header .date-badge {
-    display: inline-block; margin-top: 16px; padding: 4px 16px;
-    border: 1px solid var(--border); border-radius: 20px;
-    font-size: 12px; color: var(--text-muted); letter-spacing: 1px;
+    display: inline-block; margin-top: 18px; padding: 5px 20px;
+    border: 1px solid rgba(201,169,110,0.25);
+    background: rgba(201,169,110,0.06);
+    border-radius: 20px;
+    font-size: 12px; color: rgba(201,169,110,0.7); letter-spacing: 2px;
+    position: relative; z-index: 1;
   }
 
   .container { max-width: 960px; margin: 0 auto; padding: 0 24px 64px; }
 
   /* ===== MY SHOWS BANNER — always visible ===== */
   #my-shows-banner {
-    background: linear-gradient(135deg, rgba(201,169,110,0.08), rgba(181,52,58,0.05));
-    border: 1px solid rgba(201,169,110,0.3);
-    border-radius: 12px;
+    background: linear-gradient(135deg,
+      rgba(201,169,110,0.09) 0%,
+      rgba(30,27,20,0.97) 40%,
+      rgba(181,52,58,0.06) 100%
+    );
+    border: 1px solid rgba(201,169,110,0.28);
+    border-radius: 14px;
     margin: 24px 0 0;
     overflow: hidden;
     transition: all 0.3s;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(201,169,110,0.07);
   }
   #my-shows-banner.empty-state {
-    border-color: rgba(201,169,110,0.12);
-    background: rgba(201,169,110,0.03);
+    border-color: rgba(201,169,110,0.1);
+    background: rgba(201,169,110,0.025);
+    box-shadow: none;
   }
   #my-shows-banner .banner-header {
     display: flex; align-items: center; gap: 10px;
     padding: 14px 20px;
-    background: rgba(201,169,110,0.08);
+    background: linear-gradient(90deg, rgba(201,169,110,0.1), rgba(201,169,110,0.04));
+    border-bottom: 1px solid rgba(201,169,110,0.12);
     font-weight: 600; font-size: 15px; color: var(--gold-light);
     letter-spacing: 1px;
   }
@@ -452,23 +486,33 @@
   .cal-tooltip .tt-price { color: var(--gold-light); font-size: 11px; font-weight: 600; margin-top: 1px; }
 
   /* ===== Alerts ===== */
-  .alert { margin: 24px 0 8px; border-radius: 12px; overflow: hidden; }
+  .alert {
+    margin: 24px 0 8px; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+    position: relative;
+  }
+  .alert::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
   .alert-urgent {
-    background: linear-gradient(135deg, rgba(181,52,58,0.15), rgba(181,52,58,0.05));
-    border: 1px solid rgba(181,52,58,0.3);
+    background: linear-gradient(135deg, rgba(181,52,58,0.12) 0%, rgba(22,20,16,0.98) 50%);
+    border: 1px solid rgba(181,52,58,0.28);
   }
+  .alert-urgent::before { background: linear-gradient(180deg, transparent, var(--crimson), transparent); }
   .alert-new {
-    background: linear-gradient(135deg, rgba(201,169,110,0.08), rgba(201,169,110,0.02));
-    border: 1px solid rgba(201,169,110,0.2);
+    background: linear-gradient(135deg, rgba(201,169,110,0.09) 0%, rgba(22,20,16,0.98) 50%);
+    border: 1px solid rgba(201,169,110,0.22);
   }
+  .alert-new::before { background: linear-gradient(180deg, transparent, var(--gold), transparent); }
   .alert-header {
     display: flex; align-items: center; gap: 10px;
-    padding: 14px 20px; font-weight: 600; font-size: 15px; letter-spacing: 1px;
+    padding: 13px 20px 13px 24px; font-weight: 600; font-size: 15px; letter-spacing: 1.5px;
   }
-  .alert-urgent .alert-header { color: var(--crimson-light); background: rgba(181,52,58,0.15); }
-  .alert-new .alert-header { color: var(--gold-light); background: rgba(201,169,110,0.08); }
+  .alert-urgent .alert-header { color: var(--crimson-light); background: rgba(181,52,58,0.1); border-bottom: 1px solid rgba(181,52,58,0.12); }
+  .alert-new .alert-header { color: var(--gold-light); background: rgba(201,169,110,0.07); border-bottom: 1px solid rgba(201,169,110,0.1); }
   .alert-icon { font-size: 18px; }
-  .alert-body { padding: 14px 20px; font-size: 14px; color: var(--text); line-height: 1.8; }
+  .alert-body { padding: 14px 20px 14px 24px; font-size: 13.5px; color: var(--text); line-height: 1.9; }
   .alert-body strong { color: var(--gold-light); }
 
   /* ===== Section ===== */
@@ -499,25 +543,51 @@
 
   .perf-card {
     background: linear-gradient(135deg,
-      rgba(28,25,20,0.98) 0%,
-      rgba(22,20,16,0.99) 100%
+      rgba(30,27,21,0.97) 0%,
+      rgba(22,20,16,0.99) 60%,
+      rgba(25,22,17,0.98) 100%
     );
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 24px;
+    padding: 20px 20px 20px 28px;
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-areas: "info tags" "info price";
     gap: 8px 24px;
     transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.3s;
     position: relative; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  }
+  /* Left accent bar */
+  .perf-card::before {
+    content: '';
+    position: absolute; left: 0; top: 12px; bottom: 12px;
+    width: 3px;
+    background: linear-gradient(180deg, transparent, rgba(201,169,110,0.35), transparent);
+    border-radius: 0 2px 2px 0;
+    transition: background 0.25s;
+  }
+  .perf-card:hover::before {
+    background: linear-gradient(180deg, transparent, rgba(201,169,110,0.7), transparent);
   }
   .perf-card:hover {
-    border-color: rgba(201,169,110,0.45);
+    border-color: rgba(201,169,110,0.4);
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(201,169,110,0.08);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,169,110,0.07);
   }
   .perf-card.hidden-by-filter { display: none; }
+
+  /* Past performances — dimmed */
+  .perf-card.past {
+    opacity: 0.55;
+    filter: saturate(0.6);
+  }
+  .perf-card.past::before {
+    background: linear-gradient(180deg, transparent, rgba(100,90,80,0.25), transparent);
+  }
+  .perf-card.past .perf-title { color: var(--text-muted); }
+  .perf-card.past.bought { opacity: 0.7; }
+  .perf-card.past:hover { opacity: 0.8; filter: saturate(0.8); }
 
   .perf-card.today {
     border-color: rgba(201,169,110,0.35);
@@ -594,31 +664,46 @@
     display: inline-block; padding: 2px 10px; border-radius: 12px;
     font-size: 11px; font-weight: 500; letter-spacing: 0.5px; white-space: nowrap;
   }
-  .tag-urgent  { background: var(--tag-urgent); color: #ff8888; }
-  .tag-new     { background: var(--tag-new); color: #7ccd6e; }
-  .tag-soon    { background: var(--tag-soon); color: #d4a64a; }
-  .tag-status  { background: var(--surface-raised); color: var(--text-muted); }
-  .tag-on-sale { background: rgba(45,90,39,0.4); color: #7ccd6e; }
-  .tag-limited { background: rgba(181,52,58,0.3); color: #ff9999; }
+  .tag-urgent   { background: var(--tag-urgent); color: #ff8888; }
+  .tag-new      { background: var(--tag-new); color: #7ccd6e; }
+  .tag-soon     { background: var(--tag-soon); color: #d4a64a; }
+  .tag-status   { background: var(--surface-raised); color: var(--text-muted); }
+  .tag-on-sale  { background: rgba(45,90,39,0.4); color: #7ccd6e; }
+  .tag-limited  { background: rgba(181,52,58,0.3); color: #ff9999; }
+  .tag-ended    { background: rgba(60,55,48,0.6); color: rgba(150,140,125,0.7); text-decoration: line-through; }
+  .tag-presale  { background: rgba(80,60,20,0.5); color: #c8a050; }
 
   /* ===== Star Performer Card ===== */
   .star-section { margin: 24px 0 8px; }
   .star-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.04));
-    border: 1px solid rgba(255,215,0,0.3);
-    border-radius: 8px; padding: 6px 14px;
-    font-size: 13px; font-weight: 600; color: #ffd700;
-    letter-spacing: 1px; margin-bottom: 12px;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg,
+      rgba(255,215,0,0.14) 0%,
+      rgba(201,169,110,0.08) 50%,
+      rgba(255,215,0,0.06) 100%
+    );
+    border: 1px solid rgba(255,215,0,0.35);
+    border-radius: 10px; padding: 8px 18px;
+    font-size: 13px; font-weight: 600;
+    color: #ffd700;
+    letter-spacing: 1.5px; margin-bottom: 14px;
+    box-shadow: 0 2px 16px rgba(255,215,0,0.08), inset 0 1px 0 rgba(255,215,0,0.15);
+    text-shadow: 0 0 12px rgba(255,215,0,0.3);
   }
   .perf-card.star {
-    border-color: rgba(255,215,0,0.25);
-    background: linear-gradient(135deg, rgba(255,215,0,0.05), var(--surface));
-    box-shadow: 0 0 20px rgba(255,215,0,0.05);
+    border-color: rgba(255,215,0,0.22);
+    background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(30,27,21,0.98));
+    box-shadow: 0 2px 12px rgba(255,215,0,0.06), 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .perf-card.star::before {
+    background: linear-gradient(180deg, transparent, rgba(255,215,0,0.5), transparent);
   }
   .perf-card.star:hover {
     border-color: rgba(255,215,0,0.5);
-    box-shadow: 0 0 30px rgba(255,215,0,0.1);
+    box-shadow: 0 8px 32px rgba(255,215,0,0.12), 0 0 0 1px rgba(255,215,0,0.08);
+  }
+  .perf-card.star:hover::before {
+    background: linear-gradient(180deg, transparent, rgba(255,215,0,0.8), transparent);
   }
   .perf-card.star.bought {
     border-color: rgba(255,215,0,0.4) !important;
@@ -626,33 +711,47 @@
   }
 
   /* ===== Stats Bar ===== */
-  .stats-bar { display: flex; gap: 16px; margin: 24px 0 32px; flex-wrap: wrap; }
+  .stats-bar { display: flex; gap: 14px; margin: 24px 0 32px; flex-wrap: wrap; }
   .stat {
     flex: 1; min-width: 120px;
-    background: linear-gradient(135deg,
-      rgba(30,27,22,0.98) 0%,
+    background: linear-gradient(160deg,
+      rgba(32,28,22,0.98) 0%,
       rgba(22,20,16,0.99) 100%
     );
-    border: 1px solid rgba(201,169,110,0.12); border-radius: 12px;
-    padding: 16px 20px; text-align: center;
+    border: 1px solid rgba(201,169,110,0.1); border-radius: 14px;
+    padding: 18px 20px; text-align: center;
     position: relative; overflow: hidden;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
   .stat:hover {
-    border-color: rgba(201,169,110,0.25);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    border-color: rgba(201,169,110,0.3);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    transform: translateY(-1px);
   }
   .stat::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--crimson), var(--gold), var(--crimson));
-    opacity: 0.5;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-light) 50%, transparent 100%);
+    opacity: 0.45;
+  }
+  /* Background watermark numeral */
+  .stat::after {
+    content: attr(data-num);
+    position: absolute; right: 8px; bottom: -4px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 52px; font-weight: 900;
+    color: rgba(201,169,110,0.04);
+    line-height: 1; pointer-events: none;
+    user-select: none;
   }
   .stat-num {
-    font-family: 'Noto Serif SC', serif; font-size: 28px; font-weight: 900;
-    color: var(--gold-light); line-height: 1.2;
+    font-family: 'Noto Serif SC', serif; font-size: 32px; font-weight: 900;
+    color: var(--gold-light); line-height: 1.1;
+    text-shadow: 0 0 20px rgba(201,169,110,0.2);
+    position: relative; z-index: 1;
   }
-  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 6px; letter-spacing: 1.5px; position: relative; z-index: 1; }
 
   /* ===== Date Divider ===== */
   .date-divider {
@@ -704,8 +803,9 @@
   }
 
   @media (max-width: 640px) {
-    .header h1 { font-size: 24px; }
-    .perf-card { grid-template-columns: 1fr; grid-template-areas: "info" "price" "tags"; padding: 16px; }
+    .header h1 { font-size: 24px; letter-spacing: 3px; }
+    .header-flourish { display: none; }
+    .perf-card { grid-template-columns: 1fr; grid-template-areas: "info" "price" "tags"; padding: 14px 14px 14px 20px; }
     .perf-side { flex-direction: row; flex-wrap: wrap; }
     .perf-price { text-align: left; }
     .stats-bar { gap: 8px; }
@@ -768,10 +868,12 @@
 <body>
 
 <header class="header">
+  <span class="header-flourish left">越</span>
+  <span class="header-flourish right">剧</span>
   <div class="header-icon">🎭</div>
   <h1>上海越剧演出售票日报</h1>
   <p class="subtitle">每日监控 · 大麦网 + 东方演出网 + 剧院官方</p>
-  <span class="date-badge">📅 2026年7月1日 星期三</span>
+  <span class="date-badge" id="header-date-badge">📅 加载中…</span>
 </header>
 
 <div class="container">
@@ -818,19 +920,19 @@
 
   <!-- ===== STATS ===== -->
   <div class="stats-bar">
-    <div class="stat">
+    <div class="stat" data-num="24">
       <div class="stat-num">24</div>
       <div class="stat-label">近期演出场次</div>
     </div>
-    <div class="stat">
+    <div class="stat" data-num="4">
       <div class="stat-num">4</div>
       <div class="stat-label">⭐ 陆志艳场次</div>
     </div>
-    <div class="stat">
+    <div class="stat" data-num="0" id="stat-card">
       <div class="stat-num" id="stat-bought">0</div>
       <div class="stat-label">🎟️ 已购场次</div>
     </div>
-    <div class="stat">
+    <div class="stat" data-num="8">
       <div class="stat-num">8</div>
       <div class="stat-label">涉及城市</div>
     </div>
@@ -1652,7 +1754,10 @@ function countFutureBought() {
 }
 
 function updateBoughtStat() {
-  document.getElementById("stat-bought").textContent = countFutureBought();
+  const n = countFutureBought();
+  document.getElementById("stat-bought").textContent = n;
+  const card = document.getElementById("stat-card");
+  if (card) card.setAttribute("data-num", n);
 }
 //  Tries multiple venue variants because venue names may have
 //  changed (e.g. removed parenthetical suffixes) across updates.
@@ -2272,33 +2377,76 @@ function hideStarDuplicates() {
 }
 
 // ============================================================
-//  DYNAMIC TODAY/TOMORROW CLASS FIX
-//  Static HTML may have stale classes if page isn't regenerated daily.
-//  This recalculates based on actual current date at runtime.
+//  DYNAMIC DATE DISPLAY & STATUS REFRESH
+//  Runs at page load. Updates:
+//  1. Header date badge + page title
+//  2. today / tomorrow / past classes on cards
+//  3. "售票中" → "已演完" for past shows
+//  4. Pre-sale badge text until sale start date
 // ============================================================
 function refreshTodayTomorrowClasses() {
   const now = new Date();
+  const WEEKDAY_CN = ["周日","周一","周二","周三","周四","周五","周六"];
+  const todayLabel = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${WEEKDAY_CN[now.getDay()]}`;
+
+  // ── 1. Update header date badge & page title ──
+  const badge = document.getElementById("header-date-badge");
+  if (badge) badge.textContent = `📅 ${todayLabel}`;
+  document.title = `上海越剧演出售票日报 — ${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+
   const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   const tomorrowD = new Date(now); tomorrowD.setDate(tomorrowD.getDate() + 1);
   const tomorrowStr = `${tomorrowD.getFullYear()}-${String(tomorrowD.getMonth()+1).padStart(2,'0')}-${String(tomorrowD.getDate()).padStart(2,'0')}`;
 
   document.querySelectorAll(".perf-card[data-date]").forEach(card => {
     const d = card.dataset.date;
-    // Remove static classes first
-    card.classList.remove("today", "tomorrow");
-    if (d === todayStr) {
-      // Check if show time has already passed
+    card.classList.remove("today", "tomorrow", "past");
+
+    if (d < todayStr) {
+      // ── Past: mark card, replace sale tags ──
+      card.classList.add("past");
+      card.querySelectorAll(".tag-on-sale, .tag-limited, .tag-soon, .tag-new").forEach(tag => {
+        if (tag.textContent.includes("售票") ||
+            tag.textContent.includes("余票") ||
+            tag.textContent.includes("开票") ||
+            tag.textContent.includes("近期开演")) {
+          tag.className = "tag tag-ended";
+          tag.textContent = "已演完";
+        }
+      });
+    } else if (d === todayStr) {
+      // ── Today: check if show time already passed ──
       const timeStr = card.dataset.time || "23:59";
       const [hh, mm] = timeStr.split(":").map(Number);
       const showTime = new Date(now);
       showTime.setHours(hh, mm, 0, 0);
       if (now < showTime) {
-        // Show hasn't started yet today
         card.classList.add("today");
+      } else {
+        // Show time passed — treat as past
+        card.classList.add("past");
+        card.querySelectorAll(".tag-on-sale, .tag-soon").forEach(tag => {
+          if (tag.textContent.includes("售票") || tag.textContent.includes("近期开演")) {
+            tag.className = "tag tag-ended";
+            tag.textContent = "已演完";
+          }
+        });
       }
-      // If now >= showTime, neither today nor tomorrow (treat as past)
     } else if (d === tomorrowStr) {
       card.classList.add("tomorrow");
+    }
+
+    // ── Pre-sale: if data-sale-date is set and still in future ──
+    const saleDateStr = card.dataset.saleDate;
+    if (saleDateStr && saleDateStr > todayStr) {
+      const [sy, sm, sdd] = saleDateStr.split("-").map(Number);
+      const saleLabel = `${sm}月${sdd}日开票`;
+      card.querySelectorAll(".tag-on-sale").forEach(tag => {
+        if (tag.textContent.includes("售票")) {
+          tag.className = "tag tag-presale";
+          tag.textContent = `待开票（${saleLabel}）`;
+        }
+      });
     }
   });
 }
