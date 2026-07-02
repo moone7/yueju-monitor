@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>上海越剧演出售票日报 — 2026年7月1日</title>
+<title>上海越剧演出售票日报 — 2026年7月2日</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');
 
@@ -198,405 +198,459 @@
     font-size: 12px; cursor: default;
     position: relative; transition: all 0.2s;
     display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start;
+    background: rgba(255,255,255,0.02);
     border: 1px solid transparent;
-    background: rgba(255,255,255,0.015);
   }
-  .cal-day.empty { opacity: 0; pointer-events: none; }
-  .cal-day.other-month { opacity: 0.25; }
-  .cal-day.today-cal {
+  .cal-day.empty { background: transparent; cursor: default; }
+  .cal-day:hover:not(.empty) {
     background: rgba(201,169,110,0.06);
-    border-color: rgba(201,169,110,0.18);
-    box-shadow: inset 0 0 20px rgba(201,169,110,0.03);
+    border-color: rgba(201,169,110,0.15);
+  }
+  .cal-day.today-cal {
+    background: rgba(181,52,58,0.12);
+    border-color: rgba(181,52,58,0.35);
   }
   .cal-day.today-cal .cal-day-num {
-    color: var(--gold-light);
-    text-shadow: 0 0 12px rgba(201,169,110,0.2);
+    color: var(--crimson-light); font-weight: 700;
   }
-  .cal-day.has-show { cursor: pointer; }
-  .cal-day.has-show:hover {
-    background: rgba(201,169,110,0.08);
-    border-color: rgba(201,169,110,0.25);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 2;
+  .cal-day.has-show {
+    cursor: pointer;
+    background: rgba(201,169,110,0.07);
+    border-color: rgba(201,169,110,0.18);
+  }
+  .cal-day.has-star-show {
+    box-shadow: inset 0 0 12px rgba(255,215,0,0.08);
+    border-color: rgba(255,215,0,0.35);
+  }
+  .cal-day.has-bought-show {
+    background: rgba(45,90,39,0.18);
+    border-color: rgba(74,157,63,0.35);
   }
   .cal-day.selected {
-    background: rgba(181,52,58,0.15) !important;
-    border-color: rgba(181,52,58,0.45) !important;
-    box-shadow: 0 0 16px rgba(181,52,58,0.12), inset 0 0 8px rgba(181,52,58,0.05) !important;
-  }
-  .cal-day.selected .cal-day-num { color: var(--crimson-light) !important; }
-  .cal-day.has-bought-show {
-    border-color: rgba(181,52,58,0.3) !important;
-    background: linear-gradient(135deg,
-      rgba(181,52,58,0.06) 0%,
-      rgba(181,52,58,0.02) 100%
-    );
-    box-shadow: inset 0 0 12px rgba(181,52,58,0.04);
+    background: rgba(181,52,58,0.18);
+    border-color: var(--crimson-light);
+    box-shadow: 0 0 14px rgba(181,52,58,0.18);
   }
   .cal-day-num {
-    font-size: 13px; font-weight: 600; line-height: 1;
-    margin-bottom: 3px; color: var(--text-muted);
-    font-family: 'Noto Serif SC', serif;
-  }
-  .cal-day.has-bought-show .cal-day-num::after {
-    content: ' ✓';
-    font-size: 9px; color: var(--crimson-light);
-    font-weight: 700; opacity: 0.9;
+    font-size: 12px; color: var(--text-muted);
+    margin-bottom: 3px; line-height: 1;
   }
   .cal-day-names {
-    display: flex; flex-direction: column; align-items: center; gap: 2.5px;
-    flex: 1; justify-content: center; width: 100%; overflow: hidden;
-    padding: 0 1px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px; width: 100%;
   }
   .cal-day-name {
-    display: inline-flex; align-items: center; gap: 3px;
-    font-size: 9.5px; line-height: 1.35; white-space: nowrap;
-    overflow: hidden; max-width: 100%;
+    font-size: 9.5px; color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
     padding: 2px 4px; border-radius: 4px;
-    color: rgba(220,220,220,0.75);
-    background: rgba(255,255,255,0.04);
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: flex; align-items: center; gap: 3px;
     border: 1px solid rgba(255,255,255,0.04);
-    transition: all 0.2s;
-    font-weight: 400;
-  }
-  .cal-day-name .title-text { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; min-width: 0; }
-  .cal-day.has-show:hover .cal-day-name {
-    color: rgba(220,220,220,0.75);
-    background: rgba(255,255,255,0.07);
-  }
-  .cal-day.has-bought-show .cal-day-name {
-    color: rgba(255,150,150,0.9);
-    background: rgba(181,52,58,0.15);
-    border-color: rgba(181,52,58,0.2);
-    font-weight: 500;
-  }
-  .cal-day.has-star-show .cal-day-name {
-    color: rgba(224,192,96,0.85);
-    background: rgba(224,192,96,0.08);
-    border-color: rgba(224,192,96,0.12);
   }
   .cal-day-name.star-show {
-    color: rgba(255,215,0,0.9);
-    background: rgba(255,215,0,0.1);
-    border-color: rgba(255,215,0,0.18);
-    font-weight: 500;
-    box-shadow: 0 0 6px rgba(255,215,0,0.06);
+    background: rgba(255,215,0,0.12);
+    color: #ffd76e;
+    border-color: rgba(255,215,0,0.25);
   }
   .cal-day-name.bought-name {
-    color: rgba(255,150,150,0.9);
-    background: rgba(181,52,58,0.15);
-    border-color: rgba(181,52,58,0.2);
+    background: rgba(74,157,63,0.2);
+    color: #8fdb85;
+    border-color: rgba(74,157,63,0.3);
   }
+  .cal-day-name .title-text { overflow: hidden; text-overflow: ellipsis; }
   .cal-day-name.cal-more {
     background: transparent;
-    border-color: transparent;
     color: var(--text-dim);
-    font-size: 10px;
-    font-weight: 400;
+    border: 1px dashed rgba(201,169,110,0.2);
   }
-  .cal-group-tag {
-    display: inline-block;
-    font-size: 8px; font-weight: 400;
-    width: 14px; height: 14px; line-height: 14px;
-    text-align: center; border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .cal-group-tag.g1 { color: #ff9999; background: rgba(220,60,60,0.2); border: 1px solid rgba(220,60,60,0.35); }
-  .cal-group-tag.g2 { color: #e0c060; background: rgba(201,169,110,0.16); border: 1px solid rgba(201,169,110,0.3); }
-  .cal-group-tag.g3 { color: #6ecfc6; background: rgba(80,180,175,0.15); border: 1px solid rgba(80,180,175,0.28); }
-
-  .cal-group-legend {
-    display: flex; align-items: center; gap: 8px;
-    padding: 4px 16px 6px;
-    font-size: 10.5px; color: var(--text-dim);
-    border-bottom: 1px solid rgba(201,169,110,0.06);
-    letter-spacing: 0.5px;
-  }
-  .cal-group-legend .legend-dot {
-    display: inline-flex; align-items: center; gap: 3px;
-  }
-  .cal-group-legend .legend-dot .mini-dot {
-    display: inline-block; width: 12px; height: 12px; border-radius: 50%;
-    font-size: 7px; text-align: center; line-height: 12px; font-weight: 400;
-  }
-  .cal-group-legend .legend-dot .mini-dot.one  { color:#ff9999; background:rgba(220,60,60,0.2);  border:1px solid rgba(220,60,60,0.35); }
-  .cal-group-legend .legend-dot .mini-dot.two  { color:#e0c060; background:rgba(201,169,110,0.16); border:1px solid rgba(201,169,110,0.3); }
-  .cal-group-legend .legend-dot .mini-dot.three { color:#6ecfc6; background:rgba(80,180,175,0.15);  border:1px solid rgba(80,180,175,0.28); }
   .cal-star-badge {
-    position: absolute; top: 1px; right: 2px;
-    font-size: 12px; line-height: 1;
-    filter: drop-shadow(0 0 3px rgba(255,215,0,0.5));
-    pointer-events: none; z-index: 1;
+    position: absolute; top: 2px; right: 2px;
+    font-size: 16px; line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+    pointer-events: none;
   }
   .cal-bought-badge {
-    position: absolute; bottom: 4px; right: 4px;
-    font-size: 7.5px; font-weight: 700;
-    background: linear-gradient(135deg,
-      rgba(181,52,58,0.35) 0%,
-      rgba(181,52,58,0.2) 100%
-    );
-    color: #ffaaaa; border-radius: 4px;
-    padding: 1.5px 5px;
-    pointer-events: none; z-index: 1;
-    letter-spacing: 1px;
-    border: 1px solid rgba(181,52,58,0.25);
+    position: absolute; bottom: 3px; right: 3px;
+    font-size: 8px; font-weight: 700;
+    background: var(--tag-new); color: #fff;
+    padding: 1px 4px; border-radius: 4px;
+    pointer-events: none;
   }
+  .cal-day.has-bought-show .cal-day-num::after {
+    content: '●';
+    font-size: 9px; color: var(--tag-new);
+    margin-left: 2px; vertical-align: top;
+  }
+  .cal-group-tag {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 13px; height: 13px; border-radius: 50%;
+    font-size: 8px; line-height: 1;
+    color: #fff; flex-shrink: 0;
+    font-family: 'Noto Serif SC', serif;
+  }
+  .cal-group-tag.g一 { background: #6b8cae; }
+  .cal-group-tag.g二 { background: #b86b6b; }
+  .cal-group-tag.g三 { background: #7a9b76; }
+  .cal-group-legend {
+    display: flex; gap: 12px; padding: 6px 16px 2px;
+    font-size: 10px; color: var(--text-dim);
+  }
+  .legend-dot { display: flex; align-items: center; gap: 4px; }
+  .legend-dot .mini-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 8px; color: #fff;
+    font-family: 'Noto Serif SC', serif;
+  }
+  .legend-dot .mini-dot.one { background: #6b8cae; }
+  .legend-dot .mini-dot.two { background: #b86b6b; }
+  .legend-dot .mini-dot.three { background: #7a9b76; }
 
-  /* ===== Tooltip ===== */
+  /* Tooltip */
   .cal-tooltip {
-    display: none;
     position: fixed;
-    z-index: 1000;
-    min-width: 240px; max-width: 340px;
-    background: var(--surface-raised);
-    border: 1px solid rgba(201,169,110,0.4);
+    display: none;
+    background: rgba(26,23,20,0.98);
+    border: 1px solid rgba(201,169,110,0.25);
     border-radius: 10px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,110,0.1);
-    padding: 14px 16px;
-    font-size: 12px; line-height: 1.7;
-    pointer-events: auto;
-    animation: tooltipIn 0.15s ease;
+    padding: 12px 14px;
+    max-width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 1000;
+    font-size: 12px;
+    color: var(--text);
+    backdrop-filter: blur(4px);
   }
-  .cal-tooltip .tt-close {
-    font-size: 14px; color: var(--text-dim); cursor: pointer;
-    padding: 4px; line-height: 1; transition: color 0.2s;
-    user-select: none;
-  }
-  .cal-tooltip .tt-close:hover { color: var(--crimson-light); }
-  @keyframes tooltipIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-  .cal-tooltip .tt-header {
+  .tt-header {
     font-family: 'Noto Serif SC', serif;
-    font-size: 13px; font-weight: 700; color: var(--gold-light);
-    margin-bottom: 6px; padding-bottom: 6px;
+    color: var(--gold-light);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
     border-bottom: 1px solid var(--border);
+    display: block;
   }
-  .cal-tooltip .tt-item {
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+  .tt-item { margin-bottom: 10px; }
+  .tt-item:last-child { margin-bottom: 0; }
+  .tt-title { font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .tt-star { color: #ffd700; }
+  .tt-bought {
+    display: inline-block; margin-left: 6px;
+    background: var(--tag-new); color: #fff;
+    padding: 1px 5px; border-radius: 4px;
+    font-size: 10px; font-weight: 700;
   }
-  .cal-tooltip .tt-item:last-child { border-bottom: none; }
-  .cal-tooltip .tt-title { font-weight: 600; color: var(--text); font-size: 12px; }
-  .cal-tooltip .tt-title .tt-star { color: #ffd700; }
-  .cal-tooltip .tt-title .tt-bought { color: var(--crimson-light); font-size: 10px; margin-left: 4px; }
-  .cal-tooltip .tt-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
-  .cal-tooltip .tt-cast { color: var(--text-dim); font-size: 10px; margin-top: 1px; }
-  .cal-tooltip .tt-price { color: var(--gold-light); font-size: 11px; font-weight: 600; margin-top: 1px; }
+  .tt-meta { color: var(--text-muted); font-size: 11px; margin-bottom: 3px; }
+  .tt-cast { color: var(--text-dim); font-size: 11px; line-height: 1.5; margin-bottom: 3px; }
+  .tt-price { color: var(--gold-light); font-size: 11px; font-weight: 500; }
+  .tt-close {
+    cursor: pointer; color: var(--text-dim);
+    font-size: 14px; padding: 2px 4px;
+  }
+  .tt-close:hover { color: var(--crimson-light); }
 
-  /* ===== Alerts ===== */
-  .alert { margin: 24px 0 8px; border-radius: 12px; overflow: hidden; }
-  .alert-urgent {
-    background: linear-gradient(135deg, rgba(181,52,58,0.15), rgba(181,52,58,0.05));
-    border: 1px solid rgba(181,52,58,0.3);
+  /* ===== STATS ===== */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 12px; margin: 24px 0 0;
   }
-  .alert-new {
-    background: linear-gradient(135deg, rgba(201,169,110,0.08), rgba(201,169,110,0.02));
-    border: 1px solid rgba(201,169,110,0.2);
-  }
-  .alert-header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 20px; font-weight: 600; font-size: 15px; letter-spacing: 1px;
-  }
-  .alert-urgent .alert-header { color: var(--crimson-light); background: rgba(181,52,58,0.15); }
-  .alert-new .alert-header { color: var(--gold-light); background: rgba(201,169,110,0.08); }
-  .alert-icon { font-size: 18px; }
-  .alert-body { padding: 14px 20px; font-size: 14px; color: var(--text); line-height: 1.8; }
-  .alert-body strong { color: var(--gold-light); }
-
-  /* ===== Section ===== */
-  .section-title {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 20px; font-weight: 700; color: var(--gold);
-    margin: 40px 0 20px;
-    display: flex; align-items: center; gap: 10px; letter-spacing: 2px;
-  }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .section-icon { font-size: 22px; }
-
-  /* ===== Performance Cards ===== */
-  .perf-grid { display: grid; gap: 16px; }
-
-  .perf-card {
+  .stat {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 24px;
+    padding: 18px 12px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .stat:hover { transform: translateY(-2px); border-color: rgba(201,169,110,0.2); }
+  .stat-num {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px; font-weight: 900;
+    background: linear-gradient(180deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.5px; }
+
+  /* ===== ALERTS ===== */
+  .alert {
+    border-radius: 12px;
+    margin: 20px 0 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .alert-header {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 18px;
+    font-weight: 700; font-size: 15px;
+    letter-spacing: 1px;
+  }
+  .alert-icon { font-size: 18px; }
+  .alert-body {
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 2;
+    color: var(--text-muted);
+  }
+  .alert-body strong { color: var(--text); }
+  .alert-urgent {
+    background: linear-gradient(135deg, rgba(139,26,26,0.12), rgba(181,52,58,0.06));
+    border-color: rgba(181,52,58,0.3);
+  }
+  .alert-urgent .alert-header { background: rgba(181,52,58,0.12); color: var(--crimson-light); }
+  .alert-new {
+    background: linear-gradient(135deg, rgba(45,90,39,0.1), rgba(74,157,63,0.04));
+    border-color: rgba(74,157,63,0.25);
+  }
+  .alert-new .alert-header { background: rgba(74,157,63,0.1); color: #8fdb85; }
+
+  /* ===== STAR SECTION ===== */
+  .star-section {
+    margin: 28px 0 0;
+    background: linear-gradient(135deg,
+      rgba(255,215,0,0.06) 0%,
+      rgba(201,169,110,0.03) 50%,
+      rgba(181,52,58,0.04) 100%
+    );
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,215,0,0.05);
+    position: relative;
+  }
+  .star-section::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, #ffd700, #c9a96e, #ffd700, transparent);
+    border-radius: 16px 16px 0 0;
+  }
+  .star-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, rgba(255,215,0,0.15), rgba(201,169,110,0.08));
+    color: #ffd76e;
+    border: 1px solid rgba(255,215,0,0.25);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  /* ===== SECTION TITLE ===== */
+  .section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--gold-light);
+    margin: 42px 0 18px;
+    letter-spacing: 2px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-icon { font-size: 22px; }
+
+  /* ===== DATE DIVIDER ===== */
+  .date-divider {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--text-dim);
+    margin: 30px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .date-divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ===== PERF CARDS ===== */
+  .perf-grid { display: flex; flex-direction: column; gap: 14px; }
+  .perf-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
     display: grid;
     grid-template-columns: 1fr auto;
-    grid-template-areas: "info tags" "info price";
-    gap: 8px 24px;
-    transition: border-color 0.2s, transform 0.2s, opacity 0.3s;
-    position: relative; overflow: hidden;
+    gap: 16px;
+    position: relative;
+    transition: all 0.25s;
   }
-  .perf-card:hover { border-color: var(--gold); transform: translateY(-1px); }
-  .perf-card.hidden-by-filter { display: none; }
-
-  .perf-card.today {
-    border-color: rgba(201,169,110,0.35);
-    background: linear-gradient(135deg, rgba(201,169,110,0.06), var(--surface));
-  }
-  .perf-card.today::before {
-    content: '今日开演';
-    position: absolute; top: 0; right: 0;
-    background: var(--crimson); color: #fff;
-    font-size: 11px; font-weight: 600;
-    padding: 3px 10px 3px 14px;
-    border-radius: 0 12px 0 8px; letter-spacing: 1px;
-  }
-  .perf-card.today.bought::before { content: '今日开演 · 已购'; background: #7b2020; }
-  .perf-card.tomorrow::before {
-    content: '明日开演';
-    position: absolute; top: 0; right: 0;
-    background: #5c3d1e; color: var(--gold-light);
-    font-size: 11px; font-weight: 600;
-    padding: 3px 10px 3px 14px;
-    border-radius: 0 12px 0 8px; letter-spacing: 1px;
-  }
-
-  .perf-card.bought {
-    border-color: rgba(181,52,58,0.35) !important;
-    background: linear-gradient(135deg, rgba(181,52,58,0.06), var(--surface)) !important;
-  }
-  .perf-card.bought .perf-title::after {
-    content: ' ✓ 已购';
-    font-size: 12px; color: var(--crimson-light);
-    font-weight: 500; font-style: normal;
-    margin-left: 8px; letter-spacing: 0;
-  }
-
-  .perf-info { grid-area: info; }
-  .perf-title {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px;
-  }
-  .perf-title em { font-style: normal; color: var(--gold-light); font-size: 13px; margin-left: 6px; letter-spacing: 0.5px; }
-  .perf-meta {
-    display: flex; flex-wrap: wrap; gap: 16px;
-    margin-top: 8px; font-size: 13px; color: var(--text-muted);
-  }
-  .perf-meta span { display: flex; align-items: center; gap: 5px; }
-  .perf-meta .meta-icon { font-size: 14px; }
-  .perf-cast { margin-top: 8px; font-size: 13px; color: var(--text-dim); line-height: 1.6; }
-  .perf-cast strong { color: var(--text-muted); font-weight: 500; }
-
-  .perf-side { grid-area: tags; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-  .perf-price {
-    grid-area: price; text-align: right;
-    font-family: 'Noto Serif SC', serif; font-weight: 700; font-size: 18px; color: var(--gold-light);
-  }
-  .perf-price small { font-size: 12px; color: var(--text-dim); font-weight: 400; }
-
-  .buy-btn {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 5px 12px; border-radius: 20px; cursor: pointer;
-    font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
-    border: 1px solid rgba(181,52,58,0.4);
-    background: rgba(181,52,58,0.1); color: var(--crimson-light);
-    transition: all 0.2s; white-space: nowrap; margin-top: 4px;
-    user-select: none;
-  }
-  .buy-btn:hover { background: rgba(181,52,58,0.25); border-color: rgba(181,52,58,0.6); }
-  .buy-btn.active {
-    background: rgba(181,52,58,0.25); border-color: rgba(181,52,58,0.6);
-    color: #ff9999;
-  }
-  .buy-btn .btn-icon { font-size: 13px; }
-
-  .tag {
-    display: inline-block; padding: 2px 10px; border-radius: 12px;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.5px; white-space: nowrap;
-  }
-  .tag-urgent  { background: var(--tag-urgent); color: #ff8888; }
-  .tag-new     { background: var(--tag-new); color: #7ccd6e; }
-  .tag-soon    { background: var(--tag-soon); color: #d4a64a; }
-  .tag-status  { background: var(--surface-raised); color: var(--text-muted); }
-  .tag-on-sale { background: rgba(45,90,39,0.4); color: #7ccd6e; }
-  .tag-limited { background: rgba(181,52,58,0.3); color: #ff9999; }
-
-  /* ===== Star Performer Card ===== */
-  .star-section { margin: 24px 0 8px; }
-  .star-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,215,0,0.04));
-    border: 1px solid rgba(255,215,0,0.3);
-    border-radius: 8px; padding: 6px 14px;
-    font-size: 13px; font-weight: 600; color: #ffd700;
-    letter-spacing: 1px; margin-bottom: 12px;
+  .perf-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    border-color: rgba(201,169,110,0.25);
   }
   .perf-card.star {
-    border-color: rgba(255,215,0,0.25);
-    background: linear-gradient(135deg, rgba(255,215,0,0.05), var(--surface));
-    box-shadow: 0 0 20px rgba(255,215,0,0.05);
+    border-color: rgba(255,215,0,0.45);
+    background: linear-gradient(135deg,
+      rgba(255,215,0,0.08) 0%,
+      rgba(201,169,110,0.03) 40%,
+      rgba(26,23,20,0.98) 100%
+    );
+    box-shadow: 0 0 20px rgba(255,215,0,0.08), inset 0 1px 0 rgba(255,215,0,0.08);
   }
-  .perf-card.star:hover {
-    border-color: rgba(255,215,0,0.5);
-    box-shadow: 0 0 30px rgba(255,215,0,0.1);
+  .perf-card.star::after {
+    content: '✦';
+    position: absolute; top: 8px; right: 12px;
+    font-size: 20px; color: rgba(255,215,0,0.25);
+    pointer-events: none;
   }
-  .perf-card.star.bought {
-    border-color: rgba(255,215,0,0.4) !important;
-    background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(181,52,58,0.06), var(--surface)) !important;
+  .perf-card.today {
+    border-color: rgba(181,52,58,0.45);
+    background: linear-gradient(135deg,
+      rgba(181,52,58,0.08) 0%,
+      rgba(26,23,20,0.98) 100%
+    );
+  }
+  .perf-card.tomorrow {
+    border-color: rgba(201,169,110,0.35);
+    background: linear-gradient(135deg,
+      rgba(201,169,110,0.06) 0%,
+      rgba(26,23,20,0.98) 100%
+    );
+  }
+  .perf-card.bought {
+    border-color: rgba(74,157,63,0.45);
+    background: linear-gradient(135deg,
+      rgba(45,90,39,0.12) 0%,
+      rgba(26,23,20,0.98) 100%
+    );
+  }
+  .perf-card.hidden-by-filter { display: none !important; }
+  .perf-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1.4;
+  }
+  .perf-title em {
+    font-style: normal;
+    font-size: 13px; color: var(--text-muted); font-weight: 400;
+    margin-left: 8px;
+  }
+  .perf-meta {
+    display: flex; flex-wrap: wrap; gap: 10px 16px;
+    margin-top: 10px;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .meta-icon { margin-right: 4px; opacity: 0.8; }
+  .perf-cast {
+    margin-top: 12px;
+    font-size: 13px; color: var(--text-muted);
+    line-height: 1.8;
+  }
+  .perf-cast strong { color: var(--text); font-weight: 600; }
+  .perf-side {
+    display: flex; flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    min-width: 110px;
+  }
+  .perf-price {
+    position: absolute; bottom: 16px; right: 20px;
+    text-align: right;
+    font-size: 14px; font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1.4;
+  }
+  .perf-price small {
+    display: block;
+    font-size: 11px; color: var(--text-dim);
+    font-weight: 400;
+  }
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .tag-new { background: rgba(45,90,39,0.25); color: #8fdb85; border: 1px solid rgba(74,157,63,0.3); }
+  .tag-on-sale { background: rgba(201,169,110,0.12); color: var(--gold-light); border: 1px solid rgba(201,169,110,0.2); }
+  .tag-soon { background: rgba(92,61,30,0.3); color: #e0b876; border: 1px solid rgba(224,184,118,0.25); }
+  .tag-urgent { background: rgba(139,26,26,0.25); color: var(--crimson-light); border: 1px solid rgba(181,52,58,0.3); }
+  .tag-limited { background: rgba(139,26,26,0.18); color: #e08e8e; border: 1px solid rgba(181,52,58,0.22); }
+  .tag-status { background: rgba(107,99,85,0.2); color: var(--text-muted); border: 1px solid rgba(107,99,85,0.3); }
+  .tag-past { background: rgba(107,99,85,0.15); color: var(--text-dim); border: 1px solid rgba(107,99,85,0.2); }
+
+  .buy-btn {
+    background: transparent;
+    border: 1px solid rgba(201,169,110,0.35);
+    color: var(--gold-light);
+    padding: 7px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: all 0.2s;
+    margin-top: 2px;
+  }
+  .buy-btn:hover {
+    background: rgba(201,169,110,0.1);
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(201,169,110,0.1);
+  }
+  .buy-btn.active {
+    background: rgba(45,90,39,0.25);
+    border-color: rgba(74,157,63,0.5);
+    color: #8fdb85;
   }
 
-  /* ===== Stats Bar ===== */
-  .stats-bar { display: flex; gap: 16px; margin: 24px 0 32px; flex-wrap: wrap; }
-  .stat {
-    flex: 1; min-width: 120px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px;
-    padding: 16px 20px; text-align: center;
-  }
-  .stat-num {
-    font-family: 'Noto Serif SC', serif; font-size: 28px; font-weight: 900;
-    color: var(--gold-light); line-height: 1.2;
-  }
-  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px; }
-
-  /* ===== Date Divider ===== */
-  .date-divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 32px 0 16px;
-    color: var(--text-dim); font-size: 13px; font-weight: 500; letter-spacing: 1px;
-  }
-  .date-divider::before, .date-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  /* ===== Footer ===== */
+  /* ===== FOOTER ===== */
   .footer {
-    margin-top: 48px; padding: 24px;
-    text-align: center; border-top: 1px solid var(--border);
-    font-size: 12px; color: var(--text-dim);
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.9;
   }
-  .footer a { color: var(--gold); text-decoration: none; }
-  .footer a:hover { text-decoration: underline; }
-  .footer .sources {
-    display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 16px; margin-bottom: 12px; font-size: 11px;
+  .sources {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 8px 12px; margin-bottom: 16px;
+  }
+  .sources span {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 16px;
+    font-size: 11px; color: var(--text-muted);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 720px) {
+    .header h1 { font-size: 24px; letter-spacing: 2px; }
+    .header .subtitle { font-size: 12px; }
+    .container { padding: 0 16px 48px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-num { font-size: 24px; }
+    .perf-card {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding-bottom: 64px;
+    }
+    .perf-side {
+      flex-direction: row; flex-wrap: wrap;
+      align-items: center; justify-content: flex-start;
+    }
+    .perf-price {
+      bottom: 16px; right: auto; left: 20px;
+      text-align: left;
+    }
+    .perf-title { font-size: 16px; }
+    .perf-meta { gap: 6px 12px; }
+    .section-title { font-size: 18px; margin-top: 32px; }
+    .cal-day { min-height: 50px; padding: 4px 2px; }
+    .cal-day-name { font-size: 8.5px; padding: 1px 3px; }
+    .cal-tooltip { max-width: 260px; }
   }
 
   @media (max-width: 640px) {
-    .header h1 { font-size: 24px; }
-    .perf-card { grid-template-columns: 1fr; grid-template-areas: "info" "price" "tags"; padding: 16px; }
-    .perf-side { flex-direction: row; flex-wrap: wrap; }
-    .perf-price { text-align: left; }
-    .stats-bar { gap: 8px; }
-    .stat { min-width: 80px; padding: 12px; }
-    .container { padding: 0 12px 48px; }
-    #calendar-section { border-radius: 10px; margin-top: 16px; }
-    .cal-header { padding: 10px 12px; }
-    .cal-title { font-size: 14px; letter-spacing: 1px; }
-    .cal-nav-btn { width: 26px; height: 26px; font-size: 13px; }
-    .cal-grid { gap: 3px; padding: 3px 6px 10px; grid-template-columns: repeat(7, 1fr); }
-    .cal-weekdays { padding: 6px 6px 2px; font-size: 10px; letter-spacing: 1px; }
-    .cal-group-legend { padding: 3px 8px 5px; gap: 6px; font-size: 10px; }
-    .cal-group-legend .legend-dot .mini-dot { width: 11px; height: 11px; font-size: 6.5px; line-height: 11px; }
-    /* Mobile: tighter cells, 1 name only */
-    .cal-day { min-height: 48px; padding: 3px 1px; border-radius: 6px; justify-content: flex-start; }
-    .cal-day-num { font-size: 11px; margin-bottom: 1px; text-align: center; }
-    .cal-day-names { gap: 1.5px; padding: 0; align-items: stretch; }
-    .cal-day-name { font-size: 8px; padding: 1px 3px; border-radius: 3px; gap: 1.5px; width: 100%; justify-content: center; }
-    .cal-day-name .title-text { max-width: 90%; }
-    .cal-day-name.cal-more { font-size: 9px; width: auto; }
-    .cal-group-tag { width: 11px; height: 11px; line-height: 11px; font-size: 6.5px; }
-    /* Badges more prominent */
-    .cal-star-badge { font-size: 13px; top: -1px; right: 1px; }
+    .cal-day { min-height: 48px; }
+    .cal-day-name { font-size: 8px; }
+    .cal-star-badge { font-size: 14px; }
     .cal-bought-badge { font-size: 7px; font-weight: 700; padding: 1px 4px; border-radius: 3px; bottom: 2px; right: 2px; }
     .cal-tooltip { max-width: 240px; left: 0; right: 0; margin: 0 auto; }
     .cal-day.has-bought-show .cal-day-num::after { font-size: 8px; }
@@ -635,8 +689,8 @@
 <header class="header">
   <div class="header-icon">🎭</div>
   <h1>上海越剧演出售票日报</h1>
-  <p class="subtitle">每日监控 · 大麦网 + 东方演出网 + 剧院官方</p>
-  <span class="date-badge">📅 2026年7月1日 星期三</span>
+  <p class="subtitle">每日监控 · 大麦网 + 东方演出网 + 剧院官方 + 全国巡演</p>
+  <span class="date-badge">📅 2026年7月2日 星期四</span>
 </header>
 
 <div class="container">
@@ -681,7 +735,7 @@
   <!-- ===== STATS ===== -->
   <div class="stats-bar">
     <div class="stat">
-      <div class="stat-num">24</div>
+      <div class="stat-num">29</div>
       <div class="stat-label">近期演出场次</div>
     </div>
     <div class="stat">
@@ -693,38 +747,37 @@
       <div class="stat-label">🎟️ 已购场次</div>
     </div>
     <div class="stat">
-      <div class="stat-num">8</div>
+      <div class="stat-num">6</div>
       <div class="stat-label">涉及城市</div>
     </div>
   </div>
 
-  <!-- ===== 🔥 ===== -->
+  <!-- ===== 🔥 紧急提醒 ===== -->
   <div class="alert alert-urgent">
     <div class="alert-header">
       <span class="alert-icon">🔥</span> 近期高优提醒
     </div>
     <div class="alert-body">
-      · <strong>🎬 今日（7/1）开演！</strong>宛平剧院 越剧小戏《渔光曲》《自古英雄出少年》《新生》，¥100-200元，今晚19:15。<br>
-      · 天蟾逸夫《红楼梦》《梁祝》（7/28-29）早鸟8折已于昨日截止，目前恢复原价 ¥80-380。<br>
-      · <strong>《重圆记》</strong>杨婷娜/李旭丹/王清 7/3宁波首演倒计时2天，¥80-580。<br>
-      · 广州红线女大剧院《红楼梦》⭐陆志艳 6.18大促7折优惠中。
+      · <strong>⭐ 陆志艳近期演出：</strong>7月9日广州红线女《红楼梦》（饰林黛玉）→ 7月25日临港《虞美人》（饰无邪）→ 8月8日北大《舞台姐妹》（饰竺春花）→ 9月12日杭州蝴蝶剧场《舞台姐妹》（饰竺春花）。<br>
+      · 宛平剧院《红楼梦》《梁山伯与祝英台》（7/13-14）已全面开票，可选座。<br>
+      · 上海天蟾逸夫《红楼梦》《梁祝》（7/28-29）早鸟优惠已截止，恢复原价 ¥80-380。
     </div>
   </div>
 
-  <!-- ===== 🆕 ===== -->
+  <!-- ===== 🆕 今日新动态 ===== -->
   <div class="alert alert-new">
     <div class="alert-header">
       <span class="alert-icon">🆕</span> 今日新动态
     </div>
     <div class="alert-body">
-      · <strong>监控范围扩大！</strong>新增临港演艺中心、太仓大剧院两个场馆，并全面覆盖上海越剧院在全国各地的所有演出。<br>
-      · <strong>临港演艺中心</strong>新发现2场：7/16《情探》（三团）、7/25《虞美人》（⭐陆志艳参演）。<br>
-      · <strong>太仓大剧院</strong>7/18越剧小戏 ¥50全场统一价，上海越剧院三团献演。<br>
-      · <strong>京津冀巡演12场</strong>已全部开票：8/8-9/6，覆盖北京、天津、廊坊三城。
+      · <strong>监控范围扩大！</strong>新增临港演艺中心、太仓大剧院、杭州蝴蝶剧场，并全面覆盖上海越剧院在全国各地的所有演出。<br>
+      · <strong>上海越剧院2026“京津冀”巡演</strong>12场已全部开票：8/8-9/6，覆盖北京、天津、廊坊三城及国家大剧院。<br>
+      · <strong>新发现陆志艳场次：</strong>7月9日广州红线女大剧院《红楼梦》（饰林黛玉）、7月25日临港演艺中心《虞美人》（饰 无邪）。<br>
+      · 浙江小百花青春越剧《九斤姑娘》7/18-19将在杭州蝴蝶剧场首演，李云霄领衔。
     </div>
   </div>
 
-  <!-- ===== ⭐ 陆志艳 ===== -->
+  <!-- ===== ⭐ 陆志艳特别关注区 ===== -->
   <div class="star-section">
     <div class="star-badge">⭐ 特别关注 · 陆志艳（上海越剧院王派花旦，师承单仰萍）— 共4场</div>
 
@@ -738,7 +791,7 @@
         </div>
         <div class="perf-cast">
           <strong>主演：</strong>俞果（贾宝玉）、<strong style="color:#ffd700;">陆志艳</strong>（林黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 6.18大促7折优惠（最低票价除外）
+          <strong>演出单位：</strong>上海越剧院三团 · 广州艺术季重点展演
         </div>
       </div>
       <div class="perf-side">
@@ -748,6 +801,7 @@
       </div>
       <div class="perf-price">¥80 — 480<br><small>套票 ¥499(380×2) / ¥669(480×2)</small></div>
     </div>
+
 
     <div class="perf-card star" data-id="lzy-02" data-date="2026-07-25" data-title="新编历史故事剧《虞美人》" data-venue="上海临港演艺中心" data-time="14:30" style="margin-top:12px;">
       <div class="perf-info">
@@ -790,26 +844,6 @@
       <div class="perf-price">校内 ¥40 — 240<br><small>校外 ¥80 — 380</small></div>
     </div>
 
-    <!-- lzy-04: 杭州蝴蝶剧场 9/12 舞台姐妹 -->
-    <div class="perf-card star" data-id="lzy-04" data-date="2026-09-12" data-title="越剧《舞台姐妹》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30" style="margin-top:12px;">
-      <div class="perf-info">
-        <div class="perf-title">越剧《舞台姐妹》 <em>百越文创第五届越剧优秀剧目邀请展 · 青春传承版</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>9月12日（周六）19:30</span>
-          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
-          <span><span class="meta-icon">🏙️</span>杭州</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>竺春花：<strong style="color:#ffd700;">陆志艳</strong> | 邢月红：俞果<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 百越文创第五届越剧优秀剧目邀请展
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥180 — 380<br><small>包厢另询</small></div>
-    </div>
   </div>
 
   <!-- ===== 📋 近期演出 ===== -->
@@ -818,78 +852,37 @@
   <div class="date-divider">7 月</div>
   <div class="perf-grid">
 
-    <div class="perf-card today" data-id="p01" data-date="2026-07-01" data-title="越剧小戏三出" data-venue="上海宛平剧院" data-time="19:15">
+    <div class="perf-card" data-id="p01" data-date="2026-07-01" data-title="越剧小戏三出" data-venue="上海宛平剧院-小剧场" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">越剧小戏《渔光曲》《自古英雄出少年》《新生》</div>
         <div class="perf-meta">
           <span><span class="meta-icon">📅</span>7月1日（周三）19:15</span>
-          <span><span class="meta-icon">📍</span>上海宛平剧院</span>
+          <span><span class="meta-icon">📍</span>上海宛平剧院-小剧场</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>冯军/王婉娜/姚磊（渔光曲）、赵一兰/姚磊/张艾嘉（自古英雄出少年）、李旭丹/裘隆/冯军（新生）<br>
+          <strong>主演：</strong>冯军/王婉娜/姚磊、赵一兰/姚磊/张艾嘉、李旭丹/裘隆/冯军等<br>
           <strong>演出单位：</strong>上海越剧院
         </div>
       </div>
       <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
+        <span class="tag tag-past">已开演</span>
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
       <div class="perf-price">¥100 — 200</div>
     </div>
 
-    <div class="perf-card tomorrow" data-id="p02" data-date="2026-07-03" data-title="越剧《重圆记》" data-venue="宁波逸夫剧院" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《重圆记》 <em>新编剧目首演</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月3日（周五）19:15</span>
-          <span><span class="meta-icon">📍</span>宁波逸夫剧院</span>
-          <span><span class="meta-icon">🏙️</span>宁波</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>杨婷娜（徐德言）、李旭丹（乐昌公主）、王清（杨素）、陈欣雨（红拂）<br>
-          <strong>演出单位：</strong>上海越剧院红楼团
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-new">即将首演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 580<br><small>6档可选</small></div>
-    </div>
 
-    <div class="perf-card" data-id="p03" data-date="2026-07-05" data-title="十大流派十大梅花演唱会" data-venue="慈溪大剧院" data-time="">
+    <div class="perf-card" data-id="p03" data-date="2026-07-10" data-title="越剧《梁山伯与祝英台》" data-venue="广州红线女大剧院" data-time="19:30">
       <div class="perf-info">
-        <div class="perf-title">"十大流派十大梅花"演唱会 <em>纪念越剧诞生120周年</em></div>
+        <div class="perf-title">越剧《梁山伯与祝英台》 <em>范傅版 · 2026广州艺术季</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月5日（周日）</span>
-          <span><span class="meta-icon">📍</span>慈溪大剧院</span>
-          <span><span class="meta-icon">🏙️</span>浙江慈溪</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>十大流派传承人 + 十位梅花奖得主同台<br>
-          <strong>亮点：</strong>流派唱腔百花齐放，百年越剧盛事
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-soon">近期开演</span>
-        <span class="tag tag-limited">余票紧张</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 880<br><small>多档票价</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p04" data-date="2026-07-09" data-title="越剧《红楼梦》" data-venue="广州红线女大剧院" data-time="19:30">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》 <em>徐王版 · 2026广州艺术季</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月9日（周四）19:30</span>
+          <span><span class="meta-icon">📅</span>7月10日（周五）19:30</span>
           <span><span class="meta-icon">📍</span>广州红线女大剧院</span>
           <span><span class="meta-icon">🏙️</span>广州</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>俞果（宝玉）、陆志艳（黛玉）<br>
-          <strong>演出单位：</strong>上海越剧院三团 · ⭐陆志艳场次 · 6.18大促7折中
+          <strong>主演：</strong>董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）<br>
+          <strong>演出单位：</strong>上海越剧院三团 · 广州艺术季
         </div>
       </div>
       <div class="perf-side">
@@ -899,6 +892,7 @@
       <div class="perf-price">¥80 — 480<br><small>套票 ¥499 / ¥669</small></div>
     </div>
 
+
     <div class="perf-card" data-id="p05" data-date="2026-07-13" data-title="越剧《红楼梦》" data-venue="上海宛平剧院·大剧场" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">越剧《红楼梦》</div>
@@ -907,7 +901,7 @@
           <span><span class="meta-icon">📍</span>上海宛平剧院·大剧场</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>王婉娜（宝玉）、李旭丹（黛玉）<br>
+          <strong>主演：</strong>王婉娜（贾宝玉）、李旭丹（林黛玉）<br>
           <strong>演出单位：</strong>上海越剧院红楼团
         </div>
       </div>
@@ -926,7 +920,7 @@
           <span><span class="meta-icon">📍</span>上海宛平剧院·大剧场</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>王舒雯（梁山伯）、王婕（祝英台）、吴群<br>
+          <strong>主演：</strong>王舒雯（梁山伯）、王婕（祝英台）、吴群（祝公远）<br>
           <strong>演出单位：</strong>上海越剧院红楼团
         </div>
       </div>
@@ -937,46 +931,45 @@
       <div class="perf-price">¥80 — 380</div>
     </div>
 
-    <div class="perf-card" data-id="p07" data-date="2026-07-16" data-title="越剧《情探》" data-venue="上海临港演艺中心" data-time="14:30">
+    <div class="perf-card" data-id="p07" data-date="2026-07-18" data-title="青春越剧《九斤姑娘》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30">
       <div class="perf-info">
-        <div class="perf-title">越剧《情探》 <em>经典剧目 · 三团传承版</em></div>
+        <div class="perf-title">青春越剧《九斤姑娘》 <em>首演 · 浙江小百花越剧院</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月16日（周四）14:30</span>
-          <span><span class="meta-icon">📍</span>上海临港演艺中心</span>
-          <span><span class="meta-icon">🏙️</span>上海 · 临港</span>
+          <span><span class="meta-icon">📅</span>7月18日（周六）19:30</span>
+          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
+          <span><span class="meta-icon">🏙️</span>杭州</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>杨韵儿、范莹、张艾嘉等<br>
-          <strong>演出单位：</strong>上海越剧院三团
+          <strong>主演：</strong>李云霄领衔主演<br>
+          <strong>演出单位：</strong>浙江小百花越剧院 · 7月3日18:00开票
         </div>
       </div>
       <div class="perf-side">
-        <span class="tag tag-new">🆕 新场馆</span>
+        <span class="tag tag-new">🆕 新发现</span>
         <span class="tag tag-on-sale">售票中</span>
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
-      <div class="perf-price">待确认<br><small>购票：大麦/临港演艺中心</small></div>
+      <div class="perf-price">以浙里票务为准</div>
     </div>
 
-    <div class="perf-card" data-id="p08" data-date="2026-07-18" data-title="越剧小戏三出" data-venue="太仓大剧院" data-time="14:00">
+    <div class="perf-card" data-id="p08" data-date="2026-07-19" data-title="青春越剧《九斤姑娘》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30">
       <div class="perf-info">
-        <div class="perf-title">越剧小戏《渔光曲》《自古英雄出少年》《新生》 <em>公益场</em></div>
+        <div class="perf-title">青春越剧《九斤姑娘》 <em>首演 · 浙江小百花越剧院</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月18日（周六）14:00</span>
-          <span><span class="meta-icon">📍</span>太仓大剧院</span>
-          <span><span class="meta-icon">🏙️</span>江苏太仓</span>
+          <span><span class="meta-icon">📅</span>7月19日（周日）19:30</span>
+          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
+          <span><span class="meta-icon">🏙️</span>杭州</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>冯军/王婉娜/姚磊（渔光曲）、赵一兰/姚磊/张艾嘉（自古英雄出少年）、李旭丹/裘隆/冯军（新生）<br>
-          <strong>演出单位：</strong>上海越剧院
+          <strong>主演：</strong>李云霄领衔主演<br>
+          <strong>演出单位：</strong>浙江小百花越剧院
         </div>
       </div>
       <div class="perf-side">
-        <span class="tag tag-new">🆕 新场馆</span>
         <span class="tag tag-on-sale">售票中</span>
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
-      <div class="perf-price">¥50<br><small>全场统一价</small></div>
+      <div class="perf-price">以浙里票务为准</div>
     </div>
 
     <div class="perf-card" data-id="p09" data-date="2026-07-22" data-title="小剧场越剧《张骞使西·三别三行》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
@@ -1019,35 +1012,16 @@
       <div class="perf-price">¥80 / 180 / 280</div>
     </div>
 
-    <div class="perf-card" data-id="p11" data-date="2026-07-25" data-title="新编历史故事剧《虞美人》" data-venue="上海临港演艺中心" data-time="14:30">
+    <div class="perf-card" data-id="p11" data-date="2026-07-28" data-title="越剧《红楼梦》" data-venue="上海天蟾逸夫舞台" data-time="19:15">
       <div class="perf-info">
-        <div class="perf-title">新编历史故事剧《虞美人》 <em>经典复排 · ⭐陆志艳参演</em></div>
+        <div class="perf-title">越剧《红楼梦》 <em>尹袁版 · 蟾桂常青系列</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月25日（周六）14:30</span>
-          <span><span class="meta-icon">📍</span>上海临港演艺中心</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>忻雅琴（虞姬）、王柔桑（项羽）、吴群（张良）、吴佳燕（范增）、陆志艳（无邪）<br>
-          <strong>演出单位：</strong>上海越剧院 · 获第十届中国戏剧节剧目奖
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">¥80 — 380</div>
-    </div>
-
-    <div class="perf-card" data-id="p12" data-date="2026-07-28" data-title="越剧《红楼梦》" data-venue="上海天蟾逸夫舞台" data-time="19:15">
-      <div class="perf-info">
-        <div class="perf-title">越剧《红楼梦》 <em>蟾桂常青系列</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月28日（周一）19:15</span>
+          <span><span class="meta-icon">📅</span>7月28日（周二）19:15</span>
           <span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>郭茜云、俞景岚等<br>
-          <strong>演出单位：</strong>上海越剧院
+          <strong>主演：</strong>郭茜云（贾宝玉）、俞景岚（林黛玉）<br>
+          <strong>演出单位：</strong>上海越剧院一团
         </div>
       </div>
       <div class="perf-side">
@@ -1057,16 +1031,16 @@
       <div class="perf-price">¥80 — 380<br><small>早鸟已截止</small></div>
     </div>
 
-    <div class="perf-card" data-id="p13" data-date="2026-07-29" data-title="越剧《梁山伯与祝英台》" data-venue="上海天蟾逸夫舞台" data-time="19:15">
+    <div class="perf-card" data-id="p12" data-date="2026-07-29" data-title="越剧《梁山伯与祝英台》" data-venue="上海天蟾逸夫舞台" data-time="19:15">
       <div class="perf-info">
-        <div class="perf-title">越剧《梁山伯与祝英台》 <em>蟾桂常青系列</em></div>
+        <div class="perf-title">越剧《梁山伯与祝英台》 <em>袁范版 · 蟾桂常青系列</em></div>
         <div class="perf-meta">
           <span><span class="meta-icon">📅</span>7月29日（周三）19:15</span>
           <span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
         </div>
         <div class="perf-cast">
           <strong>主演：</strong>斯钰林（梁山伯）、徐晓飞（祝英台）、金烨（祝公远）<br>
-          <strong>演出单位：</strong>上海越剧院
+          <strong>演出单位：</strong>上海越剧院一团
         </div>
       </div>
       <div class="perf-side">
@@ -1076,11 +1050,11 @@
       <div class="perf-price">¥80 — 380<br><small>早鸟已截止</small></div>
     </div>
 
-    <div class="perf-card" data-id="p14" data-date="2026-07-31" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
+    <div class="perf-card" data-id="p13" data-date="2026-07-31" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月31日（周四）19:15</span>
+          <span><span class="meta-icon">📅</span>7月31日（周五）19:15</span>
           <span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
         </div>
         <div class="perf-cast">
@@ -1102,11 +1076,11 @@
   <div class="date-divider">8 月</div>
   <div class="perf-grid">
 
-    <div class="perf-card" data-id="p15" data-date="2026-08-01" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
+    <div class="perf-card" data-id="p14" data-date="2026-08-01" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月1日（周五）19:15</span>
+          <span><span class="meta-icon">📅</span>8月1日（周六）19:15</span>
           <span><span class="meta-icon">📍</span>上海宛平剧院·小剧场</span>
         </div>
         <div class="perf-cast">
@@ -1122,11 +1096,11 @@
       <div class="perf-price">¥80 / 180 / 280</div>
     </div>
 
-    <div class="perf-card" data-id="p16" data-date="2026-08-03" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-time="19:15">
+    <div class="perf-card" data-id="p15" data-date="2026-08-03" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">小剧场越剧《再生·缘》 <em>沉浸式 · 全场无座</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月3日（周日）19:15</span>
+          <span><span class="meta-icon">📅</span>8月3日（周一）19:15</span>
           <span><span class="meta-icon">📍</span>上海宛平剧院·戏·聚空间</span>
         </div>
         <div class="perf-cast">
@@ -1142,11 +1116,11 @@
       <div class="perf-price">¥180<br><small>单一票价</small></div>
     </div>
 
-    <div class="perf-card" data-id="p17" data-date="2026-08-04" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-time="19:15">
+    <div class="perf-card" data-id="p16" data-date="2026-08-04" data-title="小剧场越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">小剧场越剧《再生·缘》 <em>沉浸式</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月4日（周一）19:15</span>
+          <span><span class="meta-icon">📅</span>8月4日（周二）19:15</span>
           <span><span class="meta-icon">📍</span>上海宛平剧院·戏·聚空间</span>
         </div>
         <div class="perf-cast">
@@ -1162,28 +1136,7 @@
       <div class="perf-price">¥180<br><small>单一票价</small></div>
     </div>
 
-    <div class="perf-card" data-id="p18" data-date="2026-08-08" data-title="越剧《舞台姐妹》" data-venue="北京大学百周年纪念讲堂" data-time="19:00">
-      <div class="perf-info">
-        <div class="perf-title">越剧《舞台姐妹》 <em>京津冀巡演 · ⭐陆志艳</em></div>
-        <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月8日（周六）19:00</span>
-          <span><span class="meta-icon">📍</span>北京大学百周年纪念讲堂</span>
-          <span><span class="meta-icon">🏙️</span>北京</span>
-        </div>
-        <div class="perf-cast">
-          <strong>主演：</strong>单仰萍/陆志艳（竺春花）、俞果（邢月红）<br>
-          <strong>演出单位：</strong>上海越剧院三团 · 时长约170分钟
-        </div>
-      </div>
-      <div class="perf-side">
-        <span class="tag tag-status">京津冀巡演</span>
-        <span class="tag tag-on-sale">售票中</span>
-        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-      </div>
-      <div class="perf-price">校内 ¥40-240<br><small>校外 ¥80-380</small></div>
-    </div>
-
-    <div class="perf-card" data-id="p19" data-date="2026-08-09" data-title="越剧《孟丽君》" data-venue="北京大学百周年纪念讲堂" data-time="19:00">
+    <div class="perf-card" data-id="p17" data-date="2026-08-09" data-title="越剧《孟丽君》" data-venue="北京大学百周年纪念讲堂" data-time="19:00">
       <div class="perf-info">
         <div class="perf-title">越剧《孟丽君》 <em>京津冀巡演</em></div>
         <div class="perf-meta">
@@ -1204,7 +1157,7 @@
       <div class="perf-price">校内 ¥40-240<br><small>校外 ¥80-380</small></div>
     </div>
 
-    <div class="perf-card" data-id="p20" data-date="2026-08-11" data-title="越剧《西厢记》" data-venue="北京吉祥大戏院" data-time="19:30">
+    <div class="perf-card" data-id="p18" data-date="2026-08-11" data-title="越剧《西厢记》" data-venue="北京吉祥大戏院" data-time="19:30">
       <div class="perf-info">
         <div class="perf-title">越剧《西厢记》 <em>京津冀巡演</em></div>
         <div class="perf-meta">
@@ -1225,7 +1178,7 @@
       <div class="perf-price">以戏院公布为准</div>
     </div>
 
-    <div class="perf-card" data-id="p21" data-date="2026-08-12" data-title="越剧《孔雀东南飞》" data-venue="北京吉祥大戏院" data-time="19:30">
+    <div class="perf-card" data-id="p19" data-date="2026-08-12" data-title="越剧《孔雀东南飞》" data-venue="北京吉祥大戏院" data-time="19:30">
       <div class="perf-info">
         <div class="perf-title">越剧《孔雀东南飞》 <em>京津冀巡演</em></div>
         <div class="perf-meta">
@@ -1245,7 +1198,7 @@
       <div class="perf-price">以戏院公布为准</div>
     </div>
 
-    <div class="perf-card" data-id="p22" data-date="2026-08-15" data-title="越剧《红楼梦》" data-venue="天津中国大戏院" data-time="19:15">
+    <div class="perf-card" data-id="p20" data-date="2026-08-15" data-title="越剧《红楼梦》" data-venue="天津中国大戏院" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">越剧《红楼梦》 <em>京津冀巡演</em></div>
         <div class="perf-meta">
@@ -1254,7 +1207,7 @@
           <span><span class="meta-icon">🏙️</span>天津</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>杨婷娜（宝玉）、单仰萍/忻雅琴（黛玉）<br>
+          <strong>主演：</strong>杨婷娜（贾宝玉）、单仰萍/忻雅琴（林黛玉）<br>
           <strong>演出单位：</strong>上海越剧院红楼团（全女班）
         </div>
       </div>
@@ -1266,17 +1219,79 @@
       <div class="perf-price">¥50 — 580<br><small>文惠价</small></div>
     </div>
 
-    <div class="perf-card" data-id="p23" data-date="2026-08-22" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场" data-time="19:30">
+    <div class="perf-card" data-id="p21" data-date="2026-08-16" data-title="越剧《西厢记》" data-venue="天津中国大戏院" data-time="19:15">
       <div class="perf-info">
-        <div class="perf-title">越剧《甄嬛》（上本+下本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
+        <div class="perf-title">越剧《西厢记》 <em>京津冀巡演</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>8月22日（上本）23日（下本）19:30</span>
+          <span><span class="meta-icon">📅</span>8月16日（周日）19:15</span>
+          <span><span class="meta-icon">📍</span>天津中国大戏院</span>
+          <span><span class="meta-icon">🏙️</span>天津</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>陈慧迪（崔莺莺）、杨婷娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）<br>
+          <strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-status">京津冀巡演</span>
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">¥50 — 580<br><small>文惠价</small></div>
+    </div>
+
+    <div class="perf-card" data-id="p22" data-date="2026-08-18" data-title="越剧《孔雀东南飞》" data-venue="河北廊坊壹佰剧院" data-time="19:00">
+      <div class="perf-info">
+        <div class="perf-title">越剧《孔雀东南飞》 <em>京津冀巡演</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>8月18日（周二）19:00</span>
+          <span><span class="meta-icon">📍</span>河北廊坊壹佰剧院</span>
+          <span><span class="meta-icon">🏙️</span>廊坊</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>王舒雯（焦仲卿）、王婕（刘兰芝）、吴佳燕（焦母）<br>
+          <strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-status">京津冀巡演</span>
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">以场馆公布为准</div>
+    </div>
+
+    <div class="perf-card" data-id="p23" data-date="2026-08-19" data-title="越剧《孟丽君》" data-venue="河北廊坊壹佰剧院" data-time="19:00">
+      <div class="perf-info">
+        <div class="perf-title">越剧《孟丽君》 <em>京津冀巡演</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>8月19日（周三）19:00</span>
+          <span><span class="meta-icon">📍</span>河北廊坊壹佰剧院</span>
+          <span><span class="meta-icon">🏙️</span>廊坊</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）<br>
+          <strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-status">京津冀巡演</span>
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">以场馆公布为准</div>
+    </div>
+
+    <div class="perf-card" data-id="p24" data-date="2026-08-22" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场" data-time="19:30">
+      <div class="perf-info">
+        <div class="perf-title">越剧《甄嬛》（上本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>8月22日（周六）19:30</span>
           <span><span class="meta-icon">📍</span>北京国家大剧院·戏剧场</span>
           <span><span class="meta-icon">🏙️</span>北京</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>上本：李旭丹/杨婷娜/王清/史燕彬/王柔桑/裘丹莉/陈慧迪/王婕<br>
-          下本：李旭丹/杨婷娜/王清/裘丹莉<br>
+          <strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、史燕彬（沈眉庄）、王柔桑（温实初）、裘丹莉（华贵妃）、陈慧迪（安陵容）、王婕（槿汐）<br>
           <strong>演出单位：</strong>上海越剧院红楼团 · 上下本需分别购票
         </div>
       </div>
@@ -1285,7 +1300,28 @@
         <span class="tag tag-status">分场购票</span>
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
-      <div class="perf-price">以国家大剧院官网为准</div>
+      <div class="perf-price">¥100 — 580<br><small>以国家大剧院官网为准</small></div>
+    </div>
+
+    <div class="perf-card" data-id="p25" data-date="2026-08-23" data-title="越剧《甄嬛》" data-venue="北京国家大剧院·戏剧场" data-time="19:30">
+      <div class="perf-info">
+        <div class="perf-title">越剧《甄嬛》（下本） <em>京津冀巡演 · 全本首登国家大剧院</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>8月23日（周日）19:30</span>
+          <span><span class="meta-icon">📍</span>北京国家大剧院·戏剧场</span>
+          <span><span class="meta-icon">🏙️</span>北京</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、裘丹莉（华贵妃）<br>
+          <strong>演出单位：</strong>上海越剧院红楼团 · 上下本需分别购票
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-status">京津冀巡演</span>
+        <span class="tag tag-status">分场购票</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">¥100 — 580<br><small>以国家大剧院官网为准</small></div>
     </div>
 
   </div>
@@ -1294,7 +1330,7 @@
   <div class="date-divider">9 月</div>
   <div class="perf-grid">
 
-    <div class="perf-card" data-id="p24" data-date="2026-09-05" data-title="大型神话越剧《追鱼》" data-venue="北京艺术中心·戏剧场" data-time="14:30">
+    <div class="perf-card" data-id="p26" data-date="2026-09-05" data-title="大型神话越剧《追鱼》" data-venue="北京艺术中心·戏剧场" data-time="14:30">
       <div class="perf-info">
         <div class="perf-title">大型神话越剧《追鱼》 <em>京津冀巡演</em></div>
         <div class="perf-meta">
@@ -1315,7 +1351,7 @@
       <div class="perf-price">扫码购票</div>
     </div>
 
-    <div class="perf-card" data-id="p25" data-date="2026-09-06" data-title="越剧《红楼梦》" data-venue="北京艺术中心·戏剧场" data-time="14:30">
+    <div class="perf-card" data-id="p27" data-date="2026-09-06" data-title="越剧《红楼梦》" data-venue="北京艺术中心·戏剧场" data-time="14:30">
       <div class="perf-info">
         <div class="perf-title">越剧《红楼梦》 <em>京津冀巡演 · 收官场</em></div>
         <div class="perf-meta">
@@ -1324,7 +1360,7 @@
           <span><span class="meta-icon">🏙️</span>北京</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>王婉娜（宝玉）、李旭丹（黛玉）<br>
+          <strong>主演：</strong>王婉娜（贾宝玉）、李旭丹（林黛玉）<br>
           <strong>演出单位：</strong>上海越剧院红楼团
         </div>
       </div>
@@ -1334,6 +1370,27 @@
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
       <div class="perf-price">扫码购票</div>
+    </div>
+
+    <div class="perf-card star" data-id="lzy-04" data-date="2026-09-12" data-title="越剧《舞台姐妹》" data-venue="杭州蝴蝶剧场（小百花越剧场）" data-time="19:30">
+      <div class="perf-info">
+        <div class="perf-title">越剧《舞台姐妹》 <em>百越文创第五届越剧优秀剧目邀请展 · 全本传承版</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>9月12日（周六）19:30</span>
+          <span><span class="meta-icon">📍</span>杭州蝴蝶剧场（小百花越剧场）</span>
+          <span><span class="meta-icon">🏙️</span>杭州</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>俞果（邢月红）、<strong style="color:#ffd700;">陆志艳</strong>（竺春花）<br>
+          <strong>演出单位：</strong>上海越剧院三团 · 百越文创第五届越剧优秀剧目邀请展 · 时长约150分钟
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-star">⭐ 陆志艳</span>
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">¥180 — 380<br><small>包厢另询</small></div>
     </div>
 
   </div>
@@ -1347,9 +1404,10 @@
     · 上海越剧院第十代青年演员（东方卫视《越动青春》选手）将推出专场演唱会（时间待定）。<br>
     · 天蟾逸夫舞台购票：大麦网 / 天蟾小程序<br>
     · 宛平剧院购票：大麦网 / 宛平剧院官网<br>
-    · 临港演艺中心购票：大麦网<br>
-    · 太仓大剧院购票：大麦网 / 东方演出网<br>
-    · 京津冀巡演：各场馆官方渠道购票（海报扫码/北大讲堂售票处/吉祥官网/天津文惠卡/国家大剧院等）。<br>
+    · 海上梨园购票：大麦网 / 豫园海上梨园官方<br>
+    · 临港演艺中心购票：大麦网 / 东方演出网<br>
+    · 杭州蝴蝶剧场购票：浙里票务 / 大麦网<br>
+    · 京津冀巡演：各场馆官方渠道购票（北大讲堂售票处/吉祥官网/天津文惠卡/国家大剧院等）。<br>
     · <strong style="color:var(--gold-light)">🎟️ 已购标记</strong>保存在浏览器本地，重新打开页面会自动恢复。
   </div>
 
@@ -1361,14 +1419,14 @@
       <span>📊 东方演出网 df962388.com</span>
       <span>🏛️ 宛平剧院</span>
       <span>🎭 天蟾逸夫舞台</span>
+      <span>🦋 杭州蝴蝶剧场</span>
       <span>🏗️ 临港演艺中心</span>
-      <span>🎪 太仓大剧院</span>
+      <span>🦋 杭州蝴蝶剧场</span>
       <span>🏟️ 国家大剧院</span>
       <span>🎓 北京大学</span>
-      <span>🦋 蝴蝶剧场</span>
     </div>
     <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-    <p style="margin-top:6px;">数据截至 2026-07-01 09:30 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+    <p style="margin-top:6px;">数据截至 2026-07-02 09:00 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
   </div>
 
 </div>
@@ -1379,30 +1437,33 @@
 // ============================================================
 const PERF_DATES = {
   "2026-07-01": ["p01"],
-  "2026-07-03": ["p02"],
-  "2026-07-05": ["p03"],
-  "2026-07-09": ["lzy-01","p04"],
+  "2026-07-09": ["lzy-01"],
+  "2026-07-10": ["p03"],
   "2026-07-13": ["p05"],
   "2026-07-14": ["p06"],
-  "2026-07-16": ["p07"],
-  "2026-07-18": ["p08"],
+  "2026-07-18": ["p07"],
+  "2026-07-19": ["p08"],
   "2026-07-22": ["p09"],
   "2026-07-23": ["p10"],
-  "2026-07-25": ["lzy-02","p11"],
-  "2026-07-28": ["p12"],
-  "2026-07-29": ["p13"],
-  "2026-07-31": ["p14"],
-  "2026-08-01": ["p15"],
-  "2026-08-03": ["p16"],
-  "2026-08-04": ["p17"],
-  "2026-08-08": ["lzy-03","p18"],
-  "2026-08-09": ["p19"],
-  "2026-08-11": ["p20"],
-  "2026-08-12": ["p21"],
-  "2026-08-15": ["p22"],
-  "2026-08-22": ["p23"],
-  "2026-09-05": ["p24"],
-  "2026-09-06": ["p25"],
+  "2026-07-25": ["lzy-02"],
+  "2026-07-28": ["p11"],
+  "2026-07-29": ["p12"],
+  "2026-07-31": ["p13"],
+  "2026-08-01": ["p14"],
+  "2026-08-03": ["p15"],
+  "2026-08-04": ["p16"],
+  "2026-08-08": ["lzy-03"],
+  "2026-08-09": ["p17"],
+  "2026-08-11": ["p18"],
+  "2026-08-12": ["p19"],
+  "2026-08-15": ["p20"],
+  "2026-08-16": ["p21"],
+  "2026-08-18": ["p22"],
+  "2026-08-19": ["p23"],
+  "2026-08-22": ["p24"],
+  "2026-08-23": ["p25"],
+  "2026-09-05": ["p26"],
+  "2026-09-06": ["p27"],
   "2026-09-12": ["lzy-04"]
 };
 
@@ -1419,7 +1480,8 @@ const ACTOR_GROUP = {
   "王婕":"二","章瑞虹":"二","王志萍":"二","钱惠丽":"二",
   // 三团/青年团: 新生代
   "俞果":"三","陆志艳":"三","杨韵儿":"三","范莹":"三","张艾嘉":"三",
-  "陈欣雨":"三","冯军":"三","赵一兰":"三","姚磊":"三"
+  "陈欣雨":"三","冯军":"三","赵一兰":"三","姚磊":"三","董心心":"三",
+  "潘锡丹":"三","丁小蛙":"三","王杭娟":"三","李云霄":"三"
 };
 
 function extractGroup(castText) {
@@ -1476,7 +1538,7 @@ function buildShowIndex() {
 // ============================================================
 //  STORAGE
 // ============================================================
-const STORAGE_KEY = "yueju_bought_v3";
+const STORAGE_KEY = "yueju_bought_v4";
 
 // Generate a stable fingerprint from a show card's identity,
 // so bought state survives across daily HTML regenerations.
@@ -1654,7 +1716,7 @@ function getShortTitle(title) {
   }
   // No book-name marks: strip common prefixes and truncate
   let s = title
-    .replace(/^(大型神话越剧|新编历史故事剧|小剧场越剧|越剧)\s*/,'')
+    .replace(/^(大型神话越剧|新编历史故事剧|小剧场越剧|青春越剧|越剧)\s*/,'')
     .replace(/"(.+?)"演唱会/,'$1演唱会');
   if (s.length > 8) s = s.slice(0, 7) + '…';
   return s;
@@ -2000,22 +2062,16 @@ function hideStarDuplicates() {
 // ============================================================
 //  INIT
 // ============================================================
-let lastCalWidth = window.innerWidth;
-hideStarDuplicates();
-buildShowIndex();
-stampFingerprints();
-restoreBoughtState();
-updateBoughtStat();
-updateMyShowsBanner();
-buildCalendar();
-
-// Rebuild calendar on resize (handle rotation / foldable)
-window.addEventListener("resize", () => {
-  const w = window.innerWidth;
-  const crossedThreshold = (lastCalWidth <= 640 && w > 640) || (lastCalWidth > 640 && w <= 640);
-  lastCalWidth = w;
-  if (crossedThreshold) buildCalendar();
-});
+(function init() {
+  stampFingerprints();
+  buildShowIndex();
+  hideStarDuplicates();
+  restoreBoughtState();
+  updateBoughtStat();
+  buildCalendar();
+  updateMyShowsBanner();
+})();
 </script>
+
 </body>
 </html>
