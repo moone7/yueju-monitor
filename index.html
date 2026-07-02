@@ -1452,12 +1452,11 @@ function buildShowIndex() {
 }
 
 // ============================================================
-//  STORAGE
+//  STORAGE — persisted by data-id (stable across HTML regenerations)
 // ============================================================
-const STORAGE_KEY = "yueju_bought_v3";
+const STORAGE_KEY = "yueju_bought_v5";
 
-// Generate a stable fingerprint from a show card's identity,
-// so bought state survives across daily HTML regenerations.
+// Generate a content fingerprint as secondary lookup key.
 function getShowFingerprint(card) {
   const date = (card.dataset.date || "").trim();
   const title = (card.dataset.title || "").trim();
@@ -1471,9 +1470,9 @@ function getShowFingerprint(card) {
   return "f" + Math.abs(hash).toString(36);
 }
 
-// On page load, stamp every card with its fingerprint.
-function stampFingerprints() {
-  document.querySelectorAll(".perf-card[data-date]").forEach(card => {
+// On page load, stamp every card with both id and fingerprint.
+function stampIdentifiers() {
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
     card.dataset.fingerprint = getShowFingerprint(card);
   });
 }
@@ -1487,20 +1486,20 @@ function saveBought(set) {
 }
 
 // ============================================================
-//  TOGGLE BOUGHT (uses fingerprint — stable across updates)
+//  TOGGLE BOUGHT — uses data-id (stable key)
 // ============================================================
 function toggleBought(btn) {
   const card = btn.closest(".perf-card");
-  const fp = card.dataset.fingerprint;
-  if (!fp) return;
+  const id = card.dataset.id;
+  if (!id) return;
   const bought = getBought();
-  if (bought.has(fp)) {
-    bought.delete(fp);
+  if (bought.has(id)) {
+    bought.delete(id);
     card.classList.remove("bought");
     btn.classList.remove("active");
     btn.querySelector(".btn-text").textContent = "标记已购";
   } else {
-    bought.add(fp);
+    bought.add(id);
     card.classList.add("bought");
     btn.classList.add("active");
     btn.querySelector(".btn-text").textContent = "已购 ✓";
@@ -1512,13 +1511,16 @@ function toggleBought(btn) {
 }
 
 // ============================================================
-//  RESTORE BOUGHT STATE (matches by fingerprint)
+//  RESTORE BOUGHT STATE — primary: data-id, fallback: fingerprint
 // ============================================================
 function restoreBoughtState() {
   const bought = getBought();
-  document.querySelectorAll(".perf-card[data-fingerprint]").forEach(card => {
+  if (bought.size === 0) return;
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+    const id = card.dataset.id;
     const fp = card.dataset.fingerprint;
-    if (!bought.has(fp)) return;
+    // Match by data-id (primary) or fingerprint (fallback for legacy)
+    if (!bought.has(id) && (!fp || !bought.has(fp))) return;
     card.classList.add("bought");
     const btn = card.querySelector(".buy-btn");
     if (btn) {
@@ -1545,22 +1547,22 @@ function updateMyShowsBanner() {
   today.setHours(0,0,0,0);
 
   const items = [];
-  const seenFp = new Set();
-  document.querySelectorAll(".perf-card[data-fingerprint]").forEach(card => {
+  const seenIds = new Set();
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
     if (card.style.display === "none" || card.offsetParent === null) return; // skip hidden duplicates
-    const fp = card.dataset.fingerprint;
-    if (!fp) return;
-    if (seenFp.has(fp)) return; // deduplicate by fingerprint
-    if (!bought.has(fp)) return;
+    const id = card.dataset.id;
+    if (!id) return;
+    if (seenIds.has(id)) return; // deduplicate by id
+    if (!bought.has(id)) return;
     const dateStr = card.dataset.date;
     if (!dateStr) return;
     const showDate = new Date(dateStr);
     showDate.setHours(0,0,0,0);
     const diff = Math.round((showDate - today) / 86400000);
     if (diff < -1) return; // skip past
-    seenFp.add(fp);
+    seenIds.add(id);
     const isStar = STAR_IDS.has(card.dataset.id);
-    items.push({ fp, diff, dateStr, title: card.dataset.title, venue: card.dataset.venue, time: card.dataset.time, isStar });
+    items.push({ id, diff, dateStr, title: card.dataset.title, venue: card.dataset.venue, time: card.dataset.time, isStar });
   });
   items.sort((a,b) => a.diff - b.diff);
 
@@ -1639,12 +1641,7 @@ function getShortTitle(title) {
 }
 
 function buildCalendar() {
-  const boughtFps = getBought();
-  // Build id → fingerprint map for bought checks
-  const idFpMap = {};
-  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(c => {
-    idFpMap[c.dataset.id] = c.dataset.fingerprint;
-  });
+  const bought = getBought();
   const grid = document.getElementById("cal-grid");
   grid.innerHTML = "";
 
@@ -1685,7 +1682,7 @@ function buildCalendar() {
       cell.classList.add("has-show");
 
       const hasStar = visibleIds.some(id => STAR_IDS.has(id));
-      const hasBought = visibleIds.some(sid => boughtFps.has(idFpMap[sid]));
+      const hasBought = visibleIds.some(sid => bought.has(sid));
 
       if (hasBought) cell.classList.add("has-bought-show");
       else if (hasStar) cell.classList.add("has-star-show");
@@ -1729,7 +1726,7 @@ function buildCalendar() {
         const nm = document.createElement("span");
         nm.className = "cal-day-name";
         if (STAR_IDS.has(sid)) nm.classList.add("star-show");
-        if (boughtFps.has(idFpMap[sid])) nm.classList.add("bought-name");
+        if (bought.has(sid)) nm.classList.add("bought-name");
         const g = si.group;
         if (g) {
           nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span><span class="cal-group-tag g${g}">${g}</span>`;
@@ -1784,11 +1781,7 @@ function showTooltip(e, key, ids) {
   tooltipActiveDate = key;
   clearTimeout(tooltipTimer);
 
-  const boughtFps = getBought();
-  const idFpMap = {};
-  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(c => {
-    idFpMap[c.dataset.id] = c.dataset.fingerprint;
-  });
+  const bought = getBought();
   const d = new Date(key);
   const dateLabel = `${d.getMonth()+1}月${d.getDate()}日`;
 
@@ -1801,7 +1794,7 @@ function showTooltip(e, key, ids) {
     const si = SHOW_INDEX[sid];
     if (!si) return;
     const isStar = STAR_IDS.has(sid);
-    const isBought = boughtFps.has(idFpMap[sid]);
+    const isBought = bought.has(sid);
     const starIcon = isStar ? '<span class="tt-star">⭐</span> ' : '';
     const boughtTag = isBought ? '<span class="tt-bought">✓ 已购</span>' : '';
 
@@ -1981,7 +1974,7 @@ function hideStarDuplicates() {
 let lastCalWidth = window.innerWidth;
 hideStarDuplicates();
 buildShowIndex();
-stampFingerprints();
+stampIdentifiers();
 restoreBoughtState();
 updateBoughtStat();
 updateMyShowsBanner();
