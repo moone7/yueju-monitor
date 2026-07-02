@@ -1497,6 +1497,32 @@ function saveBought(set) {
 }
 
 // ============================================================
+//  MIGRATION from v3 (fingerprint-based) → v5 (data-id based)
+// ============================================================
+function migrateFromV3() {
+  const v3raw = localStorage.getItem("yueju_bought_v3");
+  if (!v3raw) return;
+  const v3fps = new Set(JSON.parse(v3raw));
+  if (v3fps.size === 0) return;
+  // Map old fingerprints to current card data-ids
+  const fpToId = {};
+  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(card => {
+    fpToId[card.dataset.fingerprint] = card.dataset.id;
+  });
+  const current = getBought();
+  let migrated = 0;
+  v3fps.forEach(fp => {
+    const id = fpToId[fp];
+    if (id && !current.has(id)) { current.add(id); migrated++; }
+  });
+  if (migrated > 0) {
+    saveBought(current);
+    // Keep v3 as backup, don't delete
+    console.log(`Migrated ${migrated} bought records from v3→v5`);
+  }
+}
+
+// ============================================================
 //  CROSS-DEVICE SYNC — clipboard export / import
 // ============================================================
 function exportBought() {
@@ -2046,6 +2072,7 @@ let lastCalWidth = window.innerWidth;
 hideStarDuplicates();
 buildShowIndex();
 stampIdentifiers();
+migrateFromV3();
 restoreBoughtState();
 updateBoughtStat();
 updateMyShowsBanner();
