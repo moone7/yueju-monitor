@@ -593,22 +593,30 @@
     border-color: rgba(201,169,110,0.35);
     background: linear-gradient(135deg, rgba(201,169,110,0.06), var(--surface));
   }
-  .perf-card.today::before {
+  .perf-card.today::after {
     content: '今日开演';
-    position: absolute; top: 0; right: 0;
-    background: var(--crimson); color: #fff;
-    font-size: 11px; font-weight: 600;
-    padding: 3px 10px 3px 14px;
-    border-radius: 0 12px 0 8px; letter-spacing: 1px;
+    position: absolute; top: 12px; right: 12px;
+    background: linear-gradient(135deg, #8b1a1a 0%, var(--crimson) 100%);
+    color: #fff; font-size: 11px; font-weight: 600;
+    padding: 4px 14px; border-radius: 20px; letter-spacing: 1px;
+    box-shadow: 0 2px 14px rgba(181,52,58,0.4), 0 0 0 1px rgba(255,255,255,0.08);
+    pointer-events: none; z-index: 2; white-space: nowrap;
   }
-  .perf-card.today.bought::before { content: '今日开演 · 已购'; background: #7b2020; }
-  .perf-card.tomorrow::before {
+  .perf-card.today.bought::after {
+    content: '今日开演 · 已购';
+    background: linear-gradient(135deg, #5a1010, #7b2020);
+  }
+  .perf-card.tomorrow {
+    border-color: rgba(201,169,110,0.28);
+  }
+  .perf-card.tomorrow::after {
     content: '明日开演';
-    position: absolute; top: 0; right: 0;
-    background: #5c3d1e; color: var(--gold-light);
-    font-size: 11px; font-weight: 600;
-    padding: 3px 10px 3px 14px;
-    border-radius: 0 12px 0 8px; letter-spacing: 1px;
+    position: absolute; top: 12px; right: 12px;
+    background: linear-gradient(135deg, #7a5a20 0%, #b8860b 100%);
+    color: #fff9e6; font-size: 11px; font-weight: 600;
+    padding: 4px 14px; border-radius: 20px; letter-spacing: 1px;
+    box-shadow: 0 2px 14px rgba(184,134,11,0.4), 0 0 0 1px rgba(255,255,255,0.06);
+    pointer-events: none; z-index: 2; white-space: nowrap;
   }
 
   .perf-card.bought {
@@ -920,8 +928,8 @@
 
   <!-- ===== STATS ===== -->
   <div class="stats-bar">
-    <div class="stat" data-num="24">
-      <div class="stat-num">24</div>
+    <div class="stat" data-num="28">
+      <div class="stat-num">28</div>
       <div class="stat-label">近期演出场次</div>
     </div>
     <div class="stat" data-num="4">
@@ -943,11 +951,8 @@
     <div class="alert-header">
       <span class="alert-icon">🔥</span> 近期高优提醒
     </div>
-    <div class="alert-body">
-      · <strong>🎬 今日（7/1）开演！</strong>宛平剧院 越剧小戏《渔光曲》《自古英雄出少年》《新生》，¥100-200元，今晚19:15。<br>
-      · 天蟾逸夫《红楼梦》《梁祝》（7/28-29）早鸟8折已于昨日截止，目前恢复原价 ¥80-380。<br>
-      · <strong>《重圆记》</strong>杨婷娜/李旭丹/王清 7/3宁波首演倒计时2天，¥80-580。<br>
-      · 广州红线女大剧院《红楼梦》⭐陆志艳 6.18大促7折优惠中。
+    <div class="alert-body" id="alert-urgent-body">
+      加载中…
     </div>
   </div>
 
@@ -956,11 +961,8 @@
     <div class="alert-header">
       <span class="alert-icon">🆕</span> 今日新动态
     </div>
-    <div class="alert-body">
-      · <strong>监控范围扩大！</strong>新增临港演艺中心、太仓大剧院两个场馆，并全面覆盖上海越剧院在全国各地的所有演出。<br>
-      · <strong>临港演艺中心</strong>新发现2场：7/16《情探》（三团）、7/25《虞美人》（⭐陆志艳参演）。<br>
-      · <strong>太仓大剧院</strong>7/18越剧小戏 ¥50全场统一价，上海越剧院三团献演。<br>
-      · <strong>京津冀巡演12场</strong>已全部开票：8/8-9/6，覆盖北京、天津、廊坊三城。
+    <div class="alert-body" id="alert-new-body">
+      加载中…
     </div>
   </div>
 
@@ -1058,7 +1060,7 @@
   <div class="date-divider">7 月</div>
   <div class="perf-grid">
 
-    <div class="perf-card today" data-id="p01" data-date="2026-07-01" data-title="越剧小戏三出" data-venue="上海宛平剧院" data-time="19:15">
+    <div class="perf-card" data-id="p01" data-date="2026-07-01" data-title="越剧小戏三出" data-venue="上海宛平剧院" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">越剧小戏《渔光曲》《自古英雄出少年》《新生》</div>
         <div class="perf-meta">
@@ -1075,6 +1077,66 @@
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
       <div class="perf-price">¥100 — 200</div>
+    </div>
+
+    <div class="perf-card tomorrow" data-id="p03" data-date="2026-07-03" data-title="越剧《珍珠塔》" data-venue="杭州胜利剧院" data-time="19:30">
+      <div class="perf-info">
+        <div class="perf-title">越剧《珍珠塔》 <em>上越一团杭州站</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>7月3日（周五）19:30</span>
+          <span><span class="meta-icon">📍</span>杭州胜利剧院</span>
+          <span><span class="meta-icon">🏙️</span>杭州</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>徐标新（方卿）、邓华蔚（陈翠娥）、周燕儿（方朵花）<br>
+          <strong>演出单位：</strong>上海越剧院一团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">扫码购票</div>
+    </div>
+
+    <div class="perf-card" data-id="p28" data-date="2026-07-04" data-title="越剧《红楼梦》" data-venue="杭州胜利剧院" data-time="19:30">
+      <div class="perf-info">
+        <div class="perf-title">越剧《红楼梦》<em>尹袁版 · 上越一团杭州站</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>7月4日（周六）19:30</span>
+          <span><span class="meta-icon">📍</span>杭州胜利剧院</span>
+          <span><span class="meta-icon">🏙️</span>杭州</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>王清、郭茜云（贾宝玉）、方亚芬、俞景岚（林黛玉）<br>
+          <strong>演出单位：</strong>上海越剧院一团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">扫码购票</div>
+    </div>
+
+    <div class="perf-card" data-id="p29" data-date="2026-07-04" data-title="大型神话越剧《追鱼》" data-venue="宁波逸夫剧院" data-time="19:15">
+      <div class="perf-info">
+        <div class="perf-title">大型神话越剧《追鱼》 <em>经典神话题材</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>7月4日（周六）19:15</span>
+          <span><span class="meta-icon">📍</span>宁波逸夫剧院</span>
+          <span><span class="meta-icon">🏙️</span>宁波</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>杨婷娜（张珍）、忻雅琴（鲤鱼精）<br>
+          <strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">¥80 — 580</div>
     </div>
 
     <div class="perf-card tomorrow" data-id="p02" data-date="2026-07-03" data-title="越剧《重圆记》" data-venue="宁波逸夫剧院" data-time="19:15">
@@ -1118,6 +1180,26 @@
       <div class="perf-price">¥80 — 480<br><small>套票 ¥499 / ¥669</small></div>
     </div>
 
+    <div class="perf-card" data-id="p30" data-date="2026-07-10" data-title="越剧《梁山伯与祝英台》" data-venue="广州红线女大剧院" data-time="19:30">
+      <div class="perf-info">
+        <div class="perf-title">越剧《梁山伯与祝英台》 <em>2026广州艺术季</em></div>
+        <div class="perf-meta">
+          <span><span class="meta-icon">📅</span>7月10日（周五）19:30</span>
+          <span><span class="meta-icon">📍</span>广州红线女大剧院</span>
+          <span><span class="meta-icon">🏙️</span>广州</span>
+        </div>
+        <div class="perf-cast">
+          <strong>主演：</strong>董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）<br>
+          <strong>演出单位：</strong>上海越剧院三团
+        </div>
+      </div>
+      <div class="perf-side">
+        <span class="tag tag-on-sale">售票中</span>
+        <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+      </div>
+      <div class="perf-price">扫码购票</div>
+    </div>
+
     <div class="perf-card" data-id="p05" data-date="2026-07-13" data-title="越剧《红楼梦》" data-venue="上海宛平剧院·大剧场" data-time="19:15">
       <div class="perf-info">
         <div class="perf-title">越剧《红楼梦》</div>
@@ -1156,25 +1238,24 @@
       <div class="perf-price">¥80 — 380</div>
     </div>
 
-    <div class="perf-card" data-id="p07" data-date="2026-07-16" data-title="越剧《情探》" data-venue="上海临港演艺中心" data-time="14:30">
+    <div class="perf-card" data-id="p31" data-date="2026-07-15" data-title="越剧《梁山伯与祝英台》" data-venue="航头镇" data-time="13:00">
       <div class="perf-info">
-        <div class="perf-title">越剧《情探》 <em>经典剧目 · 三团传承版</em></div>
+        <div class="perf-title">越剧《梁山伯与祝英台》 <em>送戏下乡 · 公益场</em></div>
         <div class="perf-meta">
-          <span><span class="meta-icon">📅</span>7月16日（周四）14:30</span>
-          <span><span class="meta-icon">📍</span>上海临港演艺中心</span>
-          <span><span class="meta-icon">🏙️</span>上海 · 临港</span>
+          <span><span class="meta-icon">📅</span>7月15日（周三）13:00</span>
+          <span><span class="meta-icon">📍</span>航头镇</span>
+          <span><span class="meta-icon">🏙️</span>上海 · 浦东</span>
         </div>
         <div class="perf-cast">
-          <strong>主演：</strong>杨韵儿、范莹、张艾嘉等<br>
-          <strong>演出单位：</strong>上海越剧院三团
+          <strong>主演：</strong>上海越剧院<br>
+          <strong>演出单位：</strong>上海越剧院
         </div>
       </div>
       <div class="perf-side">
-        <span class="tag tag-new">🆕 新场馆</span>
-        <span class="tag tag-on-sale">售票中</span>
+        <span class="tag tag-status">公益场</span>
         <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
       </div>
-      <div class="perf-price">待确认<br><small>购票：大麦/临港演艺中心</small></div>
+      <div class="perf-price">公益场</div>
     </div>
 
     <div class="perf-card" data-id="p08" data-date="2026-07-18" data-title="越剧小戏三出" data-venue="太仓大剧院" data-time="14:00">
@@ -2454,6 +2535,143 @@ function refreshTodayTomorrowClasses() {
 // ============================================================
 //  INIT
 // ============================================================
+// ============================================================
+//  DYNAMIC ALERTS — generated from card data at runtime
+//  Always reflects current state, never stale.
+// ============================================================
+function generateDynamicAlerts() {
+  const now = new Date();
+  const today = new Date(now); today.setHours(0,0,0,0);
+  const WEEKDAY_CN = ["周日","周一","周二","周三","周四","周五","周六"];
+
+  // Collect all visible, non-past shows
+  const allShows = [];
+  document.querySelectorAll(".perf-card[data-date]").forEach(card => {
+    if (card.style.display === "none" || card.offsetParent === null) return;
+    const d = card.dataset.date;
+    if (!d) return;
+    const showDate = new Date(d); showDate.setHours(0,0,0,0);
+    const diff = Math.round((showDate - today) / 86400000);
+    if (diff < -1) return; // skip way past
+    allShows.push({
+      card, diff, dateStr: d,
+      title: card.dataset.title,
+      venue: card.dataset.venue,
+      time: card.dataset.time,
+      isStar: STAR_IDS.has(card.dataset.id),
+      isBought: card.classList.contains("bought"),
+      cast: (card.querySelector(".perf-cast")?.textContent || "").trim(),
+      price: (card.querySelector(".perf-price")?.textContent || "").trim(),
+    });
+  });
+  allShows.sort((a,b) => new Date(a.dateStr) - new Date(b.dateStr));
+
+  // ── Urgent Alert ──
+  const urgentBody = document.getElementById("alert-urgent-body");
+  const urgentItems = [];
+
+  // Today's shows
+  const todayShows = allShows.filter(s => s.diff === 0);
+  if (todayShows.length > 0) {
+    todayShows.forEach(s => {
+      const star = s.isStar ? "⭐" : "";
+      const dateLabel = `${now.getMonth()+1}/${now.getDate()} ${WEEKDAY_CN[now.getDay()]}`;
+      urgentItems.push(
+        `<strong>🎬 今日（${dateLabel}）开演！</strong>${star}${s.venue} ${s.title}` +
+        (s.time ? `，${s.time}` : "") +
+        (s.price ? `，${s.price.replace(/<[^>]*>/g,"").trim()}` : "")
+      );
+    });
+  }
+
+  // Tomorrow's shows
+  const tomorrowShows = allShows.filter(s => s.diff === 1);
+  tomorrowShows.forEach(s => {
+    const star = s.isStar ? "⭐" : "";
+    urgentItems.push(
+      `<strong>📅 明日开演</strong>${star}${s.venue} ${s.title}` +
+      (s.time ? `，${s.time}` : "") +
+      (s.price ? `，${s.price.replace(/<[^>]*>/g,"").trim()}` : "")
+    );
+  });
+
+  // Shows within 3 days (but not today/tomorrow)
+  const soonShows = allShows.filter(s => s.diff >= 2 && s.diff <= 4);
+  if (soonShows.length > 0) {
+    soonShows.forEach(s => {
+      const star = s.isStar ? "⭐" : "";
+      urgentItems.push(
+        `<strong>${s.diff}天后</strong>${star}${s.venue} ${s.title}` +
+        (s.time ? `，${s.time}` : "")
+      );
+    });
+  }
+
+  // Find limited/urgent tagged shows
+  allShows.forEach(s => {
+    const tags = s.card.querySelectorAll(".tag-limited, .tag-urgent");
+    if (tags.length > 0) {
+      const star = s.isStar ? "⭐" : "";
+      const tagText = Array.from(tags).map(t => t.textContent).join(" · ");
+      const dateParts = s.dateStr.split("-");
+      urgentItems.push(
+        `<strong>⚠️ ${tagText}</strong>${star}${dateParts[1]}月${dateParts[2]}日 ${s.venue} ${s.title}`
+      );
+    }
+  });
+
+  // Deduplicate
+  const uniqueUrgent = [...new Set(urgentItems)];
+  if (uniqueUrgent.length > 0) {
+    urgentBody.innerHTML = uniqueUrgent.map(item => "· " + item).join("<br>");
+  } else {
+    urgentBody.innerHTML = "暂无近期紧急提醒。所有演出售票平稳进行中。";
+  }
+
+  // ── News Alert ──
+  const newBody = document.getElementById("alert-new-body");
+  const newItems = [];
+
+  // Star shows summary
+  const starShows = allShows.filter(s => s.isStar);
+  if (starShows.length > 0) {
+    const upcomingStars = starShows.filter(s => s.diff >= 1);
+    if (upcomingStars.length > 0) {
+      const names = upcomingStars.map(s => {
+        const dp = s.dateStr.split("-");
+        return `${dp[1]}月${dp[2]}日 ${s.title}（${s.venue}）`;
+      }).join("、");
+      newItems.push(`<strong>⭐ 陆志艳近期演出：</strong>${names}`);
+    }
+  }
+
+  // Count shows by month
+  const monthCount = {};
+  allShows.forEach(s => {
+    const m = s.dateStr.substring(0, 7);
+    monthCount[m] = (monthCount[m] || 0) + 1;
+  });
+  const monthLabels = Object.entries(monthCount).map(([m, c]) => {
+    const [y, mm] = m.split("-");
+    return `${mm}月${c}场`;
+  }).join(" · ");
+  if (monthLabels) {
+    newItems.push(`<strong>📊 近期分布：</strong>${monthLabels}`);
+  }
+
+  // Venue coverage
+  const venues = [...new Set(allShows.map(s => s.venue))];
+  if (venues.length > 0) {
+    newItems.push(`<strong>📍 覆盖场馆：</strong>${venues.slice(0,8).join("、")}${venues.length > 8 ? "等" + venues.length + "个场馆" : ""}`);
+  }
+
+  if (newItems.length > 0) {
+    newBody.innerHTML = newItems.map(item => "· " + item).join("<br>");
+  } else {
+    newBody.innerHTML = "监控正常运行中。每日 9:00 自动更新，关注陆志艳及上海越剧院最新售票动态。";
+  }
+}
+
 let lastCalWidth = window.innerWidth;
 hideStarDuplicates();
 buildShowIndex();
@@ -2461,6 +2679,7 @@ stampIdentifiers();
 migrateFromV3();
 restoreBoughtState();
 refreshTodayTomorrowClasses();
+generateDynamicAlerts();
 updateBoughtStat();
 updateMyShowsBanner();
 buildCalendar();
