@@ -1543,6 +1543,9 @@ function migrateFromV3() {
   const current = getBought();
   let migrated = 0;
 
+  // Cities whose prefix may have been added/removed in venue names
+  const cityPrefixes = ["上海", "北京", "广州", "天津", "宁波", "杭州", "太仓"];
+
   document.querySelectorAll(".perf-card[data-id]").forEach(card => {
     const id = card.dataset.id;
     if (current.has(id)) return;
@@ -1550,15 +1553,30 @@ function migrateFromV3() {
     const date = (card.dataset.date || "").trim();
     const title = (card.dataset.title || "").trim();
     const venue = (card.dataset.venue || "").trim();
+    if (!date || !title || !venue) return;
 
-    // All plausible venue formats the old page might have used
-    const venueVariants = new Set([
-      venue,                                                              // current exact
-      venue.replace(/（.*?）/g, "").trim(),                               // strip Chinese parens
-      venue.replace(/\(.*?\)/g, "").trim(),                               // strip English parens
-      venue.replace(/·.*$/, "").trim(),                                   // strip "·…" suffix
-      venue.replace(/（.*?）/g, "").replace(/·.*$/, "").trim(),          // strip both
-    ]);
+    // Build all plausible old venue formats
+    const baseVariants = [
+      venue,                                                      // exact current
+      venue.replace(/（.*?）/g, "").trim(),                       // strip Chinese parens
+      venue.replace(/\(.*?\)/g, "").trim(),                       // strip English parens
+      venue.replace(/·.*$/, "").trim(),                           // strip "·…" suffix
+      venue.replace(/（.*?）/g, "").replace(/·.*$/, "").trim(),   // strip both
+    ];
+
+    const venueVariants = new Set();
+    for (const base of baseVariants) {
+      if (!base) continue;
+      venueVariants.add(base);
+      // City prefix: old may have had 上海X, now X (or vice versa)
+      for (const city of cityPrefixes) {
+        if (base.startsWith(city)) {
+          venueVariants.add(base.slice(city.length));   // strip city prefix
+        } else {
+          venueVariants.add(city + base);                // add city prefix
+        }
+      }
+    }
 
     for (const vv of venueVariants) {
       if (!vv) continue;
@@ -1576,41 +1594,6 @@ function migrateFromV3() {
       }
     }
   });
-
-  // Phase 2: date-only fallback — if a date has exactly one show,
-  // and the v3 has SOME fingerprint for a show on that date, match it.
-  if (migrated === 0) {
-    // Build date → [id] map for current cards
-    const dateToIds = {};
-    document.querySelectorAll(".perf-card[data-id]").forEach(card => {
-      const d = (card.dataset.date || "").trim();
-      if (!d) return;
-      if (!dateToIds[d]) dateToIds[d] = [];
-      dateToIds[d].push(card.dataset.id);
-    });
-    // For each unique-date show, try matching by date + title hash (no venue)
-    document.querySelectorAll(".perf-card[data-id]").forEach(card => {
-      const id = card.dataset.id;
-      if (current.has(id)) return;
-      const date = (card.dataset.date || "").trim();
-      const title = (card.dataset.title || "").trim();
-      if (!date || !title) return;
-      // Only use date-only fallback when this date has exactly one show
-      if ((dateToIds[date] || []).length !== 1) return;
-      // Try hashing just date+title (no venue) — some old entries may match
-      const raw = date + "|" + title;
-      let hash = 0;
-      for (let i = 0; i < raw.length; i++) {
-        hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-        hash |= 0;
-      }
-      const fp = "f" + Math.abs(hash).toString(36);
-      if (v3fps.has(fp)) {
-        current.add(id);
-        migrated++;
-      }
-    });
-  }
 
   if (migrated > 0) {
     saveBought(current);
