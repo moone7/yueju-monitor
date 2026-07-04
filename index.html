@@ -1436,7 +1436,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-07-04 13:40 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-07-04 14:00 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -1605,18 +1605,33 @@ function toggleBought(btn) {
 }
 
 // ============================================================
-//  RESTORE BOUGHT STATE (matches by fingerprint)
+//  RESTORE BOUGHT STATE (matches by fingerprint, fallback to id)
 // ============================================================
 function restoreBoughtState() {
   const bought = getBought();
+  // 兼容层：同时检查旧的 id-based 格式
+  let legacyBought = new Set();
+  try {
+    legacyBought = new Set(JSON.parse(localStorage.getItem("yueju_bought_shows_legacy") || "[]"));
+  } catch(e) {}
+
   document.querySelectorAll(".perf-card[data-fingerprint]").forEach(card => {
     const fp = card.dataset.fingerprint;
-    if (!bought.has(fp)) return;
-    card.classList.add("bought");
-    const btn = card.querySelector(".buy-btn");
-    if (btn) {
-      btn.classList.add("active");
-      btn.querySelector(".btn-text").textContent = "已购 ✓";
+    const id = card.dataset.id;
+    const isBought = bought.has(fp) || legacyBought.has(id) || legacyBought.has("id:" + id);
+    
+    if (isBought) {
+      card.classList.add("bought");
+      const btn = card.querySelector(".buy-btn");
+      if (btn) {
+        btn.classList.add("active");
+        btn.querySelector(".btn-text").textContent = "已购 ✓";
+      }
+      // 如果是 legacy 匹配，迁移到 fingerprint 格式
+      if (!bought.has(fp) && id) {
+        bought.add(fp);
+        saveBought(bought);
+      }
     }
   });
 }
