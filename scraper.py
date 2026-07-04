@@ -230,11 +230,15 @@ def scrape_wiki66():
 # 数据源 3: 搜狐镜像 (上海越剧院公众号)
 # ============================================================
 def scrape_sohu_mirror():
-    """抓取搜狐镜像上的上海越剧院演出预告"""
+    """抓取搜狐镜像上的上海越剧院演出预告
+    
+    页面结构：整篇文章在一个 <article> 标签中，
+    每个演出包含：剧目名（含《》）→ 时间：X月X日XX:XX → 地点：XXX → 主演：XXX
+    需要以"时间："为锚点，向前找剧目名，向后找地点和主演
+    """
     print("📱 抓取搜狐镜像（上越公众号）...")
     shows = []
     try:
-        # 搜索最新的七月/八月演出预告
         urls = [
             "https://yule.sohu.com/a/1043882280_121124763",  # 七月演出预告
         ]
@@ -246,17 +250,22 @@ def scrape_sohu_mirror():
             soup = parse_html(html)
             text = soup.get_text()
             
-            # 提取演出信息
-            # 格式："时间：7月X日 19:15 地点：XXX 主演：XXX"
-            pattern = re.compile(
-                r'时间[：:]\s*(\d{1,2}月\d{1,2}日)\s*(\d{1,2}:\d{2}).*?地点[：:]\s*([^\n]+?)(?:\s*主演|$)',
-                re.DOTALL
-            )
+            # 用"时间："分割文本，每段包含一个演出的信息
+            # 格式：...剧目名...时间：7月3日19:30地点：杭州胜利剧院主演...
+            time_segments = re.split(r'时间[：:]', text)
             
-            for match in pattern.finditer(text):
-                date_part = match.group(1)
-                time_part = match.group(2)
-                venue = match.group(3).strip()
+            for i, seg in enumerate(time_segments[1:], 1):  # 跳过第一段（前言）
+                seg = seg.strip()
+                if not seg:
+                    continue
+                
+                # 提取日期和时间：7月3日19:30 或 2026年7月3日19:15
+                dt_match = re.match(r'\s*(?:2026年)?(\d{1,2}月\d{1,2}日)\s*(\d{1,2}:\d{2})', seg)
+                if not dt_match:
+                    continue
+                
+                date_part = dt_match.group(1)
+                time_part = dt_match.group(2)
                 
                 # 转换日期
                 try:
@@ -265,10 +274,70 @@ def scrape_sohu_mirror():
                 except:
                     continue
                 
+                # 跳过过去的演出（但保留最近2天用于状态标记）
+                today = datetime.now().strftime("%Y-%m-%d")
+                if date_iso < today:
+                    continue
+                
+                # 提取地点：时间后面紧跟"地点：XXX"
+                venue = ""
+                venue_match = re.search(r'地点[：:]\s*(.+?)(?:\n|$)', seg)
+                if venue_match:
+                    venue = venue_match.group(1).strip()
+                
+                # 提取主演
+                cast = ""
+                cast_match = re.search(r'主演(.+?)(?:时间[：:]|地点[：:]|演出单位|\d+／|\d+\.$|$)', seg, re.DOTALL)
+                if cast_match:
+                    cast = cast_match.group(1).strip()
+                    # 清理：去掉角色名前缀，保留"演员：角色"格式
+                    cast = re.sub(r'\s+', '', cast)
+                    cast = cast[:150] if len(cast) > 150 else cast
+                
+                # 向前找剧目名：在前一段文本末尾找《XXX》
+                title = ""
+                prev_seg = time_segments[i - 1] if i > 0 else ""
+                # 找最后一个《XXX》
+                title_matches = re.findall(r'《([^》]+)》', prev_seg)
+                if title_matches:
+                    # 取最后一个匹配（最靠近"时间"的）
+                    title = title_matches[-1]
+                
+                # 构建完整标题
+                if title:
+                    # 判断前缀
+                    if prev_seg.rstrip().endswith('越剧小戏') or '越剧小戏' in prev_seg[-20:]:
+                        full_title = f"越剧小戏《{title}》"
+                    elif '小剧场实验越剧' in prev_seg[-30:]:
+                        full_title = f"小剧场实验越剧《{title}》"
+                    elif '小剧场越剧' in prev_seg[-20:]:
+                        full_title = f"小剧场越剧《{title}》"
+                    elif '新编历史故事剧' in prev_seg[-30:]:
+                        full_title = f"新编历史故事剧《{title}》"
+                    elif '大型神话越剧' in prev_seg[-30:]:
+                        full_title = f"大型神话越剧《{title}》"
+                    elif '越剧' in prev_seg[-15:]:
+                        full_title = f"越剧《{title}》"
+                    elif '（尹袁版）' in prev_seg[-20:] or '尹袁版' in prev_seg[-15:]:
+                        full_title = f"越剧《{title}》"
+                    else:
+                        full_title = f"越剧《{title}》"
+                else:
+                    full_title = ""
+                
+                # 提取演出单位
+                troupe = ""
+                troupe_match = re.search(r'演出单位[：:]\s*([^\n]+?)(?:时间|地点|主演|$)', seg)
+                if troupe_match:
+                    troupe = troupe_match.group(1).strip()
+                
                 shows.append({
+                    "title": full_title,
                     "date": date_iso,
                     "time": time_part,
                     "venue": venue,
+                    "cast": cast,
+                    "troupe": troupe if troupe else "上海越剧院",
                     "source": "sohu",
                     "source_url": url
                 })
@@ -326,78 +395,86 @@ def scrape_dahepiao():
 # ============================================================
 # 合并与去重
 # ============================================================
+def normalize_title(title):
+    """标准化标题用于匹配：去掉前缀，只保留《XXX》中的内容"""
+    # 去掉常见前缀
+    prefixes = ['大型神话越剧', '小剧场实验越剧', '小剧场越剧', '新编历史故事剧', '越剧']
+    cleaned = title
+    for prefix in prefixes:
+        if cleaned.startswith(prefix):
+            cleaned = cleaned[len(prefix):]
+            break
+    # 只保留书名号内容
+    m = re.search(r'《([^》]+)》', cleaned)
+    if m:
+        return m.group(1)
+    return cleaned.strip('《》')
+
+
 def merge_shows(scraped_shows, known_shows):
     """将抓取的数据与已知数据合并"""
     # 以已知数据为基础
     merged = {f"{s['date']}|{s['title']}|{s['venue']}": s.copy() for s in known_shows}
     
-    # 建立日期+场馆的索引，用于模糊匹配
-    date_venue_index = {}
+    # 建立标准化索引：(日期, 核心剧目名) → key列表
+    # 以及 (日期, 场馆) → key列表
+    norm_index = {}  # (date, normalized_title) → [key]
+    dv_index = {}    # (date, venue) → [key]
+    
     for key, show in merged.items():
-        dv_key = f"{show['date']}|{show.get('venue', '')}"
-        if dv_key not in date_venue_index:
-            date_venue_index[dv_key] = []
-        date_venue_index[dv_key].append(key)
+        nt = normalize_title(show['title'])
+        nk = (show['date'], nt)
+        if nk not in norm_index:
+            norm_index[nk] = []
+        norm_index[nk].append(key)
+        
+        dk = (show['date'], show.get('venue', ''))
+        if dk not in dv_index:
+            dv_index[dk] = []
+        dv_index[dk].append(key)
     
     new_count = 0
     for scraped in scraped_shows:
         title = scraped.get('title', '')
         date = scraped.get('date', '')
         venue = scraped.get('venue', '')
+        norm_t = normalize_title(title) if title else ''
         
-        # 尝试精确匹配
-        key = f"{date}|{title}|{venue}"
+        # 尝试匹配：1) 日期+核心剧目名  2) 日期+场馆
+        matched_key = None
         
-        # 尝试模糊匹配（日期+场馆）
-        matched = False
-        if not title and venue:
-            # 搜狐镜像的情况：只有日期+场馆，没有标题
-            dv_key = f"{date}|{venue}"
-            # 也尝试变体（如"浙江胜利剧院" vs "杭州胜利剧院"）
-            for dv, keys in date_venue_index.items():
-                dv_date, dv_venue = dv.split('|', 1)
-                if dv_date == date and (
-                    dv_venue in venue or venue in dv_venue or
-                    dv_venue.replace('浙江', '杭州') == venue or
-                    dv_venue.replace('杭州', '浙江') == venue
-                ):
-                    # 匹配到了，补全信息
-                    for k in keys:
-                        existing = merged[k]
-                        if not existing.get('time') and scraped.get('time'):
-                            existing['time'] = scraped['time']
-                    matched = True
-                    break
+        if norm_t and (date, norm_t) in norm_index:
+            matched_key = norm_index[(date, norm_t)][0]
+        elif venue and (date, venue) in dv_index:
+            matched_key = dv_index[(date, venue)][0]
+        else:
+            # 模糊场馆匹配（浙江胜利剧院 vs 杭州胜利剧院）
+            if venue:
+                for (d, v), keys in dv_index.items():
+                    if d == date and (v in venue or venue in v or 
+                                      v.replace('浙江', '杭州') == venue or
+                                      v.replace('杭州', '浙江') == venue):
+                        matched_key = keys[0]
+                        break
         
-        if matched:
-            continue
-        
-        if key in merged:
-            # 补全缺失字段
-            existing = merged[key]
-            if not existing.get('price') and scraped.get('price'):
-                existing['price'] = scraped['price']
+        if matched_key:
+            # 匹配到了，补全缺失字段
+            existing = merged[matched_key]
+            if not existing.get('price') or existing['price'] == '以场馆公布为准':
+                if scraped.get('price'):
+                    existing['price'] = scraped['price']
             if not existing.get('cast') and scraped.get('cast'):
                 existing['cast'] = scraped['cast']
             if not existing.get('time') and scraped.get('time'):
                 existing['time'] = scraped['time']
+            if not existing.get('venue') and venue:
+                existing['venue'] = venue
         else:
-            # 检查是否是已知演出的变体（标题包含关系）
-            is_variant = False
-            for k, existing in merged.items():
-                if existing['date'] == date and title and title in existing['title']:
-                    is_variant = True
-                    # 补全信息
-                    if not existing.get('price') and scraped.get('price'):
-                        existing['price'] = scraped['price']
-                    if not existing.get('cast') and scraped.get('cast'):
-                        existing['cast'] = scraped['cast']
-                    break
-            
-            if not is_variant and date and title and len(title) > 2:
-                # 真正的新演出
+            # 真正的新演出
+            if date and title and len(title) > 2:
                 new_count += 1
                 print(f"  🆕 新发现: {date} {title} @ {venue}")
+                key = f"{date}|{title}|{venue}"
                 merged[key] = {
                     "id": f"new-{new_count:03d}",
                     "date": date,
@@ -407,7 +484,7 @@ def merge_shows(scraped_shows, known_shows):
                     "venue": venue,
                     "city": scraped.get('city', ''),
                     "cast": scraped.get('cast', ''),
-                    "troupe": "上海越剧院",
+                    "troupe": scraped.get('troupe', '上海越剧院'),
                     "price": scraped.get('price', '以场馆公布为准'),
                     "is_star": STAR_ACTOR in scraped.get('cast', ''),
                 }
