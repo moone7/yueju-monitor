@@ -1436,7 +1436,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-07-04 14:00 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-07-04 14:05 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -1639,6 +1639,57 @@ function restoreBoughtState() {
 function updateBoughtStat() {
   document.getElementById("stat-bought").textContent = getBought().size;
 }
+
+// ============================================================
+//  EMERGENCY RESTORE — 在控制台输入 restoreMyShows() 可手动恢复
+// ============================================================
+function restoreMyShows() {
+  const bought = getBought();
+  let restored = 0;
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+    const id = card.dataset.id;
+    // 已知的已购场次 ID 列表（用户反馈）
+    const knownBought = ["lzy-02", "lzy-04"];
+    if (knownBought.includes(id)) {
+      const fp = card.dataset.fingerprint || getShowFingerprint(card);
+      if (!bought.has(fp)) {
+        bought.add(fp);
+        restored++;
+      }
+      card.classList.add("bought");
+      const btn = card.querySelector(".buy-btn");
+      if (btn) {
+        btn.classList.add("active");
+        btn.querySelector(".btn-text").textContent = "已购 ✓";
+      }
+    }
+  });
+  saveBought(bought);
+  updateBoughtStat();
+  updateMyShowsBanner();
+  console.log(`✅ 恢复了 ${restored} 场已购记录（共 ${bought.size} 场）`);
+  return restored;
+}
+// 自动执行一次应急恢复（静默，不影响已正常恢复的）
+(function autoRestore() {
+  const bought = getBought();
+  const knownBought = ["lzy-02", "lzy-04"];
+  let needSave = false;
+  document.querySelectorAll(".perf-card[data-id]").forEach(card => {
+    const id = card.dataset.id;
+    if (knownBought.includes(id)) {
+      const fp = card.dataset.fingerprint || getShowFingerprint(card);
+      if (!bought.has(fp)) {
+        bought.add(fp);
+        needSave = true;
+      }
+    }
+  });
+  if (needSave) {
+    saveBought(bought);
+    console.log("✅ 自动恢复已购记录");
+  }
+})();
 
 // ============================================================
 //  MY SHOWS BANNER — always visible
