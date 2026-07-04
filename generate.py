@@ -398,6 +398,33 @@ def main():
     if remaining:
         print(f"⚠️ 警告：{len(remaining)} 个占位符未替换：{set(remaining)}")
     
+    # ============================================================
+    # FINGERPRINT 稳定性检查
+    # 确保 date+title+venue 与上次生成一致，保护已购状态
+    # ============================================================
+    fingerprint_file = Path(".fingerprint_cache")
+    current_fps = {}
+    for s in shows:
+        raw = f"{s['date']}|{s['title']}|{s['venue']}"
+        current_fps[s['id']] = raw
+    
+    if fingerprint_file.exists():
+        try:
+            old_fps = json.loads(fingerprint_file.read_text(encoding="utf-8"))
+            changed = []
+            for sid, raw in current_fps.items():
+                if sid in old_fps and old_fps[sid] != raw:
+                    changed.append(f"  ⚠️ {sid}: \"{old_fps[sid]}\" → \"{raw}\"")
+            if changed:
+                print(f"\n🚨 警告：{len(changed)} 场演出的 fingerprint 输入值发生变化！")
+                print("   已购状态可能丢失！请检查 shows.json 是否修改了 date/title/venue。")
+                for c in changed:
+                    print(c)
+        except:
+            pass
+    
+    fingerprint_file.write_text(json.dumps(current_fps, ensure_ascii=False, indent=2), encoding="utf-8")
+    
     # 写入
     Path("index.html").write_text(html, encoding="utf-8")
     print(f"✅ index.html 生成完成")

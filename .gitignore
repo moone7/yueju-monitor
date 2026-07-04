@@ -1,5 +1,6 @@
 # 运行时产物（由 scraper.py 生成，generate.py 消费）
 shows.json
+.fingerprint_cache
 
 # 工具脚本（一次性使用，不需要提交到仓库）
 extract_shows.py
