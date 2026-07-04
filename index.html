@@ -348,12 +348,12 @@
   }
   .cal-day.selected .cal-day-num { color: var(--crimson-light) !important; }
   .cal-day.has-bought-show {
-    border-color: rgba(181,52,58,0.3) !important;
+    border-color: rgba(74,157,63,0.35) !important;
     background: linear-gradient(135deg,
-      rgba(181,52,58,0.06) 0%,
-      rgba(181,52,58,0.02) 100%
+      rgba(45,90,39,0.12) 0%,
+      rgba(45,90,39,0.04) 100%
     );
-    box-shadow: inset 0 0 12px rgba(181,52,58,0.04);
+    box-shadow: inset 0 0 12px rgba(74,157,63,0.06);
   }
   .cal-day-num {
     font-size: 13px; font-weight: 600; line-height: 1;
@@ -362,7 +362,7 @@
   }
   .cal-day.has-bought-show .cal-day-num::after {
     content: ' ✓';
-    font-size: 9px; color: var(--crimson-light);
+    font-size: 9px; color: #6bcc5e;
     font-weight: 700; opacity: 0.9;
   }
   .cal-day-names {
@@ -389,9 +389,9 @@
     background: rgba(255,255,255,0.07);
   }
   .cal-day.has-bought-show .cal-day-name {
-    color: rgba(255,150,150,0.9);
-    background: rgba(181,52,58,0.15);
-    border-color: rgba(181,52,58,0.2);
+    color: rgba(120,220,100,0.9);
+    background: rgba(45,90,39,0.18);
+    border-color: rgba(74,157,63,0.25);
     font-weight: 500;
   }
   .cal-day.has-star-show .cal-day-name {
@@ -407,9 +407,9 @@
     box-shadow: 0 0 6px rgba(255,215,0,0.06);
   }
   .cal-day-name.bought-name {
-    color: rgba(255,150,150,0.9);
-    background: rgba(181,52,58,0.15);
-    border-color: rgba(181,52,58,0.2);
+    color: rgba(120,220,100,0.9);
+    background: rgba(45,90,39,0.18);
+    border-color: rgba(74,157,63,0.25);
   }
   .cal-day-name.cal-more {
     background: transparent;
@@ -430,9 +430,9 @@
     font-size: 7.5px; font-weight: 400; line-height: 1;
     vertical-align: middle;
   }
-  .cal-group-tag.g1 { color: #fff; background: rgba(200,50,50,0.85); border: 1px solid rgba(255,150,150,0.9); }
-  .cal-group-tag.g2 { color: #fff; background: rgba(180,140,60,0.8); border: 1px solid rgba(255,220,130,0.85); }
-  .cal-group-tag.g3 { color: #fff; background: rgba(50,160,155,0.8); border: 1px solid rgba(120,230,220,0.85); }
+  .cal-group-tag.g一 { color: #fff; background: rgba(200,50,50,0.85); border: 1px solid rgba(255,150,150,0.9); }
+  .cal-group-tag.g二 { color: #fff; background: rgba(180,140,60,0.8); border: 1px solid rgba(255,220,130,0.85); }
+  .cal-group-tag.g三 { color: #fff; background: rgba(50,160,155,0.8); border: 1px solid rgba(120,230,220,0.85); }
 
   .cal-group-legend {
     display: flex; align-items: center; gap: 8px;
@@ -463,14 +463,14 @@
     position: absolute; bottom: 4px; right: 4px;
     font-size: 7.5px; font-weight: 700;
     background: linear-gradient(135deg,
-      rgba(181,52,58,0.35) 0%,
-      rgba(181,52,58,0.2) 100%
+      rgba(45,90,39,0.4) 0%,
+      rgba(74,157,63,0.25) 100%
     );
-    color: #ffaaaa; border-radius: 4px;
+    color: #8fd886; border-radius: 4px;
     padding: 1.5px 5px;
     pointer-events: none; z-index: 1;
     letter-spacing: 1px;
-    border: 1px solid rgba(181,52,58,0.25);
+    border: 1px solid rgba(74,157,63,0.3);
   }
 
   /* ===== Tooltip ===== */
@@ -508,7 +508,7 @@
   .cal-tooltip .tt-item:last-child { border-bottom: none; }
   .cal-tooltip .tt-title { font-weight: 600; color: var(--text); font-size: 12px; }
   .cal-tooltip .tt-title .tt-star { color: #ffd700; }
-  .cal-tooltip .tt-title .tt-bought { color: var(--crimson-light); font-size: 10px; margin-left: 4px; }
+  .cal-tooltip .tt-title .tt-bought { color: #6bcc5e; font-size: 10px; margin-left: 4px; }
   .cal-tooltip .tt-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
   .cal-tooltip .tt-cast { color: var(--text-dim); font-size: 10px; margin-top: 1px; }
   .cal-tooltip .tt-price { color: var(--gold-light); font-size: 11px; font-weight: 600; margin-top: 1px; }
@@ -656,14 +656,14 @@
   }
 
   .perf-card.bought {
-    border-color: rgba(181,52,58,0.35) !important;
-    background: rgba(181,52,58,0.06) !important;
+    border-color: rgba(74,157,63,0.45) !important;
+    background: rgba(45,90,39,0.08) !important;
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
   }
   .perf-card.bought .perf-title::after {
     content: ' ✓ 已购';
-    font-size: 12px; color: var(--crimson-light);
+    font-size: 12px; color: #6bcc5e;
     font-weight: 500; font-style: normal;
     margin-left: 8px; letter-spacing: 0;
   }
@@ -961,11 +961,11 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat">
+<div class="stat" data-num="33">
 <div class="stat-num">33</div>
 <div class="stat-label">近期演出场次</div>
 </div>
-<div class="stat">
+<div class="stat" data-num="4">
 <div class="stat-num">4</div>
 <div class="stat-label">⭐ 陆志艳场次</div>
 </div>
@@ -973,7 +973,7 @@
 <div class="stat-num" id="stat-bought">0</div>
 <div class="stat-label">🎟️ 已购场次</div>
 </div>
-<div class="stat">
+<div class="stat" data-num="9">
 <div class="stat-num">9</div>
 <div class="stat-label">涉及城市</div>
 </div>
@@ -1665,7 +1665,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-07-04 14:21 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-07-04 14:34 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -1710,25 +1710,25 @@ const STAR_IDS = new Set(["lzy-01", "lzy-02", "lzy-03", "lzy-04"]);
 // Actor-to-group fallback (when "演出单位" text unclear). 前两位主演决定团别.
 const ACTOR_GROUP = {
   // 一团（男女合演）: 范派/袁派 为主
-  "方亚芬":"1","斯钰林":"1","邓华蔚":"1","郭茜云":"1","俞景岚":"1",
-  "徐标新":"1","徐晓飞":"1","裘隆":"1","金烨":"1",
+  "方亚芬":"一","斯钰林":"一","邓华蔚":"一","郭茜云":"一","俞景岚":"一",
+  "徐标新":"一","徐晓飞":"一","裘隆":"一","金烨":"一",
   // 二团/红楼团（女子越剧）: 徐派/王派 为主
-  "单仰萍":"2","杨婷娜":"2","李旭丹":"2","王婉娜":"2","王柔桑":"2",
-  "盛舒扬":"2","陈慧迪":"2","忻雅琴":"2","吴佳燕":"2","王舒雯":"2",
-  "王婕":"2","章瑞虹":"2","王志萍":"2","钱惠丽":"2",
+  "单仰萍":"二","杨婷娜":"二","李旭丹":"二","王婉娜":"二","王柔桑":"二",
+  "盛舒扬":"二","陈慧迪":"二","忻雅琴":"二","吴佳燕":"二","王舒雯":"二",
+  "王婕":"二","章瑞虹":"二","王志萍":"二","钱惠丽":"二",
   // 三团/青年团: 新生代
-  "俞果":"3","陆志艳":"3","杨韵儿":"3","范莹":"3","张艾嘉":"3",
-  "陈欣雨":"3","冯军":"3","赵一兰":"3","姚磊":"3","董心心":"3",
-  "潘锡丹":"3","丁小蛙":"3","王杭娟":"3","李云霄":"3"
+  "俞果":"三","陆志艳":"三","杨韵儿":"三","范莹":"三","张艾嘉":"三",
+  "陈欣雨":"三","冯军":"三","赵一兰":"三","姚磊":"三","董心心":"三",
+  "潘锡丹":"三","丁小蛙":"三","王杭娟":"三","李云霄":"三"
 };
 
 function extractGroup(castText) {
   // Try explicit label first
   const explicit = castText.match(/演出单位[：:]\s*上海越剧院\s*(\S*团)/);
   if (explicit) {
-    if (explicit[1].includes("1")) return "1";
-    if (explicit[1].includes("2") || explicit[1].includes("红楼")) return "2";
-    if (explicit[1].includes("3")) return "3";
+    if (explicit[1].includes("一")) return "一";
+    if (explicit[1].includes("二") || explicit[1].includes("红楼")) return "二";
+    if (explicit[1].includes("三")) return "三";
   }
   // Fallback: first 2 actor names
   const names = castText.match(/主演[：:]\s*(.+?)(?:<|<br>|$)/);
