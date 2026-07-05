@@ -1,12 +1,15 @@
 {
+  "id": "/yueju-monitor/",
   "name": "上海越剧演出售票日报",
   "short_name": "越剧监控",
   "description": "上海越剧院及全国巡演售票信息监控日报",
-  "start_url": "./index.html",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d0c0a",
   "theme_color": "#c9a96e",
+  "categories": ["entertainment", "music"],
   "icons": [
     {
       "src": "icon-192.png",
