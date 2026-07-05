@@ -1,6 +1,5 @@
 # 运行时数据（不需要推送到 GitHub）
 shows.json
-shows_history/
 .fingerprint_cache
 
 # Python
