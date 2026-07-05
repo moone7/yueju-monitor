@@ -1,11 +1,18 @@
-# 运行时产物（由 scraper.py 生成，generate.py 消费）
+# 运行时数据（不需要推送到 GitHub）
 shows.json
+shows_history/
 .fingerprint_cache
-
-# 工具脚本（一次性使用，不需要提交到仓库）
-extract_shows.py
-make_template.py
 
 # Python
 __pycache__/
 *.pyc
+*.pyo
+
+# 本地临时文件
+*.md
+fetch_template.py
+push_to_github.py
+
+# OS
+.DS_Store
+Thumbs.db
