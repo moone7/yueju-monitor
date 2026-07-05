@@ -540,10 +540,12 @@ def main():
     pwa_head_tags = """<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#c9a96e">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="越剧监控">
-<link rel="apple-touch-icon" href="icon.svg">
-<link rel="icon" type="image/svg+xml" href="icon.svg">"""
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">"""
     
     if "manifest.json" not in html:
         html = html.replace("<head>", "<head>\n" + pwa_head_tags, 1)
