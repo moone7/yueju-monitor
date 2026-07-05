@@ -5,9 +5,11 @@ generate.py — 读取 shows.json + template.html → 生成 index.html
 核心功能：
 1. 根据当前日期自动计算每场演出的状态（今日开演/已演/明日开演/售票中）
 2. 生成演出卡片 HTML
-3. 生成紧急提醒和今日新动态
+3. 智能提醒生成（基于历史对比，发现新增/变化）
 4. 生成 PERF_DATES 和 STAR_IDS 数据
 5. 填充模板占位符，输出 index.html
+
+历史对比：读取 shows_history/latest.json，对比找出新增演出
 """
 import json
 import re
@@ -19,6 +21,53 @@ from pathlib import Path
 # ============================================================
 STAR_ACTOR = "陆志艳"
 WEEKDAYS_CN = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
+
+# ============================================================
+# 历史对比
+# ============================================================
+def load_previous_shows():
+    """读取上次的历史数据（用于对比发现新增演出）"""
+    latest_file = Path("shows_history/latest.json")
+    if not latest_file.exists():
+        return []
+    
+    try:
+        return json.loads(latest_file.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"  ⚠️ 读取历史数据失败: {e}")
+        return []
+
+def find_new_shows(current_shows, previous_shows):
+    """找出新增的演出（对比 date+title+venue）"""
+    if not previous_shows:
+        return []
+    
+    # 建立上次演出的索引
+    prev_keys = set()
+    for show in previous_shows:
+        key = f"{show['date']}|{show['title']}|{show['venue']}"
+        prev_keys.add(key)
+    
+    # 找出新增的
+    new_shows = []
+    for show in current_shows:
+        key = f"{show['date']}|{show['title']}|{show['venue']}"
+        if key not in prev_keys:
+            new_shows.append(show)
+    
+    return new_shows
+
+def clean_title(title):
+    """去掉剧目前缀和书名号，返回纯剧目名"""
+    prefixes = ['大型神话越剧', '小剧场实验越剧', '小剧场越剧', '新编历史故事剧', '越剧']
+    cleaned = title
+    for prefix in prefixes:
+        if cleaned.startswith(prefix):
+            cleaned = cleaned[len(prefix):]
+            break
+    cleaned = cleaned.strip('《》')
+    return cleaned.strip()
+
 
 # ============================================================
 # 日期工具
@@ -48,6 +97,7 @@ def format_show_date(date_iso, time_str):
     dt = datetime.strptime(date_iso, "%Y-%m-%d")
     weekday = WEEKDAYS_CN[dt.weekday()].replace("星期", "周")
     return f"{dt.month}月{dt.day}日（{weekday}）{time_str}"
+
 
 # ============================================================
 # 状态计算
@@ -81,6 +131,7 @@ def compute_tags(date_iso, today, is_star):
     
     return tags
 
+
 # ============================================================
 # HTML 生成
 # ============================================================
@@ -91,7 +142,6 @@ def html_escape(text):
 def format_cast_html(cast, is_star=False):
     """格式化主演文本，高亮陆志艳"""
     if is_star and STAR_ACTOR in cast:
-        # 将陆志艳用 <strong> 包裹
         cast = cast.replace(STAR_ACTOR, f'<strong style="color:#ffd700;">{STAR_ACTOR}</strong>')
     return cast
 
@@ -126,7 +176,6 @@ def generate_card_html(show, today, is_star_card=False):
         parts = price.split(' · ', 1)
         price_html = parts[0]
         if len(parts) > 1 and parts[1]:
-            # 把括号内容放到 <small>
             small_text = parts[1].strip('()')
             if small_text:
                 price_html = f'{parts[0]}<br/><small>{small_text}</small>'
@@ -197,7 +246,6 @@ def generate_perf_dates(shows):
     
     return "{\n" + "\n".join(lines) + "\n}"
 
-
 def generate_star_ids(shows):
     """生成 STAR_IDS JS 数组"""
     star_ids = [s['id'] for s in shows if s['is_star']]
@@ -206,22 +254,8 @@ def generate_star_ids(shows):
 
 
 # ============================================================
-# 提醒生成
+# 智能提醒生成（基于历史对比）
 # ============================================================
-def clean_title(title):
-    """去掉剧目前缀和书名号，返回纯剧名"""
-    # 去掉常见前缀
-    prefixes = ['大型神话越剧', '小剧场实验越剧', '小剧场越剧', '新编历史故事剧', '越剧']
-    cleaned = title
-    for prefix in prefixes:
-        if cleaned.startswith(prefix):
-            cleaned = cleaned[len(prefix):]
-            break
-    # 去掉书名号
-    cleaned = cleaned.strip('《》')
-    return cleaned.strip()
-
-
 def format_show_list(shows):
     """格式化演出列表为提醒文本"""
     parts = []
@@ -231,19 +265,16 @@ def format_show_list(shows):
         parts.append(f"{dt.month}月{dt.day}日 {s['venue']}《{title_clean}》")
     return "、".join(parts)
 
-
 def format_star_list(shows):
     """格式化陆志艳演出列表"""
     parts = []
     for s in shows:
         dt = datetime.strptime(s['date'], "%Y-%m-%d")
-        # 提取角色
         role = ""
         role_match = re.search(r'陆志艳[）)）]?[（(]([^）)]+)', s['cast'])
         if role_match:
             role = f"（饰{role_match.group(1)}）"
         elif "陆志艳" in s['cast']:
-            # 尝试其他格式
             role_match2 = re.search(r'陆志艳[：:]\s*(\S+)', s['cast'])
             if role_match2:
                 role = f"（饰{role_match2.group(1)}）"
@@ -254,83 +285,163 @@ def format_star_list(shows):
     return " → ".join(parts)
 
 
-def generate_alert_urgent(shows, today):
-    """生成紧急提醒内容"""
-    today_str = date_str(today)
-    tomorrow_str = date_str(today + timedelta(days=1))
-    
+def generate_smart_alerts(shows, today, new_shows):
+    """生成智能提醒（基于历史对比，突出新增和紧急）"""
     lines = []
+    today_str = date_str(today)
     
-    # 今日开演
+    # === 新增演出提醒（最有价值的信息）===
+    if new_shows:
+        lines.append(f"<strong>🔔 新发现 {len(new_shows)} 场演出</strong>（对比昨日数据）：<br/>")
+        for i, show in enumerate(new_shows[:5]):  # 最多显示5场
+            dt = datetime.strptime(show['date'], "%Y-%m-%d")
+            days_until = (dt - today).days
+            
+            # 时间提示
+            if days_until == 0:
+                time_hint = " <span style='color:#ff6b6b;'>⚡ 今日开演！</span>"
+            elif days_until == 1:
+                time_hint = " <span style='color:#ffa07a;'>⏰ 明日开演</span>"
+            elif days_until <= 3:
+                time_hint = f" <span style='color:#ffd700;'>（还剩 {days_until} 天）</span>"
+            elif days_until <= 7:
+                time_hint = f"（{dt.month}月{dt.day}日，还剩 {days_until} 天）"
+            else:
+                time_hint = f"（{dt.month}月{dt.day}日）"
+            
+            # 票价信息
+            price_info = ""
+            if show.get('price') and show['price'] != '以场馆公布为准':
+                price_info = f" — {show['price']}"
+            
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {show['venue']}《{title_clean}》{time_hint}{price_info}<br/>")
+        
+        if len(new_shows) > 5:
+            lines.append(f"  ... 还有 {len(new_shows) - 5} 场，详见下方列表<br/>")
+        
+        lines.append("<br/>")  # 空行分隔
+    
+    # === 今日开演 ===
     today_shows = [s for s in shows if s['date'] == today_str]
     if today_shows:
-        lines.append(f"· <strong>今日开演：</strong>{format_show_list(today_shows)}。<br/>")
+        lines.append(f"<strong>🎭 今日开演</strong>（{today_str}）：<br/>")
+        for show in today_shows:
+            title_clean = clean_title(show['title'])
+            star_mark = " ⭐" if show['is_star'] else ""
+            lines.append(f"  · {show['venue']}《{title_clean}》{star_mark}<br/>")
+        lines.append("<br/>")
     
-    # 明日开演
+    # === 明日开演 ===
+    tomorrow_str = date_str(today + timedelta(days=1))
     tomorrow_shows = [s for s in shows if s['date'] == tomorrow_str]
     if tomorrow_shows:
-        lines.append(f"· <strong>明日开演：</strong>{format_show_list(tomorrow_shows)}。<br/>")
+        lines.append(f"<strong>⏰ 明日开演</strong>（{tomorrow_str}）：<br/>")
+        for show in tomorrow_shows:
+            title_clean = clean_title(show['title'])
+            star_mark = " ⭐" if show['is_star'] else ""
+            lines.append(f"  · {show['venue']}《{title_clean}》{star_mark}<br/>")
+        lines.append("<br/>")
     
-    # 陆志艳近期
+    # === 陆志艳近期演出 ===
     star_shows = [s for s in shows if s['is_star'] and s['date'] >= today_str]
     if star_shows:
-        lines.append(f"· <strong>⭐ 陆志艳近期：</strong>{format_star_list(star_shows)}。<br/>")
+        lines.append(f"<strong>⭐ 陆志艳近期演出</strong>（共 {len(star_shows)} 场）：<br/>")
+        for show in star_shows:
+            dt = datetime.strptime(show['date'], "%Y-%m-%d")
+            days_until = (dt - today).days
+            title_clean = clean_title(show['title'])
+            
+            if days_until == 0:
+                time_hint = "今日开演"
+            elif days_until == 1:
+                time_hint = "明日开演"
+            else:
+                time_hint = f"还剩 {days_until} 天"
+            
+            lines.append(f"  · {dt.month}月{dt.day}日 {show['venue']}《{title_clean}》— {time_hint}<br/>")
+        lines.append("<br/>")
     
-    # 近期开票提醒（未来7天内）
+    # === 一周内演出提醒 ===
     week_ahead = date_str(today + timedelta(days=7))
     upcoming = [s for s in shows if today_str < s['date'] <= week_ahead and not s['is_star']]
-    if upcoming:
-        venue_set = set()
-        for s in upcoming:
-            venue_set.add(s['venue'])
-        venues_text = "、".join(list(venue_set)[:3])
-        lines.append(f"· <strong>一周内演出：</strong>{format_show_list(upcoming[:4])}{'等' if len(upcoming) > 4 else ''}。<br/>")
+    if upcoming and not new_shows:  # 如果有新增演出，已经在上面显示了
+        lines.append(f"<strong>📅 一周内演出</strong>（{today_str} ~ {week_ahead}）：<br/>")
+        for show in upcoming[:4]:
+            dt = datetime.strptime(show['date'], "%Y-%m-%d")
+            title_clean = clean_title(show['title'])
+            days_until = (dt - today).days
+            lines.append(f"  · {dt.month}月{dt.day}日（{days_until}天后）{show['venue']}《{title_clean}》<br/>")
+        if len(upcoming) > 4:
+            lines.append(f"  ... 还有 {len(upcoming) - 4} 场<br/>")
+        lines.append("<br/>")
     
     if not lines:
-        lines.append("· 暂无近期高优提醒。<br/>")
+        lines.append("· 暂无更新。<br/>")
     
     return "\n      ".join(lines)
 
 
-def generate_alert_new(shows, today):
-    """生成今日新动态内容"""
+def generate_smart_news(shows, today, new_shows):
+    """生成今日新动态（更简洁，突出变化）"""
+    lines = []
     today_str = date_str(today)
     yesterday_str = date_str(today - timedelta(days=1))
     
-    lines = []
+    # === 新增演出（最重要的动态）===
+    if new_shows:
+        lines.append(f"<strong>🔔 数据更新：新增 {len(new_shows)} 场演出</strong><br/>")
+        for show in new_shows[:3]:
+            dt = datetime.strptime(show['date'], "%Y-%m-%d")
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {show['city'] or show['venue']} 新增《{title_clean}》（{dt.month}月{dt.day}日）<br/>")
+        if len(new_shows) > 3:
+            lines.append(f"  ... 还有 {len(new_shows) - 3} 场<br/>")
+        lines.append("<br/>")
     
-    # 今日开演
+    # === 今日开演 ===
     today_shows = [s for s in shows if s['date'] == today_str]
     if today_shows:
-        cities = set(s['city'] for s in today_shows if s.get('city'))
-        if len(cities) > 1:
-            lines.append(f"· <strong>今日多城联动：</strong>{format_show_list(today_shows)}。<br/>")
-        else:
-            lines.append(f"· <strong>今日开演：</strong>{format_show_list(today_shows)}。<br/>")
+        lines.append(f"<strong>🎭 今日开演</strong>：<br/>")
+        for show in today_shows:
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {show['venue']}《{title_clean}》<br/>")
+        lines.append("<br/>")
     
-    # 昨日回顾
+    # === 昨日回顾 ===
     yesterday_shows = [s for s in shows if s['date'] == yesterday_str]
     if yesterday_shows:
-        lines.append(f"· <strong>昨日回顾：</strong>{format_show_list(yesterday_shows)} 已圆满演出。<br/>")
+        lines.append(f"<strong>✅ 昨日回顾</strong>：<br/>")
+        for show in yesterday_shows:
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {show['venue']}《{title_clean}》已圆满演出<br/>")
+        lines.append("<br/>")
     
-    # 陆志艳近期
-    star_upcoming = [s for s in shows if s['is_star'] and s['date'] >= today_str]
-    if star_upcoming:
-        lines.append(f"· <strong>⭐ 陆志艳行程：</strong>共 {len(star_upcoming)} 场 — {format_star_list(star_upcoming)}。<br/>")
+    # === 京津冀巡演进度 ===
+    aug_sep_shows = [s for s in shows if s['date'].startswith(('2026-08', '2026-09')) and 
+                     any(city in s.get('city', '') + s.get('venue', '') for city in ['北京', '天津', '廊坊'])]
+    if aug_sep_shows:
+        total_aug_sep = len(aug_sep_shows)
+        played = len([s for s in aug_sep_shows if s['date'] < today_str])
+        upcoming_aug_sep = len([s for s in aug_sep_shows if s['date'] >= today_str])
+        
+        if upcoming_aug_sep > 0:
+            lines.append(f"<strong>🚄 京津冀巡演进行中</strong>：<br/>")
+            lines.append(f"  共 {total_aug_sep} 场（已演 {played} 场，剩余 {upcoming_aug_sep} 场）<br/>")
+            lines.append(f"  场馆：北大/吉祥大戏院/国家大剧院/天津中国大戏院/廊坊壹佰剧院<br/>")
+            lines.append("<br/>")
     
-    # 京津冀巡演
-    aug_shows = [s for s in shows if s['date'].startswith('2026-08') and '北京' in s.get('city', '') + s.get('venue', '')]
-    aug_shows += [s for s in shows if s['date'].startswith('2026-08') and '天津' in s.get('city', '') + s.get('venue', '')]
-    aug_shows += [s for s in shows if s['date'].startswith('2026-08') and '廊坊' in s.get('city', '') + s.get('venue', '')]
-    aug_shows += [s for s in shows if s['date'].startswith('2026-09') and '北京' in s.get('city', '') + s.get('venue', '')]
-    if aug_shows:
-        cities_count = len(set(s.get('city', '') for s in aug_shows))
-        lines.append(f"· <strong>京津冀巡演进行中：</strong>8-9月共 {len(aug_shows)} 场（北大/吉祥大戏院/国家大剧院/天津中国大戏院/廊坊壹佰剧院/北京艺术中心）。<br/>")
-    
-    # 宛平剧院
+    # === 宛平剧院近期 ===
     wanping = [s for s in shows if '宛平' in s.get('venue', '') and s['date'] >= today_str]
     if wanping:
-        lines.append(f"· <strong>宛平剧院近期：</strong>{format_show_list(wanping[:3])}{'等' if len(wanping) > 3 else ''}。<br/>")
+        lines.append(f"<strong>🎪 宛平剧院近期</strong>（共 {len(wanping)} 场）：<br/>")
+        for show in wanping[:3]:
+            dt = datetime.strptime(show['date'], "%Y-%m-%d")
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {dt.month}月{dt.day}日《{title_clean}》<br/>")
+        if len(wanping) > 3:
+            lines.append(f"  ... 还有 {len(wanping) - 3} 场<br/>")
+        lines.append("<br/>")
     
     if not lines:
         lines.append("· 今日暂无新动态。<br/>")
@@ -347,6 +458,18 @@ def main():
     shows = data['shows']
     
     today = get_today()
+    
+    # 读取历史数据（用于对比）
+    print("\n📊 加载历史数据...")
+    previous_shows = load_previous_shows()
+    new_shows = find_new_shows(shows, previous_shows)
+    
+    if new_shows:
+        print(f"  🆕 发现 {len(new_shows)} 场新增演出：")
+        for show in new_shows:
+            print(f"    - {show['date']} {show['title']} @ {show['venue']}")
+    else:
+        print("  ✓ 无新增演出（数据与昨日一致）")
     
     # 计算统计
     total = len(shows)
@@ -366,8 +489,9 @@ def main():
     perf_dates_json = generate_perf_dates(shows)
     star_ids_json = generate_star_ids(shows)
     
-    alert_urgent = generate_alert_urgent(shows, today)
-    alert_new = generate_alert_new(shows, today)
+    # 生成智能提醒（基于历史对比）
+    alert_urgent = generate_smart_alerts(shows, today, new_shows)
+    alert_new = generate_smart_news(shows, today, new_shows)
     
     # 读取模板并替换
     template = Path("template.html").read_text(encoding="utf-8")
@@ -427,7 +551,7 @@ def main():
     
     # 写入
     Path("index.html").write_text(html, encoding="utf-8")
-    print(f"✅ index.html 生成完成")
+    print(f"\n✅ index.html 生成完成")
     print(f"   报告日期：{report_date}（{WEEKDAYS_CN[today.weekday()]}）")
     print(f"   演出场次：{total}（陆志艳 {star_count} 场）")
     print(f"   涉及城市：{len(cities)} 个")
