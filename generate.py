@@ -551,17 +551,58 @@ def main():
         html = html.replace("<head>", "<head>\n" + pwa_head_tags, 1)
         print("  ℹ️ PWA head tags injected")
     
+    # PWA: SW 注册 + 自定义安装按钮（捕获 beforeinstallprompt 事件）
     pwa_sw_script = """<script>
+// Service Worker 注册
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function(e) {
-      console.log('SW registration failed:', e);
-    });
+  navigator.serviceWorker.register('sw.js').then(function(reg) {
+    console.log('SW registered:', reg.scope);
+  }).catch(function(e) {
+    console.log('SW registration failed:', e);
   });
 }
+
+// 自定义安装按钮：捕获 beforeinstallprompt 事件
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  // 创建安装按钮
+  var btn = document.createElement('div');
+  btn.id = 'pwa-install-btn';
+  btn.innerHTML = '<span>📱 安装到桌面</span>';
+  btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:99999;background:linear-gradient(135deg,#c9a96e,#e0c88e);color:#0d0c0a;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(201,169,110,0.5);cursor:pointer;display:flex;align-items:center;gap:6px;animation:pwaPulse 2s ease-in-out infinite;';
+  
+  var style = document.createElement('style');
+  style.textContent = '@keyframes pwaPulse{0%,100%{transform:scale(1);box-shadow:0 4px 20px rgba(201,169,110,0.5)}50%{transform:scale(1.05);box-shadow:0 6px 30px rgba(201,169,110,0.7)}}#pwa-install-btn:active{transform:scale(0.95)}';
+  document.head.appendChild(style);
+  
+  btn.onclick = function() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(result) {
+        if (result.outcome === 'accepted') {
+          console.log('PWA installed!');
+        }
+        deferredPrompt = null;
+        btn.remove();
+      });
+    }
+  };
+  
+  document.body.appendChild(btn);
+});
+
+// 安装成功后隐藏按钮
+window.addEventListener('appinstalled', function() {
+  var btn = document.getElementById('pwa-install-btn');
+  if (btn) btn.remove();
+  console.log('PWA installed successfully');
+});
 </script>"""
     
-    if "serviceWorker" not in html and "sw.js" not in html:
+    if "navigator.serviceWorker.register('sw.js')" not in html:
         html = html.replace("</body>", pwa_sw_script + "\n</body>")
         print("  ℹ️ PWA service worker registered")
     
