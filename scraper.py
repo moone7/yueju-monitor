@@ -498,12 +498,14 @@ def merge_shows(scraped_shows, known_shows):
 # 保存历史数据（用于对比生成智能提醒）
 # ============================================================
 def save_history(shows):
-    """保存当前演出数据到历史目录，供 generate.py 对比"""
+    """保存当前演出数据到历史目录，供 generate.py 对比
+    只保存带日期的快照（保留7天），latest.json 由 save_previous_snapshot() 负责
+    """
     history_dir = Path("shows_history")
     history_dir.mkdir(exist_ok=True)
-    
+
     today_str = datetime.now().strftime("%Y-%m-%d")
-    
+
     # 只保存对比所需的字段
     history_data = []
     for show in shows:
@@ -515,34 +517,68 @@ def save_history(shows):
             "price": show.get("price", ""),
             "is_star": show.get("is_star", False),
         })
-    
+
     # 保存带日期的快照（保留7天）
     history_file = history_dir / f"shows_{today_str}.json"
     history_file.write_text(
         json.dumps(history_data, ensure_ascii=False, indent=2),
         encoding="utf-8"
     )
-    
-    # 保存 latest.json（供 generate.py 读取上次数据）
-    latest_file = history_dir / "latest.json"
-    latest_file.write_text(
-        json.dumps(history_data, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-    
-    print(f"\n💾 历史数据已保存: {history_file.name}")
-    print(f"   （latest.json 已更新，供明日对比）")
+
+    # 清理7天前的快照
+    cutoff = datetime.now() - timedelta(days=7)
+    for f in history_dir.glob("shows_*.json"):
+        if f.name == "latest.json":
+            continue
+        try:
+            f_date_str = f.stem.replace("shows_", "")
+            f_date = datetime.strptime(f_date_str, "%Y-%m-%d")
+            if f_date < cutoff:
+                f.unlink()
+                print(f"  🗑️ 清理旧快照: {f.name}")
+        except:
+            pass
+
+    print(f"\n💾 历史快照已保存: {history_file.name}")
 
 
 # ============================================================
 # 主函数
 # ============================================================
+def save_previous_snapshot():
+    """在抓取前，把当前 shows.json 存为 shows_history/latest.json
+    这样 generate.py 对比时拿到的是上一版数据"""
+    if not Path("shows.json").exists():
+        return
+    try:
+        current = json.loads(Path("shows.json").read_text(encoding="utf-8"))
+        prev_shows = current.get("shows", [])
+        history_dir = Path("shows_history")
+        history_dir.mkdir(exist_ok=True)
+        latest_data = [
+            {"id": s["id"], "date": s["date"], "title": s["title"],
+             "venue": s["venue"], "price": s.get("price", ""),
+             "is_star": s.get("is_star", False)}
+            for s in prev_shows
+        ]
+        (history_dir / "latest.json").write_text(
+            json.dumps(latest_data, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+        print(f"  📊 已保存上一版数据到 latest.json（{len(latest_data)} 场）")
+    except Exception as e:
+        print(f"  ⚠️ 保存上一版快照失败: {e}")
+
+
 def main():
     print("=" * 60)
     print("🎭 越剧监控数据抓取")
     print(f"📅 运行时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
-    
+
+    # 先保存上一版快照（供 generate.py 对比用）
+    save_previous_snapshot()
+
     all_scraped = []
     
     # 抓取各数据源
