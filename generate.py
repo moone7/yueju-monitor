@@ -496,6 +496,22 @@ def main():
     # 读取模板并替换
     template = Path("template.html").read_text(encoding="utf-8")
     
+    # 生成备注信息区块（静态内容，不需要动态替换）
+    notes_section = """  <!-- ===== 📌 备注 ===== -->
+  <h2 class="section-title"><span class="section-icon">📌</span> 备注信息</h2>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;font-size:14px;color:var(--text-muted);line-height:2;">
+    · 上海越剧院2026年共有<strong style="color:var(--gold-light)">百余场</strong>演出计划，全年聚焦经典传承、宗师纪念（王文娟诞辰100周年）、流派弘扬三大方向。<br>
+    · 新编越剧《华山奇缘》拟于盛夏首演（具体排期待定），将以《沉香太子全传》为基础改编。<br>
+    · 2026年末上海越剧院新址将正式启用，届时举办开幕系列演出。<br>
+    · 上海越剧院第十代青年演员（东方卫视《越动青春》选手）将推出专场演唱会（时间待定）。<br>
+    · 天蟾逸夫舞台购票：大麦网 / 天蟾小程序<br>
+    · 宛平剧院购票：大麦网 / 宛平剧院官网<br>
+    · 临港演艺中心购票：大麦网<br>
+    · 太仓大剧院购票：大麦网 / 东方演出网<br>
+    · 京津冀巡演：各场馆官方渠道购票（海报扫码/北大讲堂售票处/吉祥官网/天津文惠卡/国家大剧院等）。<br>
+    · <strong style="color:var(--gold-light)">🎟️ 已购标记</strong>保存在浏览器本地，更新页面自动恢复。跨设备同步：<strong>📋 导出</strong>复制后发送到另一台设备 → <strong>📥 导入</strong>粘贴即可合并。
+  </div>"""
+    
     replacements = {
         "{{REPORT_DATE}}": report_date,
         "{{REPORT_DATE_BADGE}}": report_date_badge,
@@ -511,11 +527,27 @@ def main():
         "{{STAR_IDS_JSON}}": star_ids_json,
         "{{ALERT_URGENT}}": alert_urgent,
         "{{ALERT_NEW}}": alert_new,
+        "{{NOTES_SECTION}}": notes_section,
     }
     
     html = template
     for placeholder, value in replacements.items():
         html = html.replace(placeholder, value)
+    
+    # 兜底：如果模板里既没有 {{NOTES_SECTION}} 占位符，也没有"备注信息"字样，
+    # 则在 footer 前自动插入备注区块
+    if "备注信息" not in html:
+        # 在 <!-- ===== FOOTER ===== --> 之前插入
+        footer_marker = "<!-- ===== FOOTER ===== -->"
+        if footer_marker in html:
+            html = html.replace(
+                footer_marker,
+                notes_section + "\n\n" + footer_marker
+            )
+        else:
+            # 如果实在找不到 footer，就插在 </body> 之前
+            html = html.replace("</body>", notes_section + "\n\n</body>")
+        print("  ℹ️ 模板中未找到备注信息，已自动插入")
     
     # 验证无残留占位符
     remaining = re.findall(r'\{\{\w+\}\}', html)
