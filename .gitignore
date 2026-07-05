@@ -1,5 +1,5 @@
 # 运行时数据（不需要推送到 GitHub）
-shows.json
+# shows.json 和 shows_history/ 需要提交，供历史对比用
 .fingerprint_cache
 
 # Python
@@ -11,6 +11,8 @@ __pycache__/
 *.md
 fetch_template.py
 push_to_github.py
+push_fix.py
+push_workflow.py
 
 # OS
 .DS_Store
