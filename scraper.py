@@ -10,6 +10,8 @@ scraper.py — 多数据源抓取脚本
 4. 大河票务 (dahepiao.com) — 票价/演员详情
 
 容错：每个数据源独立 try/except，单个失败不阻塞
+
+历史对比：每次运行后保存快照到 shows_history/，供 generate.py 对比生成智能提醒
 """
 import json
 import re
@@ -48,7 +50,7 @@ KNOWN_SHOWS = [
     {"id":"p03","date":"2026-07-04","time":"19:30","title":"越剧《红楼梦》","subtitle":"尹袁版 · 杭州站","venue":"杭州胜利剧院","city":"杭州","cast":"王清/郭茜云（贾宝玉）、方亚芬/俞景岚（林黛玉）","troupe":"上海越剧院一团","price":"¥180/280/380/480/580","is_star":False},
     {"id":"p04","date":"2026-07-04","time":"19:15","title":"大型神话越剧《追鱼》","subtitle":"宁波站","venue":"宁波逸夫剧院","city":"宁波","cast":"杨婷娜（张珍）、忻雅琴（鲤鱼精）","troupe":"上海越剧院红楼团","price":"¥80/180/280/380/480/580","is_star":False},
     {"id":"lzy-01","date":"2026-07-09","time":"19:30","title":"越剧《红楼梦》","subtitle":"徐王版 · 2026广州艺术季","venue":"广州红线女大剧院","city":"广州","cast":"俞果（贾宝玉）、陆志艳（林黛玉）","troupe":"上海越剧院三团 · 广州艺术季重点展演","price":"¥80 — 480","is_star":True},
-    {"id":"p05","date":"2026-07-10","time":"19:30","title":"越剧《梁山伯与祝英台》","subtitle":"范傅版 · 2026广州艺术季","venue":"广州红线女大剧院","city":"广州","cast":"董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）","troupe":"上海越剧院三团 · 广州艺术季","price":"¥80 — 480","is_star":False},
+    {"id":"p05","date":"2026-07-10","time":"19:30","title":"越剧《梁山伯与祝英台》","subtitle":"范傅版 · 2026广州艺术季","venue":"广州红线女大剧院","city":"广州","cast":"董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）","troupe":"上海越剧院三团 · 2026广州艺术季","price":"¥80 — 480","is_star":False},
     {"id":"p06","date":"2026-07-13","time":"19:15","title":"越剧《红楼梦》","subtitle":"徐王版 · 宛平驻场","venue":"上海宛平剧院·大剧场","city":"上海","cast":"王婉娜（贾宝玉）、李旭丹（林黛玉）","troupe":"上海越剧院红楼团","price":"¥80 — 380","is_star":False},
     {"id":"p07","date":"2026-07-14","time":"19:15","title":"越剧《梁山伯与祝英台》","subtitle":"范傅版 · 宛平驻场","venue":"上海宛平剧院·大剧场","city":"上海","cast":"王舒雯（梁山伯）、王婕（祝英台）、吴群（祝公远）","troupe":"上海越剧院红楼团","price":"¥80 — 380","is_star":False},
     {"id":"p08","date":"2026-07-15","time":"13:00","title":"越剧《梁山伯与祝英台》","subtitle":"文化惠民 · 社区展演","venue":"航头镇","city":"上海","cast":"","troupe":"上海越剧院红楼团 · 基层惠民演出","price":"公益/免费","is_star":False},
@@ -183,7 +185,7 @@ def scrape_wiki66():
     print("📚 抓取戏曲百科...")
     shows = []
     try:
-        html = fetch_url('https://wiki66.com/上海越剧院2026%E2%80%9C%E4%BA%AC%E6%B4%A5%E5%86%80%E2%80%9D%E5%B7%A1%E6%BC%94')
+        html = fetch_url('https://wiki66.com/上海越剧院2026%E2%80%9C%E4%BA%AC%E6%B4%A5%E5%86%A0%E2%80%9D%E5%B7%A1%E6%BC%94')
         if not html:
             return shows
         soup = parse_html(html)
@@ -493,6 +495,46 @@ def merge_shows(scraped_shows, known_shows):
 
 
 # ============================================================
+# 保存历史数据（用于对比生成智能提醒）
+# ============================================================
+def save_history(shows):
+    """保存当前演出数据到历史目录，供 generate.py 对比"""
+    history_dir = Path("shows_history")
+    history_dir.mkdir(exist_ok=True)
+    
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    
+    # 只保存对比所需的字段
+    history_data = []
+    for show in shows:
+        history_data.append({
+            "id": show["id"],
+            "date": show["date"],
+            "title": show["title"],
+            "venue": show["venue"],
+            "price": show.get("price", ""),
+            "is_star": show.get("is_star", False),
+        })
+    
+    # 保存带日期的快照（保留7天）
+    history_file = history_dir / f"shows_{today_str}.json"
+    history_file.write_text(
+        json.dumps(history_data, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+    
+    # 保存 latest.json（供 generate.py 读取上次数据）
+    latest_file = history_dir / "latest.json"
+    latest_file.write_text(
+        json.dumps(history_data, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
+    
+    print(f"\n💾 历史数据已保存: {history_file.name}")
+    print(f"   （latest.json 已更新，供明日对比）")
+
+
+# ============================================================
 # 主函数
 # ============================================================
 def main():
@@ -545,6 +587,9 @@ def main():
         json.dumps(output, ensure_ascii=False, indent=2),
         encoding="utf-8"
     )
+    
+    # 保存历史数据（新增：供 generate.py 对比）
+    save_history(shows)
     
     print(f"\n✅ shows.json 生成完成")
     print(f"   总场次: {total}（陆志艳 {star_count} 场）")
