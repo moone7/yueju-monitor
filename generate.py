@@ -534,6 +534,35 @@ def main():
     for placeholder, value in replacements.items():
         html = html.replace(placeholder, value)
     
+    # ============================================================
+    # PWA 支持：注入 manifest 链接、theme-color、SW 注册
+    # ============================================================
+    pwa_head_tags = """<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c9a96e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="越剧监控">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" type="image/svg+xml" href="icon.svg">"""
+    
+    if "manifest.json" not in html:
+        html = html.replace("<head>", "<head>\n" + pwa_head_tags, 1)
+        print("  ℹ️ PWA head tags injected")
+    
+    pwa_sw_script = """<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(e) {
+      console.log('SW registration failed:', e);
+    });
+  });
+}
+</script>"""
+    
+    if "serviceWorker" not in html and "sw.js" not in html:
+        html = html.replace("</body>", pwa_sw_script + "\n</body>")
+        print("  ℹ️ PWA service worker registered")
+    
     # 兜底：如果模板里既没有 {{NOTES_SECTION}} 占位符，也没有"备注信息"字样，
     # 则在 footer 前自动插入备注区块
     if "备注信息" not in html:
