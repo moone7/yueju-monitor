@@ -205,9 +205,19 @@ def generate_card_html(show, today, is_star_card=False):
 </div>"""
 
 
+def is_show_visible(show, today):
+    """判断演出是否应该显示（超过一周的已演剧目不再保留）"""
+    try:
+        show_date = datetime.strptime(show['date'], '%Y-%m-%d')
+    except (ValueError, KeyError):
+        return True  # 日期解析失败则保留
+    week_ago = today - timedelta(days=7)
+    return show_date >= week_ago
+
+
 def generate_star_cards(shows, today):
     """生成陆志艳特别关注区的卡片 HTML"""
-    star_shows = [s for s in shows if s['is_star']]
+    star_shows = [s for s in shows if s['is_star'] and is_show_visible(s, today)]
     star_shows.sort(key=lambda s: s['date'])
     
     cards = []
@@ -223,17 +233,18 @@ def generate_star_cards(shows, today):
 
 def generate_month_cards(shows, today, month):
     """生成指定月份的演出卡片 HTML"""
-    month_shows = [s for s in shows if not s['is_star'] and s['date'].startswith(f"2026-{month:02d}")]
+    month_shows = [s for s in shows if not s['is_star'] and s['date'].startswith(f"2026-{month:02d}") and is_show_visible(s, today)]
     month_shows.sort(key=lambda s: (s['date'], s['time']))
     
     cards = [generate_card_html(show, today) for show in month_shows]
     return "\n".join(cards)
 
 
-def generate_perf_dates(shows):
-    """生成 PERF_DATES JS 对象"""
+def generate_perf_dates(shows, today):
+    """生成 PERF_DATES JS 对象（过滤超过一周的已演剧目）"""
+    visible_shows = [s for s in shows if is_show_visible(s, today)]
     dates = {}
-    for show in shows:
+    for show in visible_shows:
         d = show['date']
         if d not in dates:
             dates[d] = []
@@ -246,9 +257,10 @@ def generate_perf_dates(shows):
     
     return "{\n" + "\n".join(lines) + "\n}"
 
-def generate_star_ids(shows):
-    """生成 STAR_IDS JS 数组"""
-    star_ids = [s['id'] for s in shows if s['is_star']]
+def generate_star_ids(shows, today):
+    """生成 STAR_IDS JS 数组（过滤超过一周的已演剧目）"""
+    visible_shows = [s for s in shows if s['is_star'] and is_show_visible(s, today)]
+    star_ids = [s['id'] for s in visible_shows]
     ids_str = ', '.join(f'"{sid}"' for sid in star_ids)
     return f'[{ids_str}]'
 
@@ -459,6 +471,13 @@ def main():
     
     today = get_today()
     
+    # 过滤超过一周的已演剧目
+    week_ago_str = date_str(today - timedelta(days=7))
+    visible_shows = [s for s in shows if is_show_visible(s, today)]
+    hidden_count = len(shows) - len(visible_shows)
+    if hidden_count > 0:
+        print(f"  🗂️ 已隐藏 {hidden_count} 场超过一周的已演剧目（{week_ago_str} 之前）")
+    
     # 读取历史数据（用于对比）
     print("\n📊 加载历史数据...")
     previous_shows = load_previous_shows()
@@ -486,8 +505,8 @@ def main():
     aug_cards = generate_month_cards(shows, today, 8)
     sep_cards = generate_month_cards(shows, today, 9)
     
-    perf_dates_json = generate_perf_dates(shows)
-    star_ids_json = generate_star_ids(shows)
+    perf_dates_json = generate_perf_dates(shows, today)
+    star_ids_json = generate_star_ids(shows, today)
     
     # 生成智能提醒（基于历史对比）
     alert_urgent = generate_smart_alerts(shows, today, new_shows)
