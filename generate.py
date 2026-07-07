@@ -92,7 +92,9 @@ def format_report_date_badge(dt):
 
 def format_data_updated():
     """→ '2026-07-04 07:00'"""
-    return datetime.now().strftime("%Y-%m-%d %H:%M")
+    from datetime import timezone, timedelta
+    tz_bj = timezone(timedelta(hours=8))
+    return datetime.now(tz_bj).strftime("%Y-%m-%d %H:%M")
 
 def format_show_date(date_iso, time_str):
     """→ '7月4日（周六）19:30'"""
