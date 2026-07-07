@@ -73,8 +73,10 @@ def clean_title(title):
 # 日期工具
 # ============================================================
 def get_today():
-    """返回今天 00:00 的 datetime"""
-    return datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    """返回今天 00:00 的 datetime（北京时间 UTC+8）"""
+    from datetime import timezone, timedelta
+    tz_bj = timezone(timedelta(hours=8))
+    return datetime.now(tz_bj).replace(hour=0, minute=0, second=0, microsecond=0)
 
 def date_str(dt):
     """datetime → 'YYYY-MM-DD'"""
