@@ -68,15 +68,26 @@ def clean_title(title):
     cleaned = cleaned.strip('《》')
     return cleaned.strip()
 
+# 非售票活动类型 → 配色（青/蓝/粉/金）
+EVENT_TYPE_STYLE = {
+    '访谈':   {'bg': 'rgba(110,207,198,0.88)', 'fg': '#06201e', 'dot': '#6ecfc6'},
+    '讲座':   {'bg': 'rgba(140,170,230,0.88)', 'fg': '#0a1530', 'dot': '#8caaeb'},
+    '见面会': {'bg': 'rgba(230,160,200,0.88)', 'fg': '#2a0a20', 'dot': '#e6a0c8'},
+    '活动':   {'bg': 'rgba(201,169,110,0.88)', 'fg': '#0d0c0a', 'dot': '#c9a96e'},
+}
+
+def is_event(show):
+    """判断是否为非售票活动（访谈 / 讲座 / 见面会）"""
+    et = show.get('event_type', '')
+    return bool(et) and et != '演出'
+
 
 # ============================================================
 # 日期工具
 # ============================================================
 def get_today():
-    """返回今天 00:00 的 datetime（北京时间 UTC+8）"""
-    from datetime import timezone, timedelta
-    tz_bj = timezone(timedelta(hours=8))
-    return datetime.now(tz_bj).replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
+    """返回今天 00:00 的 datetime"""
+    return datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
 def date_str(dt):
     """datetime → 'YYYY-MM-DD'"""
@@ -92,9 +103,7 @@ def format_report_date_badge(dt):
 
 def format_data_updated():
     """→ '2026-07-04 07:00'"""
-    from datetime import timezone, timedelta
-    tz_bj = timezone(timedelta(hours=8))
-    return datetime.now(tz_bj).strftime("%Y-%m-%d %H:%M")
+    return datetime.now().strftime("%Y-%m-%d %H:%M")
 
 def format_show_date(date_iso, time_str):
     """→ '7月4日（周六）19:30'"""
@@ -269,6 +278,59 @@ def generate_star_ids(shows, today):
     return f'[{ids_str}]'
 
 
+def generate_event_cards(events, today):
+    """生成非售票活动卡片（访谈 / 讲座 / 见面会），与演出卡片视觉区分"""
+    events = [e for e in events if is_show_visible(e, today)]
+    events.sort(key=lambda s: (s['date'], s.get('time', '00:00')))
+    
+    cards = []
+    for ev in events:
+        card_class = compute_card_class(ev['date'], today)
+        classes = "perf-card event-card"
+        if card_class:
+            classes += f" {card_class}"
+        
+        etype = ev.get('event_type', '活动')
+        style = EVENT_TYPE_STYLE.get(etype, EVENT_TYPE_STYLE['活动'])
+        
+        city_html = ""
+        if ev.get('city'):
+            city_html = f'\n<span><span class="meta-icon">🏙️</span>{ev["city"]}</span>'
+        
+        # 主办 / 嘉宾（活动没有"主演/演出单位"）
+        info_parts = []
+        if ev.get('host'):
+            info_parts.append(f'<strong>主办：</strong>{ev["host"]}')
+        if ev.get('guest'):
+            info_parts.append(f'<strong>嘉宾：</strong>{ev["guest"]}')
+        cast_html = "<br/>".join(info_parts) if info_parts else "详情以官方公布为准"
+        
+        price = ev.get('price', '免费 / 凭邀请')
+        note_html = ""
+        if ev.get('note'):
+            note_html = f'<div class="event-note">📝 {ev["note"]}</div>'
+        
+        cards.append(f"""<div class="{classes}" data-date="{ev['date']}" data-id="{ev['id']}" data-time="{ev.get('time','')}" data-title="{ev['title']}" data-venue="{ev['venue']}" data-event="{etype}">
+<div class="perf-info">
+<div class="perf-title">{ev['title']} <em>{ev.get('subtitle', '')}</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>{format_show_date(ev['date'], ev.get('time',''))}</span>
+<span><span class="meta-icon">📍</span>{ev['venue']}</span>{city_html}
+</div>
+<div class="perf-cast">
+{cast_html}
+</div>
+{note_html}
+</div>
+<div class="perf-side">
+<span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{etype}</span>
+<div class="perf-price">{price}</div>
+</div>
+</div>""")
+    
+    return "\n".join(cards)
+
+
 # ============================================================
 # 智能提醒生成（基于历史对比）
 # ============================================================
@@ -306,18 +368,18 @@ def generate_smart_alerts(shows, today, new_shows):
     lines = []
     today_str = date_str(today)
     
-    # === 新增演出提醒（最有价值的信息）===
+    # === 新增演出 / 活动提醒（最有价值的信息）===
     if new_shows:
-        lines.append(f"<strong>🔔 新发现 {len(new_shows)} 场演出</strong>（对比昨日数据）：<br/>")
+        lines.append(f"<strong>🔔 新发现 {len(new_shows)} 场更新</strong>（对比昨日数据）：<br/>")
         for i, show in enumerate(new_shows[:5]):  # 最多显示5场
             dt = datetime.strptime(show['date'], "%Y-%m-%d")
             days_until = (dt - today).days
             
             # 时间提示
             if days_until == 0:
-                time_hint = " <span style='color:#ff6b6b;'>⚡ 今日开演！</span>"
+                time_hint = " <span style='color:#ff6b6b;'>⚡ 今日！</span>"
             elif days_until == 1:
-                time_hint = " <span style='color:#ffa07a;'>⏰ 明日开演</span>"
+                time_hint = " <span style='color:#ffa07a;'>⏰ 明日</span>"
             elif days_until <= 3:
                 time_hint = f" <span style='color:#ffd700;'>（还剩 {days_until} 天）</span>"
             elif days_until <= 7:
@@ -330,8 +392,12 @@ def generate_smart_alerts(shows, today, new_shows):
             if show.get('price') and show['price'] != '以场馆公布为准':
                 price_info = f" — {show['price']}"
             
+            # 活动类型前缀（访谈 / 讲座 / 见面会）
+            etype = show.get('event_type', '')
+            etype_prefix = f"【{etype}】" if etype and etype != '演出' else ""
+            
             title_clean = clean_title(show['title'])
-            lines.append(f"  · {show['venue']}《{title_clean}》{time_hint}{price_info}<br/>")
+            lines.append(f"  · {show['venue']}《{etype_prefix}{title_clean}》{time_hint}{price_info}<br/>")
         
         if len(new_shows) > 5:
             lines.append(f"  ... 还有 {len(new_shows) - 5} 场，详见下方列表<br/>")
@@ -404,13 +470,15 @@ def generate_smart_news(shows, today, new_shows):
     today_str = date_str(today)
     yesterday_str = date_str(today - timedelta(days=1))
     
-    # === 新增演出（最重要的动态）===
+    # === 新增演出 / 活动（最重要的动态）===
     if new_shows:
-        lines.append(f"<strong>🔔 数据更新：新增 {len(new_shows)} 场演出</strong><br/>")
+        lines.append(f"<strong>🔔 数据更新：新增 {len(new_shows)} 场</strong><br/>")
         for show in new_shows[:3]:
             dt = datetime.strptime(show['date'], "%Y-%m-%d")
             title_clean = clean_title(show['title'])
-            lines.append(f"  · {show['city'] or show['venue']} 新增《{title_clean}》（{dt.month}月{dt.day}日）<br/>")
+            etype = show.get('event_type', '')
+            etype_prefix = f"【{etype}】" if etype and etype != '演出' else ""
+            lines.append(f"  · {show['city'] or show['venue']} 新增《{etype_prefix}{title_clean}》（{dt.month}月{dt.day}日）<br/>")
         if len(new_shows) > 3:
             lines.append(f"  ... 还有 {len(new_shows) - 3} 场<br/>")
         lines.append("<br/>")
@@ -494,6 +562,10 @@ def main():
     else:
         print("  ✓ 无新增演出（数据与昨日一致）")
     
+    # 分离演出与活动（访谈/讲座/见面会）
+    performances = [s for s in shows if not is_event(s)]
+    events = [s for s in shows if is_event(s)]
+    
     # 计算统计
     total = len(shows)
     star_count = len([s for s in shows if s['is_star']])
@@ -504,17 +576,27 @@ def main():
     report_date_badge = format_report_date_badge(today)
     data_updated = format_data_updated()
     
-    star_cards = generate_star_cards(shows, today)
-    july_cards = generate_month_cards(shows, today, 7)
-    aug_cards = generate_month_cards(shows, today, 8)
-    sep_cards = generate_month_cards(shows, today, 9)
+    star_cards = generate_star_cards(performances, today)
+    july_cards = generate_month_cards(performances, today, 7)
+    aug_cards = generate_month_cards(performances, today, 8)
+    sep_cards = generate_month_cards(performances, today, 9)
+    event_cards = generate_event_cards(events, today)
+    event_section = ""
+    if event_cards.strip():
+        event_section = (
+            '<!-- ===== 🎤 名家活动 ===== -->\n'
+            '<h2 class="section-title"><span class="section-icon">🎤</span> 名家活动 · 访谈讲座见面会</h2>\n'
+            '<div class="event-grid">\n'
+            f'{event_cards}\n'
+            '</div>'
+        )
     
     perf_dates_json = generate_perf_dates(shows, today)
-    star_ids_json = generate_star_ids(shows, today)
+    star_ids_json = generate_star_ids(performances, today)
     
-    # 生成智能提醒（基于历史对比）
-    alert_urgent = generate_smart_alerts(shows, today, new_shows)
-    alert_new = generate_smart_news(shows, today, new_shows)
+    # 生成智能提醒（基于历史对比；演出与活动分别处理）
+    alert_urgent = generate_smart_alerts(performances, today, new_shows)
+    alert_new = generate_smart_news(performances, today, new_shows)
     
     # 读取模板并替换
     template = Path("template.html").read_text(encoding="utf-8")
@@ -546,6 +628,7 @@ def main():
         "{{PERF_CARDS_JULY}}": july_cards,
         "{{PERF_CARDS_AUG}}": aug_cards,
         "{{PERF_CARDS_SEP}}": sep_cards,
+        "{{EVENT_SECTION}}": event_section,
         "{{PERF_DATES_JSON}}": perf_dates_json,
         "{{STAR_IDS_JSON}}": star_ids_json,
         "{{ALERT_URGENT}}": alert_urgent,
