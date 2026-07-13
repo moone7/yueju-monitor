@@ -5,7 +5,7 @@
     "total_shows": 34,
     "star_shows": 4,
     "cities": 9,
-    "scraped_at": "2026-07-13T02:04:42.962256",
+    "scraped_at": "2026-07-13T03:02:04.447068",
     "sources": [
       "df962388",
       "wiki66",
@@ -157,7 +157,9 @@
       "guest": "越剧名家（以官方公布为准）",
       "price": "免费 / 凭邀请",
       "note": "观众互动环节，具体嘉宾与报名方式以剧场官方公众号公布为准",
-      "is_star": false
+      "is_star": false,
+      "auto": false,
+      "status": "confirmed"
     },
     {
       "id": "p10",

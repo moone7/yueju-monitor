@@ -791,6 +791,34 @@
     color: var(--text-muted); background: rgba(0,0,0,0.18);
     border-left: 2px solid rgba(110,207,198,0.5); border-radius: 0 8px 8px 0;
   }
+  /* 自动发现标记（区别于人工录入） */
+  .event-auto {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 12px;
+    letter-spacing: 0.5px; margin-left: 6px;
+    color: #0d0c0a; background: rgba(201,169,110,0.9);
+  }
+  /* 公众号待核对线索 */
+  .lead-box {
+    margin-top: 18px; padding: 14px 18px;
+    background: rgba(110,207,198,0.04);
+    border: 1px dashed rgba(110,207,198,0.4);
+    border-radius: 12px; font-size: 13px; color: var(--text-muted);
+  }
+  .lead-head {
+    font-weight: 600; color: var(--gold-light); margin-bottom: 10px;
+    font-size: 13px; letter-spacing: 0.5px;
+  }
+  .lead-item { padding: 4px 0; line-height: 1.7; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .lead-item:last-child { border-bottom: none; }
+  .lead-title { color: var(--text); }
+  .lead-acct { color: var(--text-dim); font-size: 12px; }
+  .lead-link {
+    margin-left: 8px; color: #6ecfc6; text-decoration: none;
+    border: 1px solid rgba(110,207,198,0.4); border-radius: 10px;
+    padding: 1px 8px; font-size: 12px; white-space: nowrap;
+  }
+  .lead-link:hover { background: rgba(110,207,198,0.15); }
 
   /* 日历活动标记 */
   .mini-dot.evt { background: #6ecfc6; color: #06201e; }
@@ -1035,9 +1063,6 @@
 <span class="alert-icon">🔥</span> 近期高优提醒
     </div>
 <div class="alert-body">
-      <strong>🔔 新发现 1 场更新</strong>（对比昨日数据）：<br/>
-        · 上海天蟾逸夫舞台《【访谈】名家访谈》（7月18日，还剩 5 天） — 免费 / 凭邀请<br/>
-      <br/>
       <strong>🎭 今日开演</strong>（2026-07-13）：<br/>
         · 上海宛平剧院·大剧场《红楼梦》<br/>
       <br/>
@@ -1049,6 +1074,11 @@
         · 8月8日 北京大学百周年纪念讲堂《舞台姐妹》— 还剩 26 天<br/>
         · 9月12日 杭州蝴蝶剧场《舞台姐妹》— 还剩 61 天<br/>
       <br/>
+      <strong>📅 一周内演出</strong>（2026-07-13 ~ 2026-07-20）：<br/>
+        · 7月14日（1天后）上海宛平剧院·大剧场《梁山伯与祝英台》<br/>
+        · 7月15日（2天后）航头镇《梁山伯与祝英台》<br/>
+        · 7月18日（5天后）太仓大剧院《小戏《渔光曲》《自古英雄出少年》《新生》<br/>
+      <br/>
     </div>
 </div>
 <!-- ===== 🆕 今日新动态 ===== -->
@@ -1057,9 +1087,6 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
-      <strong>🔔 数据更新：新增 1 场</strong><br/>
-        · 上海 新增《【访谈】名家访谈》（7月18日）<br/>
-      <br/>
       <strong>🎭 今日开演</strong>：<br/>
         · 上海宛平剧院·大剧场《红楼梦》<br/>
       <br/>
@@ -1180,6 +1207,10 @@
 <div class="perf-price">免费 / 凭邀请</div>
 </div>
 </div>
+</div>
+<div class="lead-box">
+<div class="lead-head">🔎 公众号待核对线索（13 条）· 自动发现但未解析成功，请点击核对</div>
+<div class="lead-item">· <span class="lead-title">邂逅•新宛平剧院</span> <span class="lead-acct">（宛平剧院）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%AE%9B%E5%B9%B3%E5%89%A7%E9%99%A2%20%E8%AE%BF%E8%B0%88" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">预告!报名!走进宛平剧院、摄影大咖点评、人像摄影技巧……尽在摄影兴趣小组活动</span> <span class="lead-acct">（宛平剧院）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%AE%9B%E5%B9%B3%E5%89%A7%E9%99%A2%20%E8%AE%B2%E5%BA%A7" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">“戏从温州来” 携南戏经典8月亮相上海宛平剧院</span> <span class="lead-acct">（宛平剧院）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%AE%9B%E5%B9%B3%E5%89%A7%E9%99%A2%20%E8%A7%81%E9%9D%A2%E4%BC%9A" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">好看、好听又好玩!宛平剧院的亲子活动,你动心了吗?</span> <span class="lead-acct">（宛平剧院）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%AE%9B%E5%B9%B3%E5%89%A7%E9%99%A2%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">六月合辑 | 宛平剧院&amp;长江剧场六月演出、活动一览</span> <span class="lead-acct">（宛平剧院）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%AE%9B%E5%B9%B3%E5%89%A7%E9%99%A2%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">演出合集 | 宛平剧院&amp;长江剧场4月演出一览</span> <span class="lead-acct">（宛平剧院）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%AE%9B%E5%B9%B3%E5%89%A7%E9%99%A2%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">专访 | 明晚《孟丽君》上海天蟾逸夫舞台遇见“大女主”李敏!附访谈视频~</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E8%AE%BF%E8%B0%88" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">活动招募丨越剧《何文秀》导赏见面会,越剧名家赵志刚携学生张杨凯男、冯军做客天蟾逸夫舞台!</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E8%A7%81%E9%9D%A2%E4%BC%9A" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">剧场开放日|百年天蟾逸夫舞台敞开大门,六大主题玩转全天,沉浸式解锁戏曲魅力!</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">【示范项目推介】上海天蟾逸夫舞台修缮工程</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">【越圈新动态】上海天蟾逸夫舞台初五 初六都是戏!</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">开票 | 《罗汉钱》12月27日天蟾逸夫舞台,70周年系列活动收官大戏,邀您赴约!</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div><div class="lead-item">· <span class="lead-title">评选颁奖丨上海天蟾逸夫舞台荣获“中国十大演出品牌”奖</span> <span class="lead-acct">（天蟾逸夫舞台）</span> <a class="lead-link" href="https://weixin.sogou.com/weixin?type=2&amp;query=%E5%A4%A9%E8%9F%BE%E9%80%B8%E5%A4%AB%E8%88%9E%E5%8F%B0%20%E6%B4%BB%E5%8A%A8" target="_blank" rel="noopener">🔎 核对</a></div>
 </div>
 <!-- ===== 📋 近期演出 ===== -->
 <h2 class="section-title"><span class="section-icon">📋</span> 近期演出一览</h2>
@@ -1699,7 +1730,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-07-13 02:04 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-07-13 03:02 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
