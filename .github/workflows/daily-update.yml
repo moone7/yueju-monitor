@@ -36,8 +36,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html shows.json
-          if [ -f wechat_events.json ]; then git add wechat_events.json; fi
-          if [ -f wechat_leads.json ]; then git add wechat_leads.json; fi
           if [ -d shows_history ]; then git add shows_history/; fi
           if git diff --staged --quiet; then
             echo "No changes to commit"
