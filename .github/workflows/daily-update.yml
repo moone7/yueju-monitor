@@ -2,7 +2,7 @@ name: Daily Auto Update
 
 on:
   schedule:
-    # UTC 23:00 = 北京时间 07:00
+    # UTC 01:00 & 13:00 = 北京时间 09:00 & 21:00
     - cron: '0 1,13 * * *'
   workflow_dispatch: {}  # 支持手动触发
 
@@ -36,6 +36,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add index.html shows.json
+          if [ -f wechat_events.json ]; then git add wechat_events.json; fi
+          if [ -f wechat_leads.json ]; then git add wechat_leads.json; fi
           if [ -d shows_history ]; then git add shows_history/; fi
           if git diff --staged --quiet; then
             echo "No changes to commit"
