@@ -328,6 +328,7 @@ def generate_event_cards(events, today):
 </div>
 <div class="perf-side">
 <span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{etype}</span>{('<span class="event-auto">🔄 自动发现</span>' if ev.get('auto') else '')}
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
 <div class="perf-price">{price}</div>
 {url_html}
 </div>
