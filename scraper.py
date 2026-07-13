@@ -570,12 +570,47 @@ def save_previous_snapshot():
         print(f"  ⚠️ 保存上一版快照失败: {e}")
 
 
+def merge_events(shows):
+    """合并 events.json 中的非售票活动（访谈 / 讲座 / 见面会）"""
+    events_file = Path("events.json")
+    if not events_file.exists():
+        return shows
+    
+    try:
+        data = json.loads(events_file.read_text(encoding="utf-8"))
+        events = data.get("events", [])
+    except Exception as e:
+        print(f"  ⚠️ 读取 events.json 失败: {e}")
+        return shows
+    
+    if not events:
+        return shows
+    
+    # 已存在 id 去重
+    existing_ids = {s.get("id") for s in shows}
+    added = 0
+    for ev in events:
+        ev = dict(ev)
+        ev.setdefault("event_type", "活动")
+        ev.setdefault("is_star", False)
+        ev.setdefault("price", "免费 / 凭邀请")
+        if ev.get("id") not in existing_ids:
+            shows.append(ev)
+            existing_ids.add(ev["id"])
+            added += 1
+    
+    if added:
+        print(f"  🎤 合并 {added} 场非售票活动（访谈/讲座/见面会）")
+    
+    return shows
+
+
 def main():
     print("=" * 60)
     print("🎭 越剧监控数据抓取")
     print(f"📅 运行时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
-
+    
     # 先保存上一版快照（供 generate.py 对比用）
     save_previous_snapshot()
 
@@ -597,6 +632,9 @@ def main():
     
     # 合并已知数据
     shows = merge_shows(all_scraped, KNOWN_SHOWS)
+    
+    # 合并活动清单（访谈 / 讲座 / 见面会等非售票活动）
+    shows = merge_events(shows)
     
     # 排序
     shows.sort(key=lambda s: (s['date'], s.get('time', '00:00')))
