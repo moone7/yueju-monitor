@@ -307,6 +307,9 @@ def generate_event_cards(events, today):
         cast_html = "<br/>".join(info_parts) if info_parts else "详情以官方公布为准"
         
         price = ev.get('price', '免费 / 凭邀请')
+        url_html = ""
+        if ev.get('url'):
+            url_html = f'<a class="event-link" href="{html.escape(ev["url"])}" target="_blank" rel="noopener">🔗 公众号原文</a>'
         note_html = ""
         if ev.get('note'):
             note_html = f'<div class="event-note">📝 {html.escape(html.unescape(ev["note"]))}</div>'
@@ -326,6 +329,7 @@ def generate_event_cards(events, today):
 <div class="perf-side">
 <span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{etype}</span>{('<span class="event-auto">🔄 自动发现</span>' if ev.get('auto') else '')}
 <div class="perf-price">{price}</div>
+{url_html}
 </div>
 </div>""")
     
