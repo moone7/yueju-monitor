@@ -571,37 +571,43 @@ def save_previous_snapshot():
 
 
 def merge_events(shows):
-    """合并 events.json 中的非售票活动（访谈 / 讲座 / 见面会）"""
-    events_file = Path("events.json")
-    if not events_file.exists():
-        return shows
-    
-    try:
-        data = json.loads(events_file.read_text(encoding="utf-8"))
-        events = data.get("events", [])
-    except Exception as e:
-        print(f"  ⚠️ 读取 events.json 失败: {e}")
-        return shows
-    
+    """合并 events.json（手动）与 wechat_events.json（公众号自动发现）中的非售票活动"""
+    event_files = [Path("events.json"), Path("wechat_events.json")]
+    events = []
+    for ef in event_files:
+        if not ef.exists():
+            continue
+        try:
+            data = json.loads(ef.read_text(encoding="utf-8"))
+            events.extend(data.get("events", []))
+        except Exception as e:
+            print(f"  ⚠️ 读取 {ef.name} 失败: {e}")
+
     if not events:
         return shows
-    
-    # 已存在 id 去重
+
+    # 去重：按 id；以及按 (日期, 标题) 避免手动与自动重复
     existing_ids = {s.get("id") for s in shows}
+    seen_pairs = {(s.get("date", ""), normalize_title(s.get("title", ""))) for s in shows}
     added = 0
     for ev in events:
         ev = dict(ev)
         ev.setdefault("event_type", "活动")
         ev.setdefault("is_star", False)
         ev.setdefault("price", "免费 / 凭邀请")
-        if ev.get("id") not in existing_ids:
+        ev.setdefault("auto", False)
+        ev.setdefault("status", "confirmed")
+        dup = (ev.get("id") in existing_ids
+               or (ev.get("date", ""), normalize_title(ev.get("title", ""))) in seen_pairs)
+        if not dup:
             shows.append(ev)
             existing_ids.add(ev["id"])
+            seen_pairs.add((ev.get("date", ""), normalize_title(ev.get("title", ""))))
             added += 1
-    
+
     if added:
         print(f"  🎤 合并 {added} 场非售票活动（访谈/讲座/见面会）")
-    
+
     return shows
 
 
@@ -632,8 +638,15 @@ def main():
     
     # 合并已知数据
     shows = merge_shows(all_scraped, KNOWN_SHOWS)
-    
-    # 合并活动清单（访谈 / 讲座 / 见面会等非售票活动）
+
+    # 公众号自动发现（宛平剧院 / 天蟾逸夫舞台）：生成 wechat_events.json / wechat_leads.json
+    try:
+        import wechat_events
+        wechat_events.run()
+    except Exception as e:
+        print(f"  ⚠️ 公众号抓取异常(已忽略): {e}")
+
+    # 合并活动清单（events.json 手动 + wechat_events.json 自动）
     shows = merge_events(shows)
     
     # 排序

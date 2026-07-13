@@ -13,6 +13,7 @@ generate.py — 读取 shows.json + template.html → 生成 index.html
 """
 import json
 import re
+import html
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -300,22 +301,22 @@ def generate_event_cards(events, today):
         # 主办 / 嘉宾（活动没有"主演/演出单位"）
         info_parts = []
         if ev.get('host'):
-            info_parts.append(f'<strong>主办：</strong>{ev["host"]}')
+            info_parts.append(f'<strong>主办：</strong>{html.escape(html.unescape(ev["host"]))}')
         if ev.get('guest'):
-            info_parts.append(f'<strong>嘉宾：</strong>{ev["guest"]}')
+            info_parts.append(f'<strong>嘉宾：</strong>{html.escape(html.unescape(ev["guest"]))}')
         cast_html = "<br/>".join(info_parts) if info_parts else "详情以官方公布为准"
         
         price = ev.get('price', '免费 / 凭邀请')
         note_html = ""
         if ev.get('note'):
-            note_html = f'<div class="event-note">📝 {ev["note"]}</div>'
+            note_html = f'<div class="event-note">📝 {html.escape(html.unescape(ev["note"]))}</div>'
         
-        cards.append(f"""<div class="{classes}" data-date="{ev['date']}" data-id="{ev['id']}" data-time="{ev.get('time','')}" data-title="{ev['title']}" data-venue="{ev['venue']}" data-event="{etype}">
+        cards.append(f"""<div class="{classes}" data-date="{ev.get('date','')}" data-id="{ev['id']}" data-time="{ev.get('time','')}" data-title="{html.escape(html.unescape(ev['title']))}" data-venue="{html.escape(html.unescape(ev.get('venue','')))}" data-event="{etype}">
 <div class="perf-info">
-<div class="perf-title">{ev['title']} <em>{ev.get('subtitle', '')}</em></div>
+<div class="perf-title">{html.escape(html.unescape(ev['title']))} <em>{html.escape(html.unescape(ev.get('subtitle', '')))}</em></div>
 <div class="perf-meta">
-<span><span class="meta-icon">📅</span>{format_show_date(ev['date'], ev.get('time',''))}</span>
-<span><span class="meta-icon">📍</span>{ev['venue']}</span>{city_html}
+<span><span class="meta-icon">📅</span>{format_show_date(ev['date'], ev.get('time','')) if ev.get('date') else '日期待确认'}</span>
+<span><span class="meta-icon">📍</span>{html.escape(html.unescape(ev.get('venue','')))}</span>{city_html}
 </div>
 <div class="perf-cast">
 {cast_html}
@@ -323,12 +324,42 @@ def generate_event_cards(events, today):
 {note_html}
 </div>
 <div class="perf-side">
-<span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{etype}</span>
+<span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{etype}</span>{('<span class="event-auto">🔄 自动发现</span>' if ev.get('auto') else '')}
 <div class="perf-price">{price}</div>
 </div>
 </div>""")
     
     return "\n".join(cards)
+
+
+def generate_leads_section():
+    """渲染公众号待核对线索（自动发现但未能解析正文的候选）"""
+    p = Path("wechat_leads.json")
+    if not p.exists():
+        return ""
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    leads = data.get("leads", [])
+    if not leads:
+        return ""
+    items = []
+    for ld in leads[:15]:
+        title = ld.get("title", "")
+        acct = ld.get("account", "")
+        url = ld.get("sogou_url", "")
+        items.append(
+            f'<div class="lead-item">· <span class="lead-title">{html.escape(html.unescape(title))}</span> '
+            f'<span class="lead-acct">（{acct}）</span> '
+            f'<a class="lead-link" href="{html.escape(url)}" target="_blank" rel="noopener">🔎 核对</a></div>'
+        )
+    return (
+        '<div class="lead-box">\n'
+        f'<div class="lead-head">🔎 公众号待核对线索（{len(leads)} 条）· 自动发现但未解析成功，请点击核对</div>\n'
+        f'{"".join(items)}\n'
+        '</div>'
+    )
 
 
 # ============================================================
@@ -372,11 +403,17 @@ def generate_smart_alerts(shows, today, new_shows):
     if new_shows:
         lines.append(f"<strong>🔔 新发现 {len(new_shows)} 场更新</strong>（对比昨日数据）：<br/>")
         for i, show in enumerate(new_shows[:5]):  # 最多显示5场
-            dt = datetime.strptime(show['date'], "%Y-%m-%d")
-            days_until = (dt - today).days
-            
+            try:
+                dt = datetime.strptime(show['date'], "%Y-%m-%d")
+                days_until = (dt - today).days
+            except (ValueError, KeyError):
+                dt = None
+                days_until = None
+
             # 时间提示
-            if days_until == 0:
+            if days_until is None:
+                time_hint = "（日期待确认）"
+            elif days_until == 0:
                 time_hint = " <span style='color:#ff6b6b;'>⚡ 今日！</span>"
             elif days_until == 1:
                 time_hint = " <span style='color:#ffa07a;'>⏰ 明日</span>"
@@ -474,11 +511,15 @@ def generate_smart_news(shows, today, new_shows):
     if new_shows:
         lines.append(f"<strong>🔔 数据更新：新增 {len(new_shows)} 场</strong><br/>")
         for show in new_shows[:3]:
-            dt = datetime.strptime(show['date'], "%Y-%m-%d")
+            try:
+                dt = datetime.strptime(show['date'], "%Y-%m-%d")
+                date_label = f"{dt.month}月{dt.day}日"
+            except (ValueError, KeyError):
+                date_label = "日期待确认"
             title_clean = clean_title(show['title'])
             etype = show.get('event_type', '')
             etype_prefix = f"【{etype}】" if etype and etype != '演出' else ""
-            lines.append(f"  · {show['city'] or show['venue']} 新增《{etype_prefix}{title_clean}》（{dt.month}月{dt.day}日）<br/>")
+            lines.append(f"  · {show['city'] or show['venue']} 新增《{etype_prefix}{title_clean}》（{date_label}）<br/>")
         if len(new_shows) > 3:
             lines.append(f"  ... 还有 {len(new_shows) - 3} 场<br/>")
         lines.append("<br/>")
@@ -581,14 +622,16 @@ def main():
     aug_cards = generate_month_cards(performances, today, 8)
     sep_cards = generate_month_cards(performances, today, 9)
     event_cards = generate_event_cards(events, today)
+    leads_html = generate_leads_section()
     event_section = ""
-    if event_cards.strip():
+    if event_cards.strip() or leads_html.strip():
         event_section = (
             '<!-- ===== 🎤 名家活动 ===== -->\n'
             '<h2 class="section-title"><span class="section-icon">🎤</span> 名家活动 · 访谈讲座见面会</h2>\n'
             '<div class="event-grid">\n'
             f'{event_cards}\n'
-            '</div>'
+            '</div>\n'
+            f'{leads_html}'
         )
     
     perf_dates_json = generate_perf_dates(shows, today)
