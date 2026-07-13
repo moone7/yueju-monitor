@@ -758,6 +758,45 @@
     background: rgba(255,215,0,0.06) !important;
   }
 
+  /* ===== 非售票活动卡片（访谈/讲座/见面会）===== */
+  .event-grid { display: flex; flex-direction: column; gap: 14px; }
+  .perf-card.event-card {
+    border-color: rgba(110,207,198,0.25);
+    background: rgba(110,207,198,0.05);
+    box-shadow: 0 2px 12px rgba(110,207,198,0.06), 0 1px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .perf-card.event-card::before {
+    background: linear-gradient(180deg, transparent, rgba(110,207,198,0.45), transparent);
+  }
+  .perf-card.event-card:hover {
+    border-color: rgba(110,207,198,0.5);
+    box-shadow: 0 8px 32px rgba(110,207,198,0.12), 0 0 0 1px rgba(110,207,198,0.1), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .event-tag {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 20px;
+    letter-spacing: 1px; white-space: nowrap;
+  }
+  .event-note {
+    margin-top: 10px; padding: 8px 12px; font-size: 12.5px; line-height: 1.6;
+    color: var(--text-muted); background: rgba(0,0,0,0.18);
+    border-left: 2px solid rgba(110,207,198,0.5); border-radius: 0 8px 8px 0;
+  }
+
+  /* 日历活动标记 */
+  .mini-dot.evt { background: #6ecfc6; color: #06201e; }
+  .cal-event-tag {
+    position: absolute;
+    right: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 4px; font-size: 7.5px; font-weight: 700;
+    color: #06201e; background: #6ecfc6; flex-shrink: 0;
+  }
+  .cal-day-name.event-name { background: rgba(110,207,198,0.14); }
+  .cal-day.has-event-show { border-color: rgba(110,207,198,0.35); }
+
   /* ===== Stats Bar ===== */
   .stats-bar { display: flex; gap: 14px; margin: 24px 0 32px; flex-wrap: wrap; }
   .stat {
@@ -874,6 +913,7 @@
     .cal-day-name .title-text { max-width: 90%; }
     .cal-day-name.cal-more { font-size: 9px; width: auto; }
     .cal-group-tag { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; font-size: 7px; font-weight: 400; }
+    .cal-event-tag { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; font-size: 7px; font-weight: 700; }
     /* Badges more prominent */
     .cal-star-badge { font-size: 13px; top: -1px; right: 1px; }
     .cal-bought-badge { font-size: 7px; font-weight: 700; padding: 1px 4px; border-radius: 3px; bottom: 2px; right: 2px; }
@@ -906,6 +946,7 @@
     .cal-star-badge { font-size: 14px; top: -2px; right: 0px; }
     .cal-bought-badge { font-size: 6.5px; font-weight: 700; padding: 1px 3px; border-radius: 2px; bottom: 1px; right: 1px; }
     .cal-group-tag { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); width: 11px; height: 11px; font-size: 6.5px; font-weight: 400; }
+    .cal-event-tag { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); width: 11px; height: 11px; font-size: 6.5px; font-weight: 700; }
     .cal-day.has-bought-show .cal-day-num::after { font-size: 7px; }
     /* Tooltip full-width */
     .cal-tooltip { max-width: calc(100vw - 16px); left: 8px; margin: 0; }
@@ -954,6 +995,7 @@
 <span class="legend-dot"><span class="mini-dot one">一</span> 一团</span>
 <span class="legend-dot"><span class="mini-dot two">二</span> 红楼团</span>
 <span class="legend-dot"><span class="mini-dot three">三</span> 青年团</span>
+<span class="legend-dot"><span class="mini-dot evt">话</span> 访谈/讲座</span>
 </div>
 <div class="cal-grid" id="cal-grid"></div>
 </div>
@@ -1001,6 +1043,7 @@
 <div class="star-badge">⭐ 特别关注 · 陆志艳（上海越剧院王派花旦，师承单仰萍）— 共{{STAT_STAR}}场</div>
 {{STAR_CARDS}}
 </div>
+{{EVENT_SECTION}}
 <!-- ===== 📋 近期演出 ===== -->
 <h2 class="section-title"><span class="section-icon">📋</span> 近期演出一览</h2>
 <div class="date-divider">7 月</div>
@@ -1103,8 +1146,18 @@ function buildShowIndex() {
     }
     const isStar = STAR_IDS.has(id);
     const group = extractGroup(cast);
-    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group };
+    const isEvent = card.classList.contains("event-card");
+    const eventType = card.dataset.event || "";
+    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType };
   });
+}
+
+// 活动类型 → 日历短标
+function eventShort(et) {
+  if (et === "访谈") return "话";
+  if (et === "讲座") return "讲";
+  if (et === "见面会") return "见";
+  return "动";
 }
 
 // ============================================================
@@ -1519,9 +1572,11 @@ function buildCalendar() {
 
       const hasStar = visibleIds.some(id => STAR_IDS.has(id));
       const hasBought = visibleIds.some(sid => boughtFps.has(idFpMap[sid]));
+      const hasEvent = visibleIds.some(sid => SHOW_INDEX[sid] && SHOW_INDEX[sid].isEvent);
 
       if (hasBought) cell.classList.add("has-bought-show");
       else if (hasStar) cell.classList.add("has-star-show");
+      if (hasEvent) cell.classList.add("has-event-show");
 
       // 🦌 star badge
       if (hasStar) {
@@ -1563,8 +1618,11 @@ function buildCalendar() {
         nm.className = "cal-day-name";
         if (STAR_IDS.has(sid)) nm.classList.add("star-show");
         if (boughtFps.has(idFpMap[sid])) nm.classList.add("bought-name");
+        if (si.isEvent) nm.classList.add("event-name");
         const g = si.group;
-        if (g) {
+        if (si.isEvent) {
+          nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span><span class="cal-event-tag">${eventShort(si.eventType)}</span>`;
+        } else if (g) {
           nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span><span class="cal-group-tag g${g}">${g}</span>`;
         } else {
           nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span>`;
