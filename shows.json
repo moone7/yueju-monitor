@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 33,
+    "total_shows": 34,
     "star_shows": 4,
     "cities": 9,
-    "scraped_at": "2026-07-12T16:16:25.169874",
+    "scraped_at": "2026-07-13T02:04:42.962256",
     "sources": [
       "df962388",
       "wiki66",
@@ -142,6 +142,21 @@
       "cast": "冯军/王婉娜/姚磊、赵一兰/姚磊/张艾嘉、李旭丹/裘隆/冯军等",
       "troupe": "上海越剧院",
       "price": "全场 ¥50",
+      "is_star": false
+    },
+    {
+      "id": "evt-20260718-tianchan",
+      "date": "2026-07-18",
+      "time": "14:00",
+      "title": "越剧名家访谈",
+      "subtitle": "天蟾逸夫舞台 · 名家面对面",
+      "venue": "上海天蟾逸夫舞台",
+      "city": "上海",
+      "event_type": "访谈",
+      "host": "上海天蟾逸夫舞台",
+      "guest": "越剧名家（以官方公布为准）",
+      "price": "免费 / 凭邀请",
+      "note": "观众互动环节，具体嘉宾与报名方式以剧场官方公众号公布为准",
       "is_star": false
     },
     {
