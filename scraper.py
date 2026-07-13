@@ -571,8 +571,8 @@ def save_previous_snapshot():
 
 
 def merge_events(shows):
-    """合并 events.json（手动）与 wechat_events.json（公众号自动发现）中的非售票活动"""
-    event_files = [Path("events.json"), Path("wechat_events.json")]
+    """合并 events.json 中的非售票活动（访谈/讲座/见面会），由人工维护"""
+    event_files = [Path("events.json")]
     events = []
     for ef in event_files:
         if not ef.exists():
@@ -639,14 +639,7 @@ def main():
     # 合并已知数据
     shows = merge_shows(all_scraped, KNOWN_SHOWS)
 
-    # 公众号自动发现（宛平剧院 / 天蟾逸夫舞台）：生成 wechat_events.json / wechat_leads.json
-    try:
-        import wechat_events
-        wechat_events.run()
-    except Exception as e:
-        print(f"  ⚠️ 公众号抓取异常(已忽略): {e}")
-
-    # 合并活动清单（events.json 手动 + wechat_events.json 自动）
+    # 合并活动清单（events.json 人工维护的访谈/讲座/见面会）
     shows = merge_events(shows)
     
     # 排序
