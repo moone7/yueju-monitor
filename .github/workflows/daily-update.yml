@@ -52,6 +52,7 @@ jobs:
 
       - name: 🔔 推送新演出通知（Server酱）
         if: success()
+        continue-on-error: true
         env:
           SCKEY: ${{ secrets.SERVERCHAN_KEY }}
         run: |
@@ -59,14 +60,7 @@ jobs:
             COUNT=$(python -c "import json;print(len(json.load(open('new_shows.json'))))")
             if [ "$COUNT" -gt 0 ]; then
               TITLE="🎭 越剧新开演 ×$COUNT"
-              DESP=$(python -c "
-          import json
-          d = json.load(open('new_shows.json'))
-          lines = []
-          for s in d:
-              lines.append('• ' + s.get('date','') + ' ' + s.get('title','') + ' @ ' + s.get('venue',''))
-          print(chr(10).join(lines))
-          ")
+              DESP=$(python -c "import json;print('\n'.join('• '+s.get('date','')+' '+s.get('title','')+' @ '+s.get('venue','') for s in json.load(open('new_shows.json'))))")
               curl -s -G "https://sctapi.ftqq.com/${SCKEY}.send" \
                 --data-urlencode "title=${TITLE}" \
                 --data-urlencode "desp=${DESP}"
