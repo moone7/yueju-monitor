@@ -49,3 +49,32 @@ jobs:
           if grep -q "new-" shows.json; then
             echo "::warning::发现新演出场次，请手动检查 shows.json 并补全信息"
           fi
+
+      - name: 🔔 推送新演出通知（Server酱）
+        if: success()
+        env:
+          SCKEY: ${{ secrets.SERVERCHAN_KEY }}
+        run: |
+          if [ -n "$SCKEY" ] && [ -f new_shows.json ]; then
+            COUNT=$(python -c "import json;print(len(json.load(open('new_shows.json'))))")
+            if [ "$COUNT" -gt 0 ]; then
+              TITLE="🎭 越剧新开演 ×$COUNT"
+              DESP=$(python -c "
+          import json
+          d = json.load(open('new_shows.json'))
+          lines = []
+          for s in d:
+              lines.append('• ' + s.get('date','') + ' ' + s.get('title','') + ' @ ' + s.get('venue',''))
+          print(chr(10).join(lines))
+          ")
+              curl -s -G "https://sctapi.ftqq.com/${SCKEY}.send" \
+                --data-urlencode "title=${TITLE}" \
+                --data-urlencode "desp=${DESP}"
+              echo "已推送通知：$COUNT 场新演出"
+            else
+              echo "无新增，跳过通知"
+            fi
+          else
+            echo "未配置 SERVERCHAN_KEY 或无 new_shows.json，跳过通知"
+          fi
+

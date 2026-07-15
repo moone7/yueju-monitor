@@ -1,6 +1,8 @@
 # 运行时数据（不需要推送到 GitHub）
 # shows.json 和 shows_history/ 需要提交，供历史对比用
 .fingerprint_cache
+# 新增演出临时落盘（仅供 workflow 推送通知，不入库）
+new_shows.json
 
 # Python
 __pycache__/

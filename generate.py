@@ -607,7 +607,26 @@ def main():
             print(f"    - {show['date']} {show['title']} @ {show['venue']}")
     else:
         print("  ✓ 无新增演出（数据与昨日一致）")
-    
+
+    # 落盘新增演出，供 workflow 推送通知（Server酱 / 其他渠道）
+    try:
+        ns_dump = [{
+            "id": s.get("id", ""),
+            "date": s.get("date", ""),
+            "time": s.get("time", ""),
+            "title": s.get("title", ""),
+            "subtitle": s.get("subtitle", ""),
+            "venue": s.get("venue", ""),
+            "city": s.get("city", ""),
+            "price": s.get("price", ""),
+        } for s in new_shows]
+        Path("new_shows.json").write_text(
+            json.dumps(ns_dump, ensure_ascii=False, indent=2), encoding="utf-8")
+        if ns_dump:
+            print(f"  📤 已写出 new_shows.json（{len(ns_dump)} 场，供通知推送）")
+    except Exception as e:
+        print(f"  ⚠️ 写出 new_shows.json 失败(忽略): {e}")
+
     # 分离演出与活动（访谈/讲座/见面会）
     performances = [s for s in shows if not is_event(s)]
     events = [s for s in shows if is_event(s)]
