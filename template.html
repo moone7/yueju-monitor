@@ -4,6 +4,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- 安全加固：内容安全策略（防御 XSS / 点击劫持 / 数据外泄） -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com; img-src 'self' https: data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none';"/>
+<meta name="referrer" content="no-referrer"/>
 <title>上海越剧演出售票日报 — {{REPORT_DATE}}</title>
 <script>document.documentElement.classList.add('js-reveal');</script>
 <style>
@@ -991,8 +994,11 @@
   /* ===== 月下戏台 · 视觉升级 ===== */
   /* 仅 JS 启用时隐藏待揭示元素（避免无 JS 时内容不可见） */
   html.js-reveal .reveal { opacity: 0; }
+  html.js-reveal .reveal:not(.perf-card) { transform: translateY(16px); }
   html.js-reveal .reveal.in-view { animation: revealIn .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  html.js-reveal .reveal.in-view:not(.perf-card) { animation: revealUp .7s cubic-bezier(.2,.7,.2,1) forwards; }
   @keyframes revealIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes revealUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
   /* 错落进场：仅用延时，保持 opacity 动画，避免与卡片 hover 位移冲突 */
   .stats-bar .stat:nth-child(1){animation-delay:.06s}
@@ -1017,7 +1023,7 @@
   }
   .perf-card:hover::after { left: 130%; }
 
-  /* 标题毛笔书法 + 戏台幕布 + 入场 */
+  /* 标题毛笔书法 + 戏台幕布 + 入场 + 朱砂印章 */
   .header { animation: headerIn .95s cubic-bezier(.2,.7,.2,1) both; }
   @keyframes headerIn {
     from { opacity: 0; transform: translateY(30px); }
@@ -1025,9 +1031,26 @@
   }
   .header h1 {
     font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
-    font-size: 46px; font-weight: 400; letter-spacing: 4px;
+    font-size: clamp(34px, 7vw, 54px);
+    font-weight: 400; letter-spacing: 4px;
+    background: linear-gradient(180deg, #f7e8ac 0%, #e7ce88 45%, #c9a96e 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    filter: drop-shadow(0 2px 12px rgba(201,169,110,.4));
   }
-  .header-flourish { font-size: 66px; opacity: 0.08; }
+  .header-flourish { font-size: 72px; opacity: 0.07; }
+  /* 朱砂印章：盖在脸谱图标上的戏院印 */
+  .header-icon { position: relative; }
+  .header-icon::before {
+    content: '戲';
+    position: absolute; top: -12px; right: -16px;
+    width: 32px; height: 32px; line-height: 32px; text-align: center;
+    font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+    font-size: 19px; color: #f4e7c9;
+    background: linear-gradient(135deg, #cc463a, #96251c);
+    border-radius: 7px;
+    box-shadow: 0 3px 12px rgba(150,37,28,.55), inset 0 0 0 1.5px rgba(244,231,201,.55);
+    transform: rotate(-9deg); opacity: .95; z-index: 2;
+  }
   .header::before {
     height: 6px;
     background: linear-gradient(90deg,
@@ -1043,8 +1066,30 @@
   .header-icon { animation: iconFloat 5s ease-in-out infinite; }
   @keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
+  /* 卡片质感升级：墨底渐变 + 悬浮金框 */
+  .perf-card {
+    background: linear-gradient(180deg, rgba(38,34,28,.55) 0%, rgba(26,23,20,.42) 100%);
+    box-shadow: 0 4px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05), inset 0 0 0 1px rgba(255,255,255,.04);
+  }
+  .perf-card:hover {
+    border-color: rgba(201,169,110,.45);
+    box-shadow: 0 12px 36px rgba(0,0,0,.45), 0 0 0 1px rgba(201,169,110,.12), inset 0 0 0 1px rgba(201,169,110,.20);
+  }
+  /* 区块标题印章微光 */
+  .section-title::before {
+    width: 5px;
+    box-shadow: 0 0 10px rgba(201,169,110,.45);
+  }
+  /* 统计卡悬浮微光 */
+  .stat:hover {
+    border-color: rgba(201,169,110,.35);
+    box-shadow: 0 10px 28px rgba(0,0,0,.45), inset 0 0 0 1px rgba(201,169,110,.20);
+    transform: translateY(-2px);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html.js-reveal .reveal { opacity: 1 !important; animation: none !important; }
+    html.js-reveal .reveal:not(.perf-card) { transform: none !important; animation: none !important; }
     .header { animation: none !important; }
     .perf-card::after { display: none; }
     .header-icon { animation: none !important; }
@@ -1175,6 +1220,10 @@
 </div>
 </div>
 <script>
+// 安全加固：所有来自 data-* 属性（经 dataset 读回的原始文本）注入 innerHTML 前必须转义，
+// 防止抓取 / 人工录入数据中的 HTML 标签被执行（存储型 XSS 二次注入防护）。
+function escHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
 // ============================================================
 //  DATA
 // ============================================================
@@ -1586,8 +1635,8 @@ function updateMyShowsBanner() {
         <span class="count-unit">${countUnit}</span>
       </div>
       <div class="my-show-detail">
-        <div class="my-show-title">${starMark}${item.title}</div>
-        <div class="my-show-meta">${dateLabel} · ${item.venue}</div>
+        <div class="my-show-title">${starMark}${escHtml(item.title)}</div>
+        <div class="my-show-meta">${dateLabel} · ${escHtml(item.venue)}</div>
       </div>
     </div>`;
   }).join('');
@@ -1719,11 +1768,11 @@ function buildCalendar() {
         if (si.isEvent) nm.classList.add("event-name");
         const g = si.group;
         if (si.isEvent) {
-          nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span><span class="cal-event-tag">${eventShort(si.eventType)}</span>`;
+          nm.innerHTML = `<span class="title-text">${escHtml(getShortTitle(si.title))}</span><span class="cal-event-tag">${escHtml(eventShort(si.eventType))}</span>`;
         } else if (g) {
-          nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span><span class="cal-group-tag g${g}">${g}</span>`;
+          nm.innerHTML = `<span class="title-text">${escHtml(getShortTitle(si.title))}</span><span class="cal-group-tag g${g}">${escHtml(g)}</span>`;
         } else {
-          nm.innerHTML = `<span class="title-text">${getShortTitle(si.title)}</span>`;
+          nm.innerHTML = `<span class="title-text">${escHtml(getShortTitle(si.title))}</span>`;
         }
         namesDiv.appendChild(nm);
       });
@@ -1795,14 +1844,14 @@ function showTooltip(e, key, ids) {
     const boughtTag = isBought ? '<span class="tt-bought">✓ 已购</span>' : '';
 
     html += `<div class="tt-item">
-      <div class="tt-title">${starIcon}${si.title}${boughtTag}</div>
-      <div class="tt-meta">🕐 ${si.time || '待定'} · 📍 ${si.venue}</div>`;
+      <div class="tt-title">${starIcon}${escHtml(si.title)}${boughtTag}</div>
+      <div class="tt-meta">🕐 ${si.time || '待定'} · 📍 ${escHtml(si.venue)}</div>`;
     if (si.cast) {
       const shortCast = si.cast.length > 60 ? si.cast.slice(0,60)+'…' : si.cast;
-      html += `<div class="tt-cast">${shortCast}</div>`;
+      html += `<div class="tt-cast">${escHtml(shortCast)}</div>`;
     }
     if (si.price) {
-      html += `<div class="tt-price">${si.price}</div>`;
+      html += `<div class="tt-price">${escHtml(si.price)}</div>`;
     }
     html += `</div>`;
   });

@@ -153,62 +153,71 @@ def html_escape(text):
     """转义 HTML 特殊字符"""
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
+def esc(text):
+    """转义任意动态文本（含引号）用于 HTML 文本与属性上下文，防 XSS 注入。
+
+    quote=True 同时转义 ' 与 "，使 data-* 属性值即便含引号也不会提前截断属性、
+    造成属性逃逸。所有来自 shows.json / events.json（抓取或人工录入）的字段都必须经此处理。
+    """
+    return html.escape(str(text), quote=True)
+
 def format_cast_html(cast, is_star=False):
-    """格式化主演文本，高亮陆志艳"""
+    """格式化主演文本，高亮陆志艳（先转义，再注入高亮标签，防 XSS）"""
+    cast_esc = esc(cast)
     if is_star and STAR_ACTOR in cast:
-        cast = cast.replace(STAR_ACTOR, f'<strong style="color:#ffd700;">{STAR_ACTOR}</strong>')
-    return cast
+        cast_esc = cast_esc.replace(esc(STAR_ACTOR), f'<strong style="color:#ffd700;">{STAR_ACTOR}</strong>')
+    return cast_esc
 
 def generate_card_html(show, today, is_star_card=False):
-    """生成单个演出卡片的 HTML"""
+    """生成单个演出卡片的 HTML（所有动态字段均 HTML 转义，防 XSS）"""
     card_class = compute_card_class(show['date'], today)
     tags = compute_tags(show['date'], today, show['is_star'])
-    
+
     # 卡片 class
     classes = "perf-card"
     if is_star_card:
         classes += " star"
     if card_class:
         classes += f" {card_class}"
-    
+
     # 城市
     city_html = ""
     if show.get('city'):
-        city_html = f'\n<span><span class="meta-icon">🏙️</span>{show["city"]}</span>'
-    
-    # 主演
+        city_html = f'\n<span><span class="meta-icon">🏙️</span>{esc(show["city"])}</span>'
+
+    # 主演（含陆志艳高亮，已内部转义）
     cast_html = format_cast_html(show['cast'], show['is_star'])
-    
-    # 标签
+
+    # 标签（tc=类名，tt=显示文本，均转义）
     tags_html = "\n".join(
-        f'<span class="tag {tc}">{tt}</span>' for tc, tt in tags
+        f'<span class="tag {esc(tc)}">{esc(tt)}</span>' for tc, tt in tags
     )
-    
-    # 票价（支持小字补充）
+
+    # 票价（支持小字补充），文本部分必须转义
     price = show.get('price', '以场馆公布为准')
     if ' · ' in price:
         parts = price.split(' · ', 1)
-        price_html = parts[0]
-        if len(parts) > 1 and parts[1]:
-            small_text = parts[1].strip('()')
-            if small_text:
-                price_html = f'{parts[0]}<br/><small>{small_text}</small>'
+        small_text = parts[1].strip('()')
+        if small_text:
+            price_html = f'{esc(parts[0])}<br/><small>{esc(small_text)}</small>'
+        else:
+            price_html = esc(parts[0])
     else:
-        price_html = price
-    
+        price_html = esc(price)
+
     # margin-top for star cards after first
     style_attr = ' style="margin-top:12px;"' if is_star_card else ''
-    
-    return f"""<div class="{classes}" data-date="{show['date']}" data-id="{show['id']}" data-time="{show['time']}" data-title="{show['title']}" data-venue="{show['venue']}"{style_attr}>
+
+    return f"""<div class="{classes}" data-date="{esc(show['date'])}" data-id="{esc(show['id'])}" data-time="{esc(show['time'])}" data-title="{esc(show['title'])}" data-venue="{esc(show['venue'])}"{style_attr}>
 <div class="perf-info">
-<div class="perf-title">{show['title']} <em>{show.get('subtitle', '')}</em></div>
+<div class="perf-title">{esc(show['title'])} <em>{esc(show.get('subtitle', ''))}</em></div>
 <div class="perf-meta">
-<span><span class="meta-icon">📅</span>{format_show_date(show['date'], show['time'])}</span>
-<span><span class="meta-icon">📍</span>{show['venue']}</span>{city_html}
+<span><span class="meta-icon">📅</span>{esc(format_show_date(show['date'], show['time']))}</span>
+<span><span class="meta-icon">📍</span>{esc(show['venue'])}</span>{city_html}
 </div>
 <div class="perf-cast">
 <strong>主演：</strong>{cast_html}<br/>
-<strong>演出单位：</strong>{show.get('troupe', '')}
+<strong>演出单位：</strong>{esc(show.get('troupe', ''))}
         </div>
 </div>
 <div class="perf-side">
@@ -296,30 +305,30 @@ def generate_event_cards(events, today):
         
         city_html = ""
         if ev.get('city'):
-            city_html = f'\n<span><span class="meta-icon">🏙️</span>{ev["city"]}</span>'
-        
-        # 主办 / 嘉宾（活动没有"主演/演出单位"）
+            city_html = f'\n<span><span class="meta-icon">🏙️</span>{esc(ev["city"])}</span>'
+
+        # 主办 / 嘉宾（活动没有"主演/演出单位"），均转义
         info_parts = []
         if ev.get('host'):
-            info_parts.append(f'<strong>主办：</strong>{html.escape(html.unescape(ev["host"]))}')
+            info_parts.append(f'<strong>主办：</strong>{esc(ev["host"])}')
         if ev.get('guest'):
-            info_parts.append(f'<strong>嘉宾：</strong>{html.escape(html.unescape(ev["guest"]))}')
+            info_parts.append(f'<strong>嘉宾：</strong>{esc(ev["guest"])}')
         cast_html = "<br/>".join(info_parts) if info_parts else "详情以官方公布为准"
-        
+
         price = ev.get('price', '免费 / 凭邀请')
         url_html = ""
         if ev.get('url'):
-            url_html = f'<a class="event-link" href="{html.escape(ev["url"])}" target="_blank" rel="noopener">🔗 公众号原文</a>'
+            url_html = f'<a class="event-link" href="{esc(ev["url"])}" target="_blank" rel="noopener noreferrer">🔗 公众号原文</a>'
         note_html = ""
         if ev.get('note'):
-            note_html = f'<div class="event-note">📝 {html.escape(html.unescape(ev["note"]))}</div>'
-        
-        cards.append(f"""<div class="{classes}" data-date="{ev.get('date','')}" data-id="{ev['id']}" data-time="{ev.get('time','')}" data-title="{html.escape(html.unescape(ev['title']))}" data-venue="{html.escape(html.unescape(ev.get('venue','')))}" data-event="{etype}">
+            note_html = f'<div class="event-note">📝 {esc(ev["note"])}</div>'
+
+        cards.append(f"""<div class="{classes}" data-date="{esc(ev.get('date',''))}" data-id="{esc(ev['id'])}" data-time="{esc(ev.get('time',''))}" data-title="{esc(ev['title'])}" data-venue="{esc(ev.get('venue',''))}" data-event="{esc(etype)}">
 <div class="perf-info">
-<div class="perf-title">{html.escape(html.unescape(ev['title']))} <em>{html.escape(html.unescape(ev.get('subtitle', '')))}</em></div>
+<div class="perf-title">{esc(ev['title'])} <em>{esc(ev.get('subtitle', ''))}</em></div>
 <div class="perf-meta">
-<span><span class="meta-icon">📅</span>{format_show_date(ev['date'], ev.get('time','')) if ev.get('date') else '日期待确认'}</span>
-<span><span class="meta-icon">📍</span>{html.escape(html.unescape(ev.get('venue','')))}</span>{city_html}
+<span><span class="meta-icon">📅</span>{esc(format_show_date(ev['date'], ev.get('time','')) if ev.get('date') else '日期待确认')}</span>
+<span><span class="meta-icon">📍</span>{esc(ev.get('venue',''))}</span>{city_html}
 </div>
 <div class="perf-cast">
 {cast_html}
@@ -327,9 +336,9 @@ def generate_event_cards(events, today):
 {note_html}
 </div>
 <div class="perf-side">
-<span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{etype}</span>{('<span class="event-auto">🔄 自动发现</span>' if ev.get('auto') else '')}
+<span class="event-tag" style="background:{style['bg']};color:{style['fg']};">{esc(etype)}</span>{('<span class="event-auto">🔄 自动发现</span>' if ev.get('auto') else '')}
 <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
-<div class="perf-price">{price}</div>
+<div class="perf-price">{esc(price)}</div>
 {url_html}
 </div>
 </div>""")
@@ -432,14 +441,14 @@ def generate_smart_alerts(shows, today, new_shows):
             # 票价信息
             price_info = ""
             if show.get('price') and show['price'] != '以场馆公布为准':
-                price_info = f" — {show['price']}"
+                price_info = f" — {esc(show['price'])}"
             
             # 活动类型前缀（访谈 / 讲座 / 见面会）
             etype = show.get('event_type', '')
             etype_prefix = f"【{etype}】" if etype and etype != '演出' else ""
             
             title_clean = clean_title(show['title'])
-            lines.append(f"  · {show['venue']}《{etype_prefix}{title_clean}》{time_hint}{price_info}<br/>")
+            lines.append(f"  · {esc(show['venue'])}《{etype_prefix}{esc(title_clean)}》{time_hint}{price_info}<br/>")
         
         if len(new_shows) > 5:
             lines.append(f"  ... 还有 {len(new_shows) - 5} 场，详见下方列表<br/>")
@@ -453,7 +462,7 @@ def generate_smart_alerts(shows, today, new_shows):
         for show in today_shows:
             title_clean = clean_title(show['title'])
             star_mark = " ⭐" if show['is_star'] else ""
-            lines.append(f"  · {show['venue']}《{title_clean}》{star_mark}<br/>")
+            lines.append(f"  · {esc(show['venue'])}《{esc(title_clean)}》{star_mark}<br/>")
         lines.append("<br/>")
     
     # === 明日开演 ===
@@ -464,7 +473,7 @@ def generate_smart_alerts(shows, today, new_shows):
         for show in tomorrow_shows:
             title_clean = clean_title(show['title'])
             star_mark = " ⭐" if show['is_star'] else ""
-            lines.append(f"  · {show['venue']}《{title_clean}》{star_mark}<br/>")
+            lines.append(f"  · {esc(show['venue'])}《{esc(title_clean)}》{star_mark}<br/>")
         lines.append("<br/>")
     
     # === 陆志艳近期演出 ===
@@ -483,7 +492,7 @@ def generate_smart_alerts(shows, today, new_shows):
             else:
                 time_hint = f"还剩 {days_until} 天"
             
-            lines.append(f"  · {dt.month}月{dt.day}日 {show['venue']}《{title_clean}》— {time_hint}<br/>")
+            lines.append(f"  · {dt.month}月{dt.day}日 {esc(show['venue'])}《{esc(title_clean)}》— {time_hint}<br/>")
         lines.append("<br/>")
     
     # === 一周内演出提醒 ===
@@ -495,7 +504,7 @@ def generate_smart_alerts(shows, today, new_shows):
             dt = datetime.strptime(show['date'], "%Y-%m-%d")
             title_clean = clean_title(show['title'])
             days_until = (dt - today).days
-            lines.append(f"  · {dt.month}月{dt.day}日（{days_until}天后）{show['venue']}《{title_clean}》<br/>")
+            lines.append(f"  · {dt.month}月{dt.day}日（{days_until}天后）{esc(show['venue'])}《{esc(title_clean)}》<br/>")
         if len(upcoming) > 4:
             lines.append(f"  ... 还有 {len(upcoming) - 4} 场<br/>")
         lines.append("<br/>")
@@ -524,7 +533,7 @@ def generate_smart_news(shows, today, new_shows):
             title_clean = clean_title(show['title'])
             etype = show.get('event_type', '')
             etype_prefix = f"【{etype}】" if etype and etype != '演出' else ""
-            lines.append(f"  · {show['city'] or show['venue']} 新增《{etype_prefix}{title_clean}》（{date_label}）<br/>")
+            lines.append(f"  · {esc(show['city'] or show['venue'])} 新增《{etype_prefix}{esc(title_clean)}》（{date_label}）<br/>")
         if len(new_shows) > 3:
             lines.append(f"  ... 还有 {len(new_shows) - 3} 场<br/>")
         lines.append("<br/>")
@@ -535,7 +544,7 @@ def generate_smart_news(shows, today, new_shows):
         lines.append(f"<strong>🎭 今日开演</strong>：<br/>")
         for show in today_shows:
             title_clean = clean_title(show['title'])
-            lines.append(f"  · {show['venue']}《{title_clean}》<br/>")
+            lines.append(f"  · {esc(show['venue'])}《{esc(title_clean)}》<br/>")
         lines.append("<br/>")
     
     # === 昨日回顾 ===
@@ -544,7 +553,7 @@ def generate_smart_news(shows, today, new_shows):
         lines.append(f"<strong>✅ 昨日回顾</strong>：<br/>")
         for show in yesterday_shows:
             title_clean = clean_title(show['title'])
-            lines.append(f"  · {show['venue']}《{title_clean}》已圆满演出<br/>")
+            lines.append(f"  · {esc(show['venue'])}《{esc(title_clean)}》已圆满演出<br/>")
         lines.append("<br/>")
     
     # === 京津冀巡演进度 ===
@@ -568,7 +577,7 @@ def generate_smart_news(shows, today, new_shows):
         for show in wanping[:3]:
             dt = datetime.strptime(show['date'], "%Y-%m-%d")
             title_clean = clean_title(show['title'])
-            lines.append(f"  · {dt.month}月{dt.day}日《{title_clean}》<br/>")
+            lines.append(f"  · {dt.month}月{dt.day}日《{esc(title_clean)}》<br/>")
         if len(wanping) > 3:
             lines.append(f"  ... 还有 {len(wanping) - 3} 场<br/>")
         lines.append("<br/>")
