@@ -5,8 +5,9 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>上海越剧演出售票日报 — {{REPORT_DATE}}</title>
+<script>document.documentElement.classList.add('js-reveal');</script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -987,6 +988,67 @@
     /* Tooltip full-width */
     .cal-tooltip { max-width: calc(100vw - 16px); left: 8px; margin: 0; }
   }
+  /* ===== 月下戏台 · 视觉升级 ===== */
+  /* 仅 JS 启用时隐藏待揭示元素（避免无 JS 时内容不可见） */
+  html.js-reveal .reveal { opacity: 0; }
+  html.js-reveal .reveal.in-view { animation: revealIn .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes revealIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* 错落进场：仅用延时，保持 opacity 动画，避免与卡片 hover 位移冲突 */
+  .stats-bar .stat:nth-child(1){animation-delay:.06s}
+  .stats-bar .stat:nth-child(2){animation-delay:.13s}
+  .stats-bar .stat:nth-child(3){animation-delay:.20s}
+  .stats-bar .stat:nth-child(4){animation-delay:.27s}
+  .perf-grid .perf-card:nth-child(1){animation-delay:.05s}
+  .perf-grid .perf-card:nth-child(2){animation-delay:.11s}
+  .perf-grid .perf-card:nth-child(3){animation-delay:.17s}
+  .perf-grid .perf-card:nth-child(4){animation-delay:.23s}
+  .perf-grid .perf-card:nth-child(5){animation-delay:.29s}
+  .perf-grid .perf-card:nth-child(6){animation-delay:.35s}
+  .perf-grid .perf-card:nth-child(7){animation-delay:.41s}
+  .perf-grid .perf-card:nth-child(8){animation-delay:.47s}
+  .perf-grid .perf-card:nth-child(n+9){animation-delay:.53s}
+
+  /* 卡片丝绸光泽掠过 */
+  .perf-card::after {
+    content: ''; position: absolute; top: 0; left: -80%; width: 55%; height: 100%;
+    background: linear-gradient(105deg, transparent 0%, rgba(224,200,142,0.10) 50%, transparent 100%);
+    transform: skewX(-18deg); transition: left .85s ease; pointer-events: none; z-index: 2;
+  }
+  .perf-card:hover::after { left: 130%; }
+
+  /* 标题毛笔书法 + 戏台幕布 + 入场 */
+  .header { animation: headerIn .95s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes headerIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .header h1 {
+    font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+    font-size: 46px; font-weight: 400; letter-spacing: 4px;
+  }
+  .header-flourish { font-size: 66px; opacity: 0.08; }
+  .header::before {
+    height: 6px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(181,52,58,0.55) 12%,
+      rgba(201,169,110,0.9) 28%,
+      rgba(240,223,160,1) 50%,
+      rgba(201,169,110,0.9) 72%,
+      rgba(181,52,58,0.55) 88%,
+      transparent 100%);
+    box-shadow: 0 0 20px rgba(201,169,110,0.4);
+  }
+  .header-icon { animation: iconFloat 5s ease-in-out infinite; }
+  @keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js-reveal .reveal { opacity: 1 !important; animation: none !important; }
+    .header { animation: none !important; }
+    .perf-card::after { display: none; }
+    .header-icon { animation: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -1914,6 +1976,28 @@ function hideStarDuplicates() {
   refreshTodayTomorrowClasses();
   buildCalendar();
   updateMyShowsBanner();
+})();
+</script>
+<script>
+(function(){
+  var root = document.documentElement;
+  if (!('IntersectionObserver' in window)) {
+    var all = document.querySelectorAll('.reveal');
+    for (var i = 0; i < all.length; i++) all[i].classList.add('in-view');
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) { en.target.classList.add('in-view'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -6% 0px' });
+  var sel = '.reveal, .perf-card, .section-title, .date-divider, .alert, .stats-bar, #calendar-section, #my-shows-banner, .star-section, .footer, .lead-box';
+  var els = document.querySelectorAll(sel);
+  for (var j = 0; j < els.length; j++) { els[j].classList.add('reveal'); io.observe(els[j]); }
+  setTimeout(function(){
+    var pending = document.querySelectorAll('.reveal:not(.in-view)');
+    for (var k = 0; k < pending.length; k++) pending[k].classList.add('in-view');
+  }, 2600);
 })();
 </script>
 </body>
