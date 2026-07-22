@@ -46,7 +46,7 @@ jobs:
       
       - name: Check for new shows
         run: |
-          if grep -q "new-" shows.json; then
+          if grep -q '"id": "auto-' shows.json; then
             echo "::warning::发现新演出场次，请手动检查 shows.json 并补全信息"
           fi
 
