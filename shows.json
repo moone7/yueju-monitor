@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 34,
+    "total_shows": 36,
     "star_shows": 4,
-    "cities": 9,
-    "scraped_at": "2026-07-22T05:40:56.030517",
+    "cities": 10,
+    "scraped_at": "2026-07-22T06:28:00.835754",
     "sources": [
       "df962388",
       "wiki66",
@@ -449,6 +449,19 @@
       "is_star": false
     },
     {
+      "id": "p30",
+      "date": "2026-09-12",
+      "time": "14:30",
+      "title": "越剧《梁山伯与祝英台》",
+      "subtitle": "苏州站 · 上海越剧院",
+      "venue": "苏州狮山大剧院·大剧场",
+      "city": "苏州",
+      "cast": "",
+      "troupe": "上海越剧院",
+      "price": "¥180/280/380/480",
+      "is_star": false
+    },
+    {
       "id": "lzy-04",
       "date": "2026-09-12",
       "time": "19:30",
@@ -460,6 +473,19 @@
       "troupe": "上海越剧院三团 · 百越文创第五届越剧优秀剧目邀请展 · 时长约150分钟",
       "price": "¥180 — 380",
       "is_star": true
+    },
+    {
+      "id": "p31",
+      "date": "2026-09-13",
+      "time": "14:30",
+      "title": "越剧《梁山伯与祝英台》",
+      "subtitle": "苏州站 · 上海越剧院",
+      "venue": "苏州狮山大剧院·大剧场",
+      "city": "苏州",
+      "cast": "",
+      "troupe": "上海越剧院",
+      "price": "¥180/280/380/480",
+      "is_star": false
     }
   ]
 }
