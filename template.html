@@ -621,6 +621,26 @@
   .perf-card.past.bought { opacity: 0.7; }
   .perf-card.past:hover { opacity: 0.8; filter: saturate(0.8); }
 
+  /* 官宣取消的演出：置灰 + 删除线 */
+  .perf-card.cancelled {
+    filter: grayscale(1);
+    opacity: 0.6;
+    background: #15151b;
+    border-color: #34343d !important;
+  }
+  .perf-card.cancelled::before { background: #2a2a31; }
+  .perf-card.cancelled .perf-title { text-decoration: line-through; color: var(--text-muted); }
+  .perf-card.cancelled .perf-title em { color: var(--text-muted); opacity: 0.8; }
+  .perf-card.cancelled:hover { opacity: 0.72; filter: grayscale(1) saturate(0.6); transform: none; }
+  .perf-card.cancelled:hover::before { background: #2a2a31; }
+  .tag-cancelled {
+    background: rgba(120,120,130,0.18);
+    color: #c8c8d0;
+    border-color: rgba(160,160,170,0.4);
+  }
+  .cal-day.has-cancelled { background: rgba(120,120,130,0.07); }
+  .cal-day-name.cancelled-name { text-decoration: line-through; opacity: 0.45; color: var(--text-muted); }
+
   .perf-card.today {
     border-color: rgba(201,169,110,0.35);
     background: rgba(201,169,110,0.06);
@@ -1295,7 +1315,8 @@ function buildShowIndex() {
     const group = extractGroup(cast);
     const isEvent = card.classList.contains("event-card");
     const eventType = card.dataset.event || "";
-    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType };
+    const isCancelled = card.classList.contains("cancelled");
+    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType, isCancelled };
   });
 }
 
@@ -1718,13 +1739,16 @@ function buildCalendar() {
     if (visibleIds.length > 0) {
       cell.classList.add("has-show");
 
-      const hasStar = visibleIds.some(id => STAR_IDS.has(id));
-      const hasBought = visibleIds.some(sid => boughtFps.has(idFpMap[sid]));
+      const isCancel = sid => SHOW_INDEX[sid] && SHOW_INDEX[sid].isCancelled;
+      const hasStar = visibleIds.some(id => STAR_IDS.has(id) && !isCancel(id));
+      const hasBought = visibleIds.some(sid => boughtFps.has(idFpMap[sid]) && !isCancel(sid));
       const hasEvent = visibleIds.some(sid => SHOW_INDEX[sid] && SHOW_INDEX[sid].isEvent);
+      const hasCancelled = visibleIds.some(isCancel);
 
       if (hasBought) cell.classList.add("has-bought-show");
       else if (hasStar) cell.classList.add("has-star-show");
       if (hasEvent) cell.classList.add("has-event-show");
+      if (hasCancelled) cell.classList.add("has-cancelled");
 
       // 🦌 star badge
       if (hasStar) {
@@ -1764,9 +1788,10 @@ function buildCalendar() {
         if (!si) return;
         const nm = document.createElement("span");
         nm.className = "cal-day-name";
-        if (STAR_IDS.has(sid)) nm.classList.add("star-show");
-        if (boughtFps.has(idFpMap[sid])) nm.classList.add("bought-name");
+        if (STAR_IDS.has(sid) && !si.isCancelled) nm.classList.add("star-show");
+        if (boughtFps.has(idFpMap[sid]) && !si.isCancelled) nm.classList.add("bought-name");
         if (si.isEvent) nm.classList.add("event-name");
+        if (si.isCancelled) nm.classList.add("cancelled-name");
         const g = si.group;
         if (si.isEvent) {
           nm.innerHTML = `<span class="title-text">${escHtml(getShortTitle(si.title))}</span><span class="cal-event-tag">${escHtml(eventShort(si.eventType))}</span>`;

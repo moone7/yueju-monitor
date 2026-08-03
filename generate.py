@@ -170,15 +170,20 @@ def format_cast_html(cast, is_star=False):
 
 def generate_card_html(show, today, is_star_card=False):
     """生成单个演出卡片的 HTML（所有动态字段均 HTML 转义，防 XSS）"""
-    card_class = compute_card_class(show['date'], today)
-    tags = compute_tags(show['date'], today, show['is_star'])
-
-    # 卡片 class
-    classes = "perf-card"
-    if is_star_card:
-        classes += " star"
-    if card_class:
-        classes += f" {card_class}"
+    cancelled = show.get('cancelled', False)
+    if cancelled:
+        classes = "perf-card cancelled"
+        if is_star_card:
+            classes += " star"
+        tags = [("tag-cancelled", "⚠️ 官宣取消")]
+    else:
+        card_class = compute_card_class(show['date'], today)
+        tags = compute_tags(show['date'], today, show['is_star'])
+        classes = "perf-card"
+        if is_star_card:
+            classes += " star"
+        if card_class:
+            classes += f" {card_class}"
 
     # 城市
     city_html = ""
@@ -207,8 +212,10 @@ def generate_card_html(show, today, is_star_card=False):
 
     # margin-top for star cards after first
     style_attr = ' style="margin-top:12px;"' if is_star_card else ''
+    cancelled_attr = ' data-cancelled="1"' if cancelled else ''
+    buy_btn_html = '' if cancelled else '<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>'
 
-    return f"""<div class="{classes}" data-date="{esc(show['date'])}" data-id="{esc(show['id'])}" data-time="{esc(show['time'])}" data-title="{esc(show['title'])}" data-venue="{esc(show['venue'])}"{style_attr}>
+    return f"""<div class="{classes}" data-date="{esc(show['date'])}" data-id="{esc(show['id'])}" data-time="{esc(show['time'])}" data-title="{esc(show['title'])}" data-venue="{esc(show['venue'])}"{style_attr}{cancelled_attr}>
 <div class="perf-info">
 <div class="perf-title">{esc(show['title'])} <em>{esc(show.get('subtitle', ''))}</em></div>
 <div class="perf-meta">
@@ -222,14 +229,16 @@ def generate_card_html(show, today, is_star_card=False):
 </div>
 <div class="perf-side">
 {tags_html}
-<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+{buy_btn_html}
 <div class="perf-price">{price_html}</div></div>
 
 </div>"""
 
 
 def is_show_visible(show, today):
-    """判断演出是否应该显示（超过一周的已演剧目不再保留）"""
+    """判断演出是否应该显示（超过一周的已演剧目不再保留；官宣取消的演出长期置灰保留）"""
+    if show.get('cancelled'):
+        return True  # 取消演出始终保留，不被一周规则隐藏
     try:
         show_date = datetime.strptime(show['date'], '%Y-%m-%d')
     except (ValueError, KeyError):
