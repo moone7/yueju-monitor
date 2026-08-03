@@ -441,8 +441,8 @@ def generate_smart_alerts(shows, today, new_shows, cancelled_shows=None):
     tomorrow_str = date_str(today + timedelta(days=1))
     week_ahead = date_str(today + timedelta(days=7))
 
-    today_shows = [s for s in shows if s['date'] == today_str]
-    tomorrow_shows = [s for s in shows if s['date'] == tomorrow_str]
+    today_shows = [s for s in shows if s['date'] == today_str and not s.get('cancelled')]
+    tomorrow_shows = [s for s in shows if s['date'] == tomorrow_str and not s.get('cancelled')]
     week_shows = [s for s in shows if today_str < s['date'] <= week_ahead and not s.get('cancelled')]
     star_shows = [s for s in shows if s['is_star'] and s['date'] >= today_str and not s.get('cancelled')]
     tour_shows = [s for s in shows if s['date'].startswith(('2026-08', '2026-09')) and
