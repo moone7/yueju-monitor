@@ -236,9 +236,7 @@ def generate_card_html(show, today, is_star_card=False):
 
 
 def is_show_visible(show, today):
-    """判断演出是否应该显示（超过一周的已演剧目不再保留；官宣取消的演出长期置灰保留）"""
-    if show.get('cancelled'):
-        return True  # 取消演出始终保留，不被一周规则隐藏
+    """判断演出是否应该显示（超过一周的已演剧目不再保留；取消演出同样适用）"""
     try:
         show_date = datetime.strptime(show['date'], '%Y-%m-%d')
     except (ValueError, KeyError):
