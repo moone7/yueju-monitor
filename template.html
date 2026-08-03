@@ -1645,7 +1645,8 @@ function updateMyShowsBanner() {
 // ============================================================
 //  CALENDAR
 // ============================================================
-let calYear = 2026, calMonth = 6; // 0-indexed: 6=July
+let _initNow = new Date();
+let calYear = _initNow.getFullYear(), calMonth = _initNow.getMonth(); // 默认跳到当前月（按访客本地时区）
 let calFilterDate = null;
 
 const MONTH_NAMES = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
