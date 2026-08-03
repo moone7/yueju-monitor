@@ -58,6 +58,24 @@ def find_new_shows(current_shows, previous_shows):
     
     return new_shows
 
+def find_cancelled_shows(current_shows, previous_shows):
+    """找出"本次新官宣取消"的演出：上次在售/未标取消，本次 cancelled=True"""
+    if not previous_shows:
+        return []
+    prev_state = {}
+    for show in previous_shows:
+        key = f"{show['date']}|{show['title']}|{show['venue']}"
+        prev_state[key] = show.get('cancelled', False)
+    cancelled_new = []
+    for show in current_shows:
+        if not show.get('cancelled'):
+            continue
+        key = f"{show['date']}|{show['title']}|{show['venue']}"
+        prev_cancel = prev_state.get(key, None)
+        if prev_cancel is not True:  # 上次未标取消（或根本没有这场）→ 本次才标取消
+            cancelled_new.append(show)
+    return cancelled_new
+
 def clean_title(title):
     """去掉剧目前缀和书名号，返回纯剧目名"""
     prefixes = ['大型神话越剧', '小剧场实验越剧', '小剧场越剧', '新编历史故事剧', '越剧']
@@ -415,10 +433,20 @@ def format_star_list(shows):
     return " → ".join(parts)
 
 
-def generate_smart_alerts(shows, today, new_shows):
-    """生成智能提醒（基于历史对比，突出新增和紧急）"""
+def generate_smart_alerts(shows, today, new_shows, cancelled_shows=None):
+    """生成智能提醒（基于历史对比，突出新增、取消和紧急）"""
     lines = []
     today_str = date_str(today)
+    cancelled_shows = cancelled_shows or []
+    
+    # === 总括：本次数据更新（新增 / 取消）===
+    if new_shows or cancelled_shows:
+        parts = []
+        if new_shows:
+            parts.append(f"新增 {len(new_shows)} 场")
+        if cancelled_shows:
+            parts.append(f"官宣取消 {len(cancelled_shows)} 场")
+        lines.append(f"<strong>🔔 本次数据更新：{' · '.join(parts)}</strong><br/><br/>")
     
     # === 新增演出 / 活动提醒（最有价值的信息）===
     if new_shows:
@@ -461,6 +489,21 @@ def generate_smart_alerts(shows, today, new_shows):
             lines.append(f"  ... 还有 {len(new_shows) - 5} 场，详见下方列表<br/>")
         
         lines.append("<br/>")  # 空行分隔
+    
+    # === 官宣取消提醒 ===
+    if cancelled_shows:
+        lines.append(f"<strong>⚠️ 官宣取消 {len(cancelled_shows)} 场</strong>（以下演出已取消，请留意）：<br/>")
+        for show in cancelled_shows[:5]:
+            try:
+                dt = datetime.strptime(show['date'], "%Y-%m-%d")
+                date_label = f"{dt.month}月{dt.day}日"
+            except (ValueError, KeyError):
+                date_label = "日期待确认"
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {esc(show['venue'])}《{esc(title_clean)}》（{date_label}）⚠️ 已取消<br/>")
+        if len(cancelled_shows) > 5:
+            lines.append(f"  ... 还有 {len(cancelled_shows) - 5} 场<br/>")
+        lines.append("<br/>")
     
     # === 今日开演 ===
     today_shows = [s for s in shows if s['date'] == today_str]
@@ -522,11 +565,21 @@ def generate_smart_alerts(shows, today, new_shows):
     return "\n      ".join(lines)
 
 
-def generate_smart_news(shows, today, new_shows):
+def generate_smart_news(shows, today, new_shows, cancelled_shows=None):
     """生成今日新动态（更简洁，突出变化）"""
     lines = []
     today_str = date_str(today)
     yesterday_str = date_str(today - timedelta(days=1))
+    cancelled_shows = cancelled_shows or []
+    
+    # === 总括：本次数据更新（新增 / 取消）===
+    if new_shows or cancelled_shows:
+        parts = []
+        if new_shows:
+            parts.append(f"新增 {len(new_shows)} 场")
+        if cancelled_shows:
+            parts.append(f"官宣取消 {len(cancelled_shows)} 场")
+        lines.append(f"<strong>🔔 本次更新：{' · '.join(parts)}</strong><br/><br/>")
     
     # === 新增演出 / 活动（最重要的动态）===
     if new_shows:
@@ -543,6 +596,21 @@ def generate_smart_news(shows, today, new_shows):
             lines.append(f"  · {esc(show['city'] or show['venue'])} 新增《{etype_prefix}{esc(title_clean)}》（{date_label}）<br/>")
         if len(new_shows) > 3:
             lines.append(f"  ... 还有 {len(new_shows) - 3} 场<br/>")
+        lines.append("<br/>")
+    
+    # === 官宣取消 ===
+    if cancelled_shows:
+        lines.append(f"<strong>⚠️ 官宣取消 {len(cancelled_shows)} 场</strong>：<br/>")
+        for show in cancelled_shows[:3]:
+            try:
+                dt = datetime.strptime(show['date'], "%Y-%m-%d")
+                date_label = f"{dt.month}月{dt.day}日"
+            except (ValueError, KeyError):
+                date_label = "日期待确认"
+            title_clean = clean_title(show['title'])
+            lines.append(f"  · {esc(show['venue'])}《{esc(title_clean)}》（{date_label}）已取消<br/>")
+        if len(cancelled_shows) > 3:
+            lines.append(f"  ... 还有 {len(cancelled_shows) - 3} 场<br/>")
         lines.append("<br/>")
     
     # === 今日开演 ===
@@ -616,6 +684,13 @@ def main():
     print("\n📊 加载历史数据...")
     previous_shows = load_previous_shows()
     new_shows = find_new_shows(shows, previous_shows)
+    cancelled_shows = find_cancelled_shows(shows, previous_shows)
+    if cancelled_shows:
+        print(f"  ⚠️ 发现 {len(cancelled_shows)} 场新官宣取消：")
+        for show in cancelled_shows:
+            print(f"    - {show['date']} {show['title']} @ {show['venue']}")
+    elif previous_shows:
+        print("  ✓ 无新官宣取消")
     
     if new_shows:
         print(f"  🆕 发现 {len(new_shows)} 场新增演出：")
@@ -678,8 +753,8 @@ def main():
     star_ids_json = generate_star_ids(performances, today)
     
     # 生成智能提醒（基于历史对比；演出与活动分别处理）
-    alert_urgent = generate_smart_alerts(performances, today, new_shows)
-    alert_new = generate_smart_news(performances, today, new_shows)
+    alert_urgent = generate_smart_alerts(performances, today, new_shows, cancelled_shows)
+    alert_new = generate_smart_news(performances, today, new_shows, cancelled_shows)
     
     # 读取模板并替换
     template = Path("template.html").read_text(encoding="utf-8")
