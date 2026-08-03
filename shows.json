@@ -5,7 +5,7 @@
     "total_shows": 49,
     "star_shows": 4,
     "cities": 11,
-    "scraped_at": "2026-08-03T06:33:24.917419",
+    "scraped_at": "2026-08-03T06:48:14.127311",
     "sources": [
       "df962388",
       "wiki66",
@@ -238,7 +238,8 @@
       "cast": "王柔桑（嵇康）、吴佳燕（广陵仙子）、陈慧迪（长乐亭主）、潘锡丹、孙嘉蔚",
       "troupe": "上海越剧院",
       "price": "¥80 / 180 / 280",
-      "is_star": false
+      "is_star": false,
+      "cancelled": true
     },
     {
       "id": "p15",
@@ -251,7 +252,8 @@
       "cast": "王柔桑（嵇康）、吴佳燕（广陵仙子）、陈慧迪（长乐亭主）",
       "troupe": "上海越剧院",
       "price": "¥80 / 180 / 280",
-      "is_star": false
+      "is_star": false,
+      "cancelled": true
     },
     {
       "id": "p16",
@@ -264,7 +266,8 @@
       "cast": "忻雅琴（孟丽君）、王清（皇帝）、王柔桑（皇甫少华）",
       "troupe": "上海越剧院",
       "price": "¥180",
-      "is_star": false
+      "is_star": false,
+      "cancelled": true
     },
     {
       "id": "p17",
@@ -277,7 +280,8 @@
       "cast": "忻雅琴（孟丽君）、王清（皇帝）、王柔桑（皇甫少华）",
       "troupe": "上海越剧院",
       "price": "¥180",
-      "is_star": false
+      "is_star": false,
+      "cancelled": true
     },
     {
       "id": "lzy-03",

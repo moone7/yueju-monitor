@@ -630,6 +630,26 @@
   .perf-card.past.bought { opacity: 0.7; }
   .perf-card.past:hover { opacity: 0.8; filter: saturate(0.8); }
 
+  /* 官宣取消的演出：置灰 + 删除线 */
+  .perf-card.cancelled {
+    filter: grayscale(1);
+    opacity: 0.6;
+    background: #15151b;
+    border-color: #34343d !important;
+  }
+  .perf-card.cancelled::before { background: #2a2a31; }
+  .perf-card.cancelled .perf-title { text-decoration: line-through; color: var(--text-muted); }
+  .perf-card.cancelled .perf-title em { color: var(--text-muted); opacity: 0.8; }
+  .perf-card.cancelled:hover { opacity: 0.72; filter: grayscale(1) saturate(0.6); transform: none; }
+  .perf-card.cancelled:hover::before { background: #2a2a31; }
+  .tag-cancelled {
+    background: rgba(120,120,130,0.18);
+    color: #c8c8d0;
+    border-color: rgba(160,160,170,0.4);
+  }
+  .cal-day.has-cancelled { background: rgba(120,120,130,0.07); }
+  .cal-day-name.cancelled-name { text-decoration: line-through; opacity: 0.45; color: var(--text-muted); }
+
   .perf-card.today {
     border-color: rgba(201,169,110,0.35);
     background: rgba(201,169,110,0.06);
@@ -1300,7 +1320,7 @@
 <div class="perf-price">¥80 — 380</div></div>
 
 </div>
-<div class="perf-card" data-date="2026-07-31" data-id="p14" data-time="19:15" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场">
+<div class="perf-card cancelled" data-date="2026-07-31" data-id="p14" data-time="19:15" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-cancelled="1">
 <div class="perf-info">
 <div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
 <div class="perf-meta">
@@ -1314,15 +1334,15 @@
         </div>
 </div>
 <div class="perf-side">
-<span class="tag tag-done">✅ 已演</span>
-<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<span class="tag tag-cancelled">⚠️ 官宣取消</span>
+
 <div class="perf-price">¥80 / 180 / 280</div></div>
 
 </div>
 <!-- ---- 8月 ---- -->
 <div class="date-divider">8 月</div>
 <div class="perf-grid">
-<div class="perf-card" data-date="2026-08-01" data-id="p15" data-time="19:15" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场">
+<div class="perf-card cancelled" data-date="2026-08-01" data-id="p15" data-time="19:15" data-title="小剧场越剧《假如我不是嵇康》" data-venue="上海宛平剧院·小剧场" data-cancelled="1">
 <div class="perf-info">
 <div class="perf-title">小剧场越剧《假如我不是嵇康》 <em>魏晋风骨</em></div>
 <div class="perf-meta">
@@ -1336,12 +1356,12 @@
         </div>
 </div>
 <div class="perf-side">
-<span class="tag tag-done">✅ 已演</span>
-<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<span class="tag tag-cancelled">⚠️ 官宣取消</span>
+
 <div class="perf-price">¥80 / 180 / 280</div></div>
 
 </div>
-<div class="perf-card today" data-date="2026-08-03" data-id="p16" data-time="19:15" data-title="小剧场实验越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间">
+<div class="perf-card cancelled" data-date="2026-08-03" data-id="p16" data-time="19:15" data-title="小剧场实验越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-cancelled="1">
 <div class="perf-info">
 <div class="perf-title">小剧场实验越剧《再生·缘》 <em>沉浸式 · 全场无座</em></div>
 <div class="perf-meta">
@@ -1355,13 +1375,12 @@
         </div>
 </div>
 <div class="perf-side">
-<span class="tag tag-urgent">🔥 今日开演</span>
-<span class="tag tag-on-sale">售票中</span>
-<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<span class="tag tag-cancelled">⚠️ 官宣取消</span>
+
 <div class="perf-price">¥180</div></div>
 
 </div>
-<div class="perf-card tomorrow" data-date="2026-08-04" data-id="p17" data-time="19:15" data-title="小剧场实验越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间">
+<div class="perf-card cancelled" data-date="2026-08-04" data-id="p17" data-time="19:15" data-title="小剧场实验越剧《再生·缘》" data-venue="上海宛平剧院·戏·聚空间" data-cancelled="1">
 <div class="perf-info">
 <div class="perf-title">小剧场实验越剧《再生·缘》 <em>沉浸式</em></div>
 <div class="perf-meta">
@@ -1375,9 +1394,8 @@
         </div>
 </div>
 <div class="perf-side">
-<span class="tag tag-urgent">🔥 明日开演</span>
-<span class="tag tag-on-sale">售票中</span>
-<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<span class="tag tag-cancelled">⚠️ 官宣取消</span>
+
 <div class="perf-price">¥180</div></div>
 
 </div>
@@ -1909,7 +1927,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-08-03 06:33 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-08-03 06:48 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2019,7 +2037,8 @@ function buildShowIndex() {
     const group = extractGroup(cast);
     const isEvent = card.classList.contains("event-card");
     const eventType = card.dataset.event || "";
-    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType };
+    const isCancelled = card.classList.contains("cancelled");
+    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType, isCancelled };
   });
 }
 
@@ -2442,13 +2461,16 @@ function buildCalendar() {
     if (visibleIds.length > 0) {
       cell.classList.add("has-show");
 
-      const hasStar = visibleIds.some(id => STAR_IDS.has(id));
-      const hasBought = visibleIds.some(sid => boughtFps.has(idFpMap[sid]));
+      const isCancel = sid => SHOW_INDEX[sid] && SHOW_INDEX[sid].isCancelled;
+      const hasStar = visibleIds.some(id => STAR_IDS.has(id) && !isCancel(id));
+      const hasBought = visibleIds.some(sid => boughtFps.has(idFpMap[sid]) && !isCancel(sid));
       const hasEvent = visibleIds.some(sid => SHOW_INDEX[sid] && SHOW_INDEX[sid].isEvent);
+      const hasCancelled = visibleIds.some(isCancel);
 
       if (hasBought) cell.classList.add("has-bought-show");
       else if (hasStar) cell.classList.add("has-star-show");
       if (hasEvent) cell.classList.add("has-event-show");
+      if (hasCancelled) cell.classList.add("has-cancelled");
 
       // 🦌 star badge
       if (hasStar) {
@@ -2488,9 +2510,10 @@ function buildCalendar() {
         if (!si) return;
         const nm = document.createElement("span");
         nm.className = "cal-day-name";
-        if (STAR_IDS.has(sid)) nm.classList.add("star-show");
-        if (boughtFps.has(idFpMap[sid])) nm.classList.add("bought-name");
+        if (STAR_IDS.has(sid) && !si.isCancelled) nm.classList.add("star-show");
+        if (boughtFps.has(idFpMap[sid]) && !si.isCancelled) nm.classList.add("bought-name");
         if (si.isEvent) nm.classList.add("event-name");
+        if (si.isCancelled) nm.classList.add("cancelled-name");
         const g = si.group;
         if (si.isEvent) {
           nm.innerHTML = `<span class="title-text">${escHtml(getShortTitle(si.title))}</span><span class="cal-event-tag">${escHtml(eventShort(si.eventType))}</span>`;
