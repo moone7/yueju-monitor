@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 50,
+    "total_shows": 51,
     "star_shows": 4,
     "cities": 11,
-    "scraped_at": "2026-08-09T13:48:26.215081",
+    "scraped_at": "2026-08-09T17:03:48.251255",
     "sources": [
       "df962388",
       "wiki66",
@@ -541,6 +541,19 @@
       "cast": "",
       "troupe": "上海越剧院",
       "price": "¥180/280/380/480",
+      "is_star": false
+    },
+    {
+      "id": "p46",
+      "date": "2026-09-17",
+      "time": "19:15",
+      "title": "越剧《四花绽放·经典传承》",
+      "subtitle": "绍百四朵梅花专场 · 上海天蟾逸夫舞台 · 9/17-18 两晚",
+      "venue": "上海天蟾逸夫舞台",
+      "city": "上海",
+      "cast": "吴凤花（范派·二度梅）、吴素英（吕派·梅）、陈飞（傅派·梅）、张琳（尹派·梅）领衔，绍百六代演员共同登场",
+      "troupe": "绍兴小百花越剧团",
+      "price": "¥80/120/200/280/420",
       "is_star": false
     },
     {
