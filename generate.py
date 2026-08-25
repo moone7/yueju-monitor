@@ -283,9 +283,32 @@ def generate_month_cards(shows, today, month):
     """生成指定月份的演出卡片 HTML"""
     month_shows = [s for s in shows if not s['is_star'] and s['date'].startswith(f"2026-{month:02d}") and is_show_visible(s, today)]
     month_shows.sort(key=lambda s: (s['date'], s['time']))
-    
+
     cards = [generate_card_html(show, today) for show in month_shows]
     return "\n".join(cards)
+
+
+def generate_month_sections(performances, today):
+    """按"有可见卡片的月份"动态生成若干个月份段。
+    解决两个问题：空月份不显示分隔条（避免 7月 早就过完还挂个空标题）；
+    未来月份有演出时自动出现（不再硬卡到 7/8/9 月）。"""
+    pool = [s for s in performances if not s.get('is_star') and is_show_visible(s, today)]
+    pool.sort(key=lambda s: (s['date'], s.get('time', '00:00')))
+
+    by_month = {}
+    for s in pool:
+        ym = s['date'][:7]  # 'YYYY-MM'
+        by_month.setdefault(ym, []).append(s)
+
+    chunks = []
+    for ym in sorted(by_month):
+        year, month = ym.split('-')
+        cards_html = "\n".join(generate_card_html(s, today) for s in by_month[ym])
+        chunks.append(
+            f'<div class="date-divider">{int(month)} 月</div>\n'
+            f'<div class="perf-grid">\n{cards_html}\n</div>'
+        )
+    return "\n".join(chunks)
 
 
 def generate_perf_dates(shows, today):
@@ -671,9 +694,7 @@ def main():
     data_updated = format_data_updated()
     
     star_cards = generate_star_cards(performances, today)
-    july_cards = generate_month_cards(performances, today, 7)
-    aug_cards = generate_month_cards(performances, today, 8)
-    sep_cards = generate_month_cards(performances, today, 9)
+    month_sections = generate_month_sections(performances, today)
     event_cards = generate_event_cards(events, today)
     leads_html = generate_leads_section()
     event_section = ""
@@ -721,9 +742,7 @@ def main():
         "{{STAT_STAR}}": str(star_count),
         "{{STAT_CITIES}}": str(len(cities)),
         "{{STAR_CARDS}}": star_cards,
-        "{{PERF_CARDS_JULY}}": july_cards,
-        "{{PERF_CARDS_AUG}}": aug_cards,
-        "{{PERF_CARDS_SEP}}": sep_cards,
+        "{{MONTH_SECTIONS}}": month_sections,
         "{{EVENT_SECTION}}": event_section,
         "{{PERF_DATES_JSON}}": perf_dates_json,
         "{{STAR_IDS_JSON}}": star_ids_json,

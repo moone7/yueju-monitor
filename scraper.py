@@ -534,7 +534,8 @@ def save_previous_snapshot():
         latest_data = [
             {"id": s["id"], "date": s["date"], "title": s["title"],
              "venue": s["venue"], "price": s.get("price", ""),
-             "is_star": s.get("is_star", False)}
+             "is_star": s.get("is_star", False),
+             "cancelled": s.get("cancelled", False)}
             for s in prev_shows
         ]
         (history_dir / "latest.json").write_text(
