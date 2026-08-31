@@ -1289,6 +1289,18 @@ function extractGroup(castText) {
 // ============================================================
 let SHOW_INDEX = {};
 
+// id → 指纹映射：优先用可见卡片的活指纹，历史场回落到 CAL_SHOWS 预生成的 fp
+function getFpMap() {
+  const map = {};
+  for (const id in SHOW_INDEX) {
+    if (SHOW_INDEX[id].fingerprint) map[id] = SHOW_INDEX[id].fingerprint;
+  }
+  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(c => {
+    map[c.dataset.id] = c.dataset.fingerprint;
+  });
+  return map;
+}
+
 function buildShowIndex() {
   SHOW_INDEX = {};
   // 1) 从 CAL_SHOWS 灌入全部日历演出（含已演>1周、无 DOM 卡片的历史场）
@@ -1298,7 +1310,8 @@ function buildShowIndex() {
       id, date: s.date, title: s.title, venue: s.venue, time: s.time,
       price: s.price, cast: s.cast, isStar: s.isStar, group: s.group || "",
       isEvent: s.isEvent, eventType: s.eventType, isCancelled: s.isCancelled,
-      fingerprint: "",
+      // 历史场无 DOM 卡片，用 CAL_SHOWS 预生成的指纹（与前端同算法）匹配已购
+      fingerprint: s.fp || "",
     };
   }
   // 2) 用当前可见的 DOM 卡片覆盖（活的 cast 文本、已购指纹优先）
@@ -1698,11 +1711,8 @@ function getShortTitle(title) {
 
 function buildCalendar() {
   const boughtFps = getBought();
-  // Build id → fingerprint map for bought checks
-  const idFpMap = {};
-  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(c => {
-    idFpMap[c.dataset.id] = c.dataset.fingerprint;
-  });
+  // Build id → fingerprint map for bought checks（含历史场：无 DOM 卡片也能标已购）
+  const idFpMap = getFpMap();
   const grid = document.getElementById("cal-grid");
   grid.innerHTML = "";
 
@@ -1849,10 +1859,7 @@ function showTooltip(e, key, ids) {
   clearTimeout(tooltipTimer);
 
   const boughtFps = getBought();
-  const idFpMap = {};
-  document.querySelectorAll(".perf-card[data-id][data-fingerprint]").forEach(c => {
-    idFpMap[c.dataset.id] = c.dataset.fingerprint;
-  });
+  const idFpMap = getFpMap();
   const d = new Date(key);
   const dateLabel = `${d.getMonth()+1}月${d.getDate()}日`;
 

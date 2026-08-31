@@ -273,6 +273,75 @@ def cal_included(show, today):
     return is_show_visible(show, today)
 
 
+# 演员 → 团别（与 template.html 的 ACTOR_GROUP 保持一致）
+ACTOR_GROUP = {
+    # 一团（男女合演）: 范派/袁派 为主
+    "方亚芬": "一", "斯钰林": "一", "邓华蔚": "一", "郭茜云": "一", "俞景岚": "一",
+    "徐标新": "一", "徐晓飞": "一", "裘隆": "一", "金烨": "一",
+    # 二团/红楼团（女子越剧）: 徐派/王派 为主
+    "单仰萍": "二", "杨婷娜": "二", "李旭丹": "二", "王婉娜": "二", "王柔桑": "二",
+    "盛舒扬": "二", "陈慧迪": "二", "忻雅琴": "二", "吴佳燕": "二", "王舒雯": "二",
+    "王婕": "二", "章瑞虹": "二", "王志萍": "二", "钱惠丽": "二",
+    # 三团/青年团: 新生代
+    "俞果": "三", "陆志艳": "三", "杨韵儿": "三", "范莹": "三", "张艾嘉": "三",
+    "陈欣雨": "三", "冯军": "三", "赵一兰": "三", "姚磊": "三", "董心心": "三",
+    "潘锡丹": "三", "丁小蛙": "三", "王杭娟": "三", "李云霄": "三",
+}
+
+
+def extract_group(cast, troupe):
+    """复刻前端 extractGroup()，让历史演出（无 DOM 卡片）也能标出上越一/二/三团。
+    必须与 template.html 的 buildShowIndex 文本预处理完全一致：
+    卡片 .perf-cast 的 innerText 会把换行替换成空格、合并空白后裁剪。
+    """
+    text = f"主演：{cast}\n演出单位：{troupe}"
+    text = re.sub(r"\s+", " ", text.replace("\n", " ")).strip()
+
+    m = re.search(r"演出单位[：:]\s*上海越剧院\s*(\S*团)", text)
+    if m:
+        g = m.group(1)
+        if "一" in g:
+            return "一"
+        if "二" in g or "红楼" in g:
+            return "二"
+        if "三" in g:
+            return "三"
+
+    m2 = re.search(r"主演[：:]\s*(.+?)(?:<|<br>|$)", text)
+    if m2:
+        s = re.sub(r"<[^>]*>", "", m2.group(1))
+        s = re.sub(r"[（(][^)）]*[)）]", "", s)
+        actors = [a.strip() for a in re.split(r"[,，、/]", s) if a.strip()]
+        for a in actors[:2]:
+            if a in ACTOR_GROUP:
+                return ACTOR_GROUP[a]
+    return ""
+
+
+def show_fingerprint(date, title, venue):
+    """复刻前端 getShowFingerprint()，使历史演出（无 DOM 卡片）能命中 localStorage 的已购记录。
+    JS: raw = date.trim()+"|"+title.trim()+"|"+venue.trim()
+        hash=0; for ch: hash=((hash<<5)-hash)+code; hash|=0
+        return "f"+Math.abs(hash).toString(36)
+    """
+    raw = f"{(date or '').strip()}|{(title or '').strip()}|{(venue or '').strip()}"
+    h = 0
+    for ch in raw:
+        h = ((h << 5) - h) + ord(ch)
+        h &= 0xFFFFFFFF              # 模拟 JS 32 位有符号
+        if h >= 0x80000000:
+            h -= 0x100000000
+    n = abs(h)
+    digits = "0123456789abcdefghijklmnopqrstuvwxyz"
+    if n == 0:
+        return "f0"
+    s = ""
+    while n:
+        s = digits[n % 36] + s
+        n //= 36
+    return "f" + s
+
+
 def generate_star_cards(shows, today):
     """生成陆志艳特别关注区的卡片 HTML"""
     star_shows = [s for s in shows if s['is_star'] and is_show_visible(s, today)]
@@ -361,7 +430,10 @@ def generate_cal_shows(shows, today):
             'isEvent': bool(et) and et != '演出',
             'eventType': et if (bool(et) and et != '演出') else '',
             'isCancelled': bool(s.get('cancelled', False)),
-            'group': '',  # 历史演出省略团组标签（仅装饰用）
+            # 上越一/二/三团标签：用与前端一致的规则算出，历史场也能标上
+            'group': extract_group(s.get('cast', ''), s.get('troupe', '')),
+            # 已购指纹：与前端 getShowFingerprint 同算法，让过往买过的场次在日历上留纪念
+            'fp': show_fingerprint(s.get('date', ''), s.get('title', ''), s.get('venue', '')),
         }
     return json.dumps(out, ensure_ascii=False, indent=2)
 
