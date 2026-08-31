@@ -263,6 +263,16 @@ def is_show_visible(show, today):
     return show_date >= week_ago
 
 
+def cal_included(show, today):
+    """日历纳入规则（与卡片列表解耦）：
+    - 非取消演出：始终纳入（历史已演 + 未来开票都要在日历上看得见）
+    - 取消演出：仅在 1 周内纳入，过后与卡片一致消失
+    """
+    if not show.get('cancelled'):
+        return True
+    return is_show_visible(show, today)
+
+
 def generate_star_cards(shows, today):
     """生成陆志艳特别关注区的卡片 HTML"""
     star_shows = [s for s in shows if s['is_star'] and is_show_visible(s, today)]
@@ -312,10 +322,11 @@ def generate_month_sections(performances, today):
 
 
 def generate_perf_dates(shows, today):
-    """生成 PERF_DATES JS 对象（过滤超过一周的已演剧目）"""
-    visible_shows = [s for s in shows if is_show_visible(s, today)]
+    """生成 PERF_DATES JS 对象（日历日期→演出 id 列表）。
+    按 cal_included 规则：已演>1周的非取消演出仍保留在日历上（与卡片列表解耦）。"""
+    cal_shows = [s for s in shows if cal_included(s, today)]
     dates = {}
-    for show in visible_shows:
+    for show in cal_shows:
         d = show['date']
         if d not in dates:
             dates[d] = []
@@ -328,10 +339,37 @@ def generate_perf_dates(shows, today):
     
     return "{\n" + "\n".join(lines) + "\n}"
 
+
+def generate_cal_shows(shows, today):
+    """生成 CAL_SHOWS JS 对象：日历自给自足的演出元数据。
+    关键：不依赖页面上的 .perf-card DOM——已演>1周的演出在卡片列表里被隐藏、
+    不再生成 DOM 卡片，但日历仍需看得见它们（用户要求"演过的在日历上保留"）。
+    按 cal_included 规则纳入：非取消演出始终在，取消演出仅 1 周内。"""
+    out = {}
+    for s in shows:
+        if not cal_included(s, today):
+            continue
+        et = s.get('event_type', '')
+        out[s['id']] = {
+            'date': s.get('date', ''),
+            'title': s.get('title', ''),
+            'venue': s.get('venue', ''),
+            'time': s.get('time', ''),
+            'price': s.get('price', ''),
+            'cast': s.get('cast', ''),
+            'isStar': bool(s.get('is_star', False)),
+            'isEvent': bool(et) and et != '演出',
+            'eventType': et if (bool(et) and et != '演出') else '',
+            'isCancelled': bool(s.get('cancelled', False)),
+            'group': '',  # 历史演出省略团组标签（仅装饰用）
+        }
+    return json.dumps(out, ensure_ascii=False, indent=2)
+
 def generate_star_ids(shows, today):
-    """生成 STAR_IDS JS 数组（过滤超过一周的已演剧目）"""
-    visible_shows = [s for s in shows if s['is_star'] and is_show_visible(s, today)]
-    star_ids = [s['id'] for s in visible_shows]
+    """生成 STAR_IDS JS 数组（陆志艳特别关注）。
+    日历纳入规则：非取消的特别关注演出始终纳入（历史演出也想在日历看到🦌）。"""
+    cal_shows = [s for s in shows if s['is_star'] and cal_included(s, today)]
+    star_ids = [s['id'] for s in cal_shows]
     ids_str = ', '.join(f'"{sid}"' for sid in star_ids)
     return f'[{ids_str}]'
 
@@ -710,6 +748,7 @@ def main():
     
     perf_dates_json = generate_perf_dates(shows, today)
     star_ids_json = generate_star_ids(performances, today)
+    cal_shows_json = generate_cal_shows(shows, today)
     
     # 生成智能提醒（基于历史对比；演出与活动分别处理）
     alert_urgent = generate_smart_alerts(performances, today, new_shows, cancelled_shows)
@@ -746,6 +785,7 @@ def main():
         "{{EVENT_SECTION}}": event_section,
         "{{PERF_DATES_JSON}}": perf_dates_json,
         "{{STAR_IDS_JSON}}": star_ids_json,
+        "{{CAL_SHOWS_JSON}}": cal_shows_json,
         "{{ALERT_URGENT}}": alert_urgent,
         "{{ALERT_NEW}}": alert_new,
         "{{NOTES_SECTION}}": notes_section,

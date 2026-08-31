@@ -1240,6 +1240,10 @@ const PERF_DATES = {{PERF_DATES_JSON}};
 
 const STAR_IDS = new Set({{STAR_IDS_JSON}});
 
+// 日历自给自足的演出元数据：已演>1周的演出在卡片列表里被隐藏（无 DOM 卡片），
+// 但日历仍要看得见它们，故用这份数据作为日历/tooltip 的权威来源（不查 .perf-card）。
+const CAL_SHOWS = {{CAL_SHOWS_JSON}};
+
 // Actor-to-group fallback (when "演出单位" text unclear). 前两位主演决定团别.
 const ACTOR_GROUP = {
   // 一团（男女合演）: 范派/袁派 为主
@@ -1281,18 +1285,25 @@ function extractGroup(castText) {
 }
 
 // ============================================================
-//  SHOW DATA INDEX (built from DOM for tooltips)
+//  SHOW DATA INDEX (self-contained from CAL_SHOWS + DOM overlay)
 // ============================================================
 let SHOW_INDEX = {};
 
 function buildShowIndex() {
   SHOW_INDEX = {};
+  // 1) 从 CAL_SHOWS 灌入全部日历演出（含已演>1周、无 DOM 卡片的历史场）
+  for (const id in CAL_SHOWS) {
+    const s = CAL_SHOWS[id];
+    SHOW_INDEX[id] = {
+      id, date: s.date, title: s.title, venue: s.venue, time: s.time,
+      price: s.price, cast: s.cast, isStar: s.isStar, group: s.group || "",
+      isEvent: s.isEvent, eventType: s.eventType, isCancelled: s.isCancelled,
+      fingerprint: "",
+    };
+  }
+  // 2) 用当前可见的 DOM 卡片覆盖（活的 cast 文本、已购指纹优先）
   document.querySelectorAll(".perf-card[data-id]").forEach(card => {
     const id = card.dataset.id;
-    const date = card.dataset.date;
-    const title = card.dataset.title;
-    const venue = card.dataset.venue;
-    const time = card.dataset.time;
     const priceEl = card.querySelector(".perf-price");
     const price = priceEl ? priceEl.innerText.trim().replace(/\n/g, ' · ') : '';
     const castEl = card.querySelector(".perf-cast");
@@ -1300,12 +1311,15 @@ function buildShowIndex() {
     if (castEl) {
       cast = castEl.innerText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
     }
-    const isStar = STAR_IDS.has(id);
-    const group = extractGroup(cast);
     const isEvent = card.classList.contains("event-card");
     const eventType = card.dataset.event || "";
     const isCancelled = card.classList.contains("cancelled");
-    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType, isCancelled };
+    SHOW_INDEX[id] = {
+      id, date: card.dataset.date, title: card.dataset.title, venue: card.dataset.venue,
+      time: card.dataset.time, price, cast, isStar: STAR_IDS.has(id),
+      group: extractGroup(cast), isEvent, eventType, isCancelled,
+      fingerprint: card.dataset.fingerprint || "",
+    };
   });
 }
 
@@ -1720,11 +1734,8 @@ function buildCalendar() {
     if (isToday) cell.classList.add("today-cal");
 
     const ids = PERF_DATES[key] || [];
-    // Filter out hidden (star-duplicate) IDs
-    const visibleIds = ids.filter(sid => {
-      const card = document.querySelector(`.perf-card[data-id="${sid}"]`);
-      return card && card.style.display !== "none";
-    });
+    // 用 SHOW_INDEX 判断（含历史已演、无 DOM 卡片的场），不再依赖页面卡片是否存在
+    const visibleIds = ids.filter(sid => SHOW_INDEX[sid]);
     if (visibleIds.length > 0) {
       cell.classList.add("has-show");
 
@@ -1944,14 +1955,17 @@ tooltip.addEventListener('click', (e) => {
 function applyCalFilter(key, d) {
   const note = document.getElementById("cal-filter-note");
   note.classList.add("active");
-  document.getElementById("cal-filter-text").textContent =
-    `已筛选：${calYear}年${MONTH_NAMES[calMonth]}${d}日的演出`;
 
   const ids = new Set(PERF_DATES[key] || []);
+  let matchedCard = false;
   document.querySelectorAll(".perf-card[data-id]").forEach(card => {
-    if (ids.has(card.dataset.id)) card.classList.remove("hidden-by-filter");
+    if (ids.has(card.dataset.id)) { card.classList.remove("hidden-by-filter"); matchedCard = true; }
     else card.classList.add("hidden-by-filter");
   });
+
+  const label = `已筛选：${calYear}年${MONTH_NAMES[calMonth]}${d}日的演出`;
+  document.getElementById("cal-filter-text").textContent =
+    matchedCard ? label : `${label}（演出已结束，仅在日历可见）`;
 
   document.querySelectorAll(".date-divider").forEach(div => {
     const nextSibling = div.nextElementSibling;
