@@ -1771,7 +1771,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-08-31 06:40 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-08-31 10:47 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -1783,6 +1783,29 @@ function escHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c)
 //  DATA
 // ============================================================
 const PERF_DATES = {
+  "2026-07-03": ["p02", "p01"],
+  "2026-07-04": ["p04", "p03"],
+  "2026-07-09": ["lzy-01"],
+  "2026-07-10": ["p05"],
+  "2026-07-13": ["p06"],
+  "2026-07-14": ["p07"],
+  "2026-07-15": ["p08"],
+  "2026-07-18": ["p09", "evt-20260718-tianchan"],
+  "2026-07-22": ["p10"],
+  "2026-07-23": ["p11"],
+  "2026-07-25": ["lzy-02"],
+  "2026-07-28": ["p12"],
+  "2026-07-29": ["p13"],
+  "2026-08-08": ["lzy-03"],
+  "2026-08-09": ["p18"],
+  "2026-08-11": ["p36", "p19"],
+  "2026-08-12": ["p20"],
+  "2026-08-15": ["p21"],
+  "2026-08-16": ["p22", "p23"],
+  "2026-08-18": ["p24"],
+  "2026-08-19": ["p25"],
+  "2026-08-22": ["p26"],
+  "2026-08-23": ["p27"],
   "2026-08-31": ["p45"],
   "2026-09-03": ["p33"],
   "2026-09-04": ["p34"],
@@ -1807,7 +1830,714 @@ const PERF_DATES = {
   "2026-10-31": ["p32", "p53"],
 };
 
-const STAR_IDS = new Set(["lzy-04"]);
+const STAR_IDS = new Set(["lzy-01", "lzy-02", "lzy-03", "lzy-04"]);
+
+// 日历自给自足的演出元数据：已演>1周的演出在卡片列表里被隐藏（无 DOM 卡片），
+// 但日历仍要看得见它们，故用这份数据作为日历/tooltip 的权威来源（不查 .perf-card）。
+const CAL_SHOWS = {
+  "p02": {
+    "date": "2026-07-03",
+    "title": "越剧《重圆记》",
+    "venue": "宁波逸夫剧院",
+    "time": "19:15",
+    "price": "¥80 — 580",
+    "cast": "杨婷娜（徐德言）、李旭丹（乐昌）、王清（杨素）、陈欣雨（红拂）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p01": {
+    "date": "2026-07-03",
+    "title": "越剧《珍珠塔》",
+    "venue": "杭州胜利剧院",
+    "time": "19:30",
+    "price": "¥180 起",
+    "cast": "徐标新（方卿）、邓华蔚（陈翠娥）、周燕儿（方朵花）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p04": {
+    "date": "2026-07-04",
+    "title": "大型神话越剧《追鱼》",
+    "venue": "宁波逸夫剧院",
+    "time": "19:15",
+    "price": "¥80/180/280/380/480/580",
+    "cast": "杨婷娜（张珍）、忻雅琴（鲤鱼精）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p03": {
+    "date": "2026-07-04",
+    "title": "越剧《红楼梦》",
+    "venue": "杭州胜利剧院",
+    "time": "19:30",
+    "price": "¥180/280/380/480/580",
+    "cast": "王清/郭茜云（贾宝玉）、方亚芬/俞景岚（林黛玉）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "lzy-01": {
+    "date": "2026-07-09",
+    "title": "越剧《红楼梦》",
+    "venue": "广州红线女大剧院",
+    "time": "19:30",
+    "price": "¥80 — 480",
+    "cast": "俞果（贾宝玉）、陆志艳（林黛玉）",
+    "isStar": true,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p05": {
+    "date": "2026-07-10",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "广州红线女大剧院",
+    "time": "19:30",
+    "price": "¥80 — 480",
+    "cast": "董心心（梁山伯）、杨韵儿（祝英台）、潘锡丹（祝公远）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p06": {
+    "date": "2026-07-13",
+    "title": "越剧《红楼梦》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:15",
+    "price": "¥80 — 380",
+    "cast": "王婉娜（贾宝玉）、李旭丹（林黛玉）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p07": {
+    "date": "2026-07-14",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:15",
+    "price": "¥80 — 380",
+    "cast": "王舒雯（梁山伯）、王婕（祝英台）、吴群（祝公远）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p08": {
+    "date": "2026-07-15",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "航头镇",
+    "time": "13:00",
+    "price": "公益/免费",
+    "cast": "",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p09": {
+    "date": "2026-07-18",
+    "title": "越剧小戏《渔光曲》《自古英雄出少年》《新生》",
+    "venue": "太仓大剧院",
+    "time": "14:00",
+    "price": "全场 ¥50",
+    "cast": "冯军/王婉娜/姚磊、赵一兰/姚磊/张艾嘉、李旭丹/裘隆/冯军等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "evt-20260718-tianchan": {
+    "date": "2026-07-18",
+    "title": "百年天蟾·高峰对谈",
+    "venue": "上海天蟾逸夫舞台大剧场",
+    "time": "19:00",
+    "price": "80 / 50 / 30 元（会员积分可全额抵扣）",
+    "cast": "",
+    "isStar": false,
+    "isEvent": true,
+    "eventType": "访谈",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p10": {
+    "date": "2026-07-22",
+    "title": "小剧场越剧《张骞使西·三别三行》",
+    "venue": "上海宛平剧院·小剧场",
+    "time": "19:15",
+    "price": "¥80 / 180 / 280",
+    "cast": "徐标新（张骞）、徐晓飞（匈奴女）、裘隆（汉武帝）、姚磊（甘父）、顾爱军（伊稚斜）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p11": {
+    "date": "2026-07-23",
+    "title": "小剧场越剧《张骞使西·三别三行》",
+    "venue": "上海宛平剧院·小剧场",
+    "time": "19:15",
+    "price": "¥80 / 180 / 280",
+    "cast": "徐标新（张骞）、徐晓飞（匈奴女）、裘隆（汉武帝）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "lzy-02": {
+    "date": "2026-07-25",
+    "title": "新编历史故事剧《虞美人》",
+    "venue": "上海临港演艺中心",
+    "time": "14:30",
+    "price": "¥80 — 380",
+    "cast": "忻雅琴（虞姬）、王柔桑（项羽）、吴群（张良）、吴佳燕（范增）、陆志艳（无邪）",
+    "isStar": true,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p12": {
+    "date": "2026-07-28",
+    "title": "越剧《红楼梦》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80 — 380",
+    "cast": "郭茜云（贾宝玉）、俞景岚（林黛玉）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p13": {
+    "date": "2026-07-29",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80 — 380",
+    "cast": "斯钰林（梁山伯）、徐晓飞（祝英台）、金烨（祝公远）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "lzy-03": {
+    "date": "2026-08-08",
+    "title": "越剧《舞台姐妹》",
+    "venue": "北京大学百周年纪念讲堂",
+    "time": "19:00",
+    "price": "校内 ¥40 — 240",
+    "cast": "竺春花：单仰萍、陆志艳 | 邢月红：俞果",
+    "isStar": true,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p18": {
+    "date": "2026-08-09",
+    "title": "越剧《孟丽君》",
+    "venue": "北京大学百周年纪念讲堂",
+    "time": "19:00",
+    "price": "校内 ¥40-240",
+    "cast": "孟丽君：单仰萍/忻雅琴 | 皇甫少华：王柔桑 | 皇帝：杨婷娜",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p36": {
+    "date": "2026-08-11",
+    "title": "越剧《女班》",
+    "venue": "美琪大戏院",
+    "time": "19:15",
+    "price": "¥80/180/280/380/480/580/680",
+    "cast": "张宇峰（金凌云）、裘巧芳（金满堂）、陈梦薇（沈冬妹）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p19": {
+    "date": "2026-08-11",
+    "title": "越剧《西厢记》",
+    "venue": "北京吉祥大戏院",
+    "time": "19:30",
+    "price": "以戏院公布为准",
+    "cast": "陈慧迪（崔莺莺）、王婉娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p20": {
+    "date": "2026-08-12",
+    "title": "越剧《孔雀东南飞》",
+    "venue": "北京吉祥大戏院",
+    "time": "19:30",
+    "price": "以场馆公布为准",
+    "cast": "王柔桑（焦仲卿）、盛舒扬（刘兰芝）、吴佳燕（焦母）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p21": {
+    "date": "2026-08-15",
+    "title": "越剧《红楼梦》",
+    "venue": "天津中国大戏院",
+    "time": "19:15",
+    "price": "¥50 — 580",
+    "cast": "杨婷娜（贾宝玉）、单仰萍/忻雅琴（林黛玉）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p22": {
+    "date": "2026-08-16",
+    "title": "越剧《西厢记》",
+    "venue": "天津中国大戏院",
+    "time": "19:15",
+    "price": "¥50 — 580",
+    "cast": "陈慧迪（崔莺莺）、杨婷娜（张珙）、盛舒扬（红娘）、吴群（崔夫人）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p23": {
+    "date": "2026-08-16",
+    "title": "越剧《血手印》",
+    "venue": "上海保利大剧院-大剧场",
+    "time": "19:30",
+    "price": "¥80 — 380",
+    "cast": "",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p24": {
+    "date": "2026-08-18",
+    "title": "越剧《孔雀东南飞》",
+    "venue": "河北廊坊壹佰剧院",
+    "time": "19:00",
+    "price": "以场馆公布为准",
+    "cast": "王舒雯（焦仲卿）、王婕（刘兰芝）、吴佳燕（焦母）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p25": {
+    "date": "2026-08-19",
+    "title": "越剧《孟丽君》",
+    "venue": "河北廊坊壹佰剧院",
+    "time": "19:00",
+    "price": "以场馆公布为准",
+    "cast": "忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p26": {
+    "date": "2026-08-22",
+    "title": "越剧《甄嬛》",
+    "venue": "北京国家大剧院·戏剧场",
+    "time": "19:30",
+    "price": "¥100 — 580",
+    "cast": "李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、史燕彬（沈眉庄）、王柔桑（温实初）、裘丹莉（华贵妃）、陈慧迪（安陵容）、王婕（槿汐）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p27": {
+    "date": "2026-08-23",
+    "title": "越剧《甄嬛》",
+    "venue": "北京国家大剧院·戏剧场",
+    "time": "19:30",
+    "price": "¥100 — 580",
+    "cast": "李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、裘丹莉（华贵妃）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p45": {
+    "date": "2026-08-31",
+    "title": "越剧《华山奇缘》",
+    "venue": "临港演艺中心",
+    "time": "14:30",
+    "price": "公益场（以官方购票页为准）",
+    "cast": "樊婷婷（三圣母/王桂英）、徐标新（刘彦昌·前）、吴群（刘彦昌·后）、赵志刚（特邀·二郎神）、方亚芬（石矶娘娘）、郭茜云（沉香）、张艾嘉（月老）、叶元蓓（灵芝）、朱洋（秋儿）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p33": {
+    "date": "2026-09-03",
+    "title": "越剧《早春二月》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80/180/280/380/480",
+    "cast": "许杰（萧涧秋）、方亚芬（文嫂）、唐晓羚（陶岚）、张伟忠（陶慕侃）、徐标新（钱正兴）、俞佳娜（采莲）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p34": {
+    "date": "2026-09-04",
+    "title": "越剧《祥林嫂》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80/180/280/380",
+    "cast": "徐莱（祥林嫂）、裘隆（贺老六）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p28": {
+    "date": "2026-09-05",
+    "title": "大型神话越剧《追鱼》",
+    "venue": "北京艺术中心·戏剧场",
+    "time": "14:30",
+    "price": "扫码购票",
+    "cast": "杨婷娜（张珍）、忻雅琴（鲤鱼精）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p29": {
+    "date": "2026-09-06",
+    "title": "越剧《红楼梦》",
+    "venue": "北京艺术中心·戏剧场",
+    "time": "14:30",
+    "price": "扫码购票",
+    "cast": "王婉娜（贾宝玉）、李旭丹（林黛玉）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p30": {
+    "date": "2026-09-12",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "苏州狮山大剧院·大剧场",
+    "time": "14:30",
+    "price": "¥180/280/380/480",
+    "cast": "",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "lzy-04": {
+    "date": "2026-09-12",
+    "title": "越剧《舞台姐妹》",
+    "venue": "杭州蝴蝶剧场",
+    "time": "19:30",
+    "price": "¥180 — 380",
+    "cast": "俞果（邢月红）、陆志艳（竺春花）",
+    "isStar": true,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p31": {
+    "date": "2026-09-13",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "苏州狮山大剧院·大剧场",
+    "time": "14:30",
+    "price": "¥180/280/380/480",
+    "cast": "",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p46": {
+    "date": "2026-09-17",
+    "title": "越剧《四花绽放·经典传承》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80/120/200/280/420",
+    "cast": "吴凤花（范派·二度梅）、吴素英（吕派·梅）、陈飞（傅派·梅）、张琳（尹派·梅）领衔，绍百六代演员共同登场",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p47": {
+    "date": "2026-09-19",
+    "title": "越剧《女班》",
+    "venue": "北外滩友邦大剧院",
+    "time": "19:30",
+    "price": "¥80/180/280/380/480/580/680",
+    "cast": "张宇峰（金凌云）、裘巧芳（金满堂）、陈梦薇（沈冬妹）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p35": {
+    "date": "2026-09-22",
+    "title": "越剧《桃李梅》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80/120/180/280",
+    "cast": "陈欣雨（袁玉梅）、赵心瑜（袁玉李）、笪雪莹（袁玉桃）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p40": {
+    "date": "2026-09-24",
+    "title": "越剧《吴王悲歌》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥120/180/280/380/480/580/680",
+    "cast": "吴凤花（夫差）、陈飞（郑旦）、楼慧琴（伍子胥）、吴素英（君夫人）、何梦莱（勾践）等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p37": {
+    "date": "2026-09-24",
+    "title": "越剧《何文秀》",
+    "venue": "保利上海城市剧院",
+    "time": "19:30",
+    "price": "¥80/180/280/380/580/680",
+    "cast": "王君安（何文秀）、郑全（王兰英）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p41": {
+    "date": "2026-09-25",
+    "title": "越剧《吴王悲歌》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥120/180/280/380/480/580/680",
+    "cast": "吴凤花（夫差）、陈飞（郑旦）、楼慧琴（伍子胥）、吴素英（君夫人）、何梦莱（勾践）等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p44": {
+    "date": "2026-09-25",
+    "title": "越剧《玉蜻蜓》",
+    "venue": "保利上海城市剧院",
+    "time": "19:30",
+    "price": "¥80/180/280/380/580/680",
+    "cast": "王君安（申贵升/徐元宰）、张倩倩（王志贞）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p38": {
+    "date": "2026-09-26",
+    "title": "越剧《穆桂英挂帅》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥80/180/280/380",
+    "cast": "陈雯婷（穆桂英）、屠少桦（杨宗保）、楼慧琴（杨延昭）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p39": {
+    "date": "2026-09-27",
+    "title": "越剧《三看御妹》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "14:00",
+    "price": "¥100/180/280/380/580",
+    "cast": "吴素英（刘金定）、吴凤花（封加进）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p42": {
+    "date": "2026-09-29",
+    "title": "越剧《何文秀》",
+    "venue": "上海保利云间剧院",
+    "time": "19:00",
+    "price": "¥80/180/280/380/580/680",
+    "cast": "赵志刚（何文秀）、陈湜（王兰英）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p43": {
+    "date": "2026-09-30",
+    "title": "越剧《蝶海情》",
+    "venue": "上海保利云间剧院",
+    "time": "19:00",
+    "price": "¥80/180/280/380/580/680",
+    "cast": "赵志刚（真如）、陈湜（香凝）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p48": {
+    "date": "2026-10-16",
+    "title": "越剧《华山奇缘》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:15",
+    "price": "¥80/180/280/380/580/680",
+    "cast": "樊婷婷（三圣母/王桂英）、徐标新（刘彦昌·前）、吴群（刘彦昌·后）、赵志刚（特邀·二郎神）、方亚芬（石矶娘娘）、郭茜云（沉香）、张艾嘉（月老）、叶元蓓（灵芝）、朱洋（秋儿）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p49": {
+    "date": "2026-10-17",
+    "title": "越剧《华山奇缘》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:15",
+    "price": "¥80/180/280/380/580/680",
+    "cast": "樊婷婷（三圣母/王桂英）、徐标新（刘彦昌·前）、吴群（刘彦昌·后）、赵志刚（特邀·二郎神）、方亚芬（石矶娘娘）、郭茜云（沉香）、张艾嘉（月老）、叶元蓓（灵芝）、朱洋（秋儿）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p50": {
+    "date": "2026-10-24",
+    "title": "新编越剧《明月清泉》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:15",
+    "price": "¥180/280/380/580/680",
+    "cast": "张琳（范仲淹）、吴凤花（钱松）、何梦莱（王世鸿）、孙琴菲（无嫣）、楼慧琴（晏殊）、屠少桦（泉水少年）、陈丽（竹砚）、丁媛（李明轩）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p51": {
+    "date": "2026-10-25",
+    "title": "新编越剧《明月清泉》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:15",
+    "price": "¥80/180/280/480",
+    "cast": "张琳（范仲淹）、娄周英（钱松）、何梦莱（王世鸿）、孙琴菲（无嫣）、楼慧琴（晏殊）、屠少桦（泉水少年）、陈丽（竹砚）、丁媛（李明轩）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p52": {
+    "date": "2026-10-30",
+    "title": "越剧《虎踞龙盘》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:30",
+    "price": "¥180/280/380/480/680",
+    "cast": "李晓旭（诸葛亮）、裘赛琳（孙权）、丁沛孜（陆逊）、郦晨烨（诸葛瑾）、罗佳佳（周瑜）、蔡奇奇（曹操）、鲁易梦（凌统）、钟柯迪（甘宁）等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p32": {
+    "date": "2026-10-31",
+    "title": "红楼梦",
+    "venue": "南京保利大剧院大剧场",
+    "time": "19:30",
+    "price": "180/280/380/480元",
+    "cast": "杨婷娜、忻雅琴 等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  },
+  "p53": {
+    "date": "2026-10-31",
+    "title": "越剧《虎踞龙盘》",
+    "venue": "上海宛平剧院·大剧场",
+    "time": "19:30",
+    "price": "¥180/280/380/480/680",
+    "cast": "李晓旭（诸葛亮）、裘赛琳（孙权）、丁沛孜（陆逊）、郦晨烨（诸葛瑾）、罗佳佳（周瑜）、蔡奇奇（曹操）、鲁易梦（凌统）、钟柯迪（甘宁）等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": ""
+  }
+};
 
 // Actor-to-group fallback (when "演出单位" text unclear). 前两位主演决定团别.
 const ACTOR_GROUP = {
@@ -1850,18 +2580,25 @@ function extractGroup(castText) {
 }
 
 // ============================================================
-//  SHOW DATA INDEX (built from DOM for tooltips)
+//  SHOW DATA INDEX (self-contained from CAL_SHOWS + DOM overlay)
 // ============================================================
 let SHOW_INDEX = {};
 
 function buildShowIndex() {
   SHOW_INDEX = {};
+  // 1) 从 CAL_SHOWS 灌入全部日历演出（含已演>1周、无 DOM 卡片的历史场）
+  for (const id in CAL_SHOWS) {
+    const s = CAL_SHOWS[id];
+    SHOW_INDEX[id] = {
+      id, date: s.date, title: s.title, venue: s.venue, time: s.time,
+      price: s.price, cast: s.cast, isStar: s.isStar, group: s.group || "",
+      isEvent: s.isEvent, eventType: s.eventType, isCancelled: s.isCancelled,
+      fingerprint: "",
+    };
+  }
+  // 2) 用当前可见的 DOM 卡片覆盖（活的 cast 文本、已购指纹优先）
   document.querySelectorAll(".perf-card[data-id]").forEach(card => {
     const id = card.dataset.id;
-    const date = card.dataset.date;
-    const title = card.dataset.title;
-    const venue = card.dataset.venue;
-    const time = card.dataset.time;
     const priceEl = card.querySelector(".perf-price");
     const price = priceEl ? priceEl.innerText.trim().replace(/\n/g, ' · ') : '';
     const castEl = card.querySelector(".perf-cast");
@@ -1869,12 +2606,15 @@ function buildShowIndex() {
     if (castEl) {
       cast = castEl.innerText.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
     }
-    const isStar = STAR_IDS.has(id);
-    const group = extractGroup(cast);
     const isEvent = card.classList.contains("event-card");
     const eventType = card.dataset.event || "";
     const isCancelled = card.classList.contains("cancelled");
-    SHOW_INDEX[id] = { id, date, title, venue, time, price, cast, isStar, group, isEvent, eventType, isCancelled };
+    SHOW_INDEX[id] = {
+      id, date: card.dataset.date, title: card.dataset.title, venue: card.dataset.venue,
+      time: card.dataset.time, price, cast, isStar: STAR_IDS.has(id),
+      group: extractGroup(cast), isEvent, eventType, isCancelled,
+      fingerprint: card.dataset.fingerprint || "",
+    };
   });
 }
 
@@ -2289,11 +3029,8 @@ function buildCalendar() {
     if (isToday) cell.classList.add("today-cal");
 
     const ids = PERF_DATES[key] || [];
-    // Filter out hidden (star-duplicate) IDs
-    const visibleIds = ids.filter(sid => {
-      const card = document.querySelector(`.perf-card[data-id="${sid}"]`);
-      return card && card.style.display !== "none";
-    });
+    // 用 SHOW_INDEX 判断（含历史已演、无 DOM 卡片的场），不再依赖页面卡片是否存在
+    const visibleIds = ids.filter(sid => SHOW_INDEX[sid]);
     if (visibleIds.length > 0) {
       cell.classList.add("has-show");
 
@@ -2513,14 +3250,17 @@ tooltip.addEventListener('click', (e) => {
 function applyCalFilter(key, d) {
   const note = document.getElementById("cal-filter-note");
   note.classList.add("active");
-  document.getElementById("cal-filter-text").textContent =
-    `已筛选：${calYear}年${MONTH_NAMES[calMonth]}${d}日的演出`;
 
   const ids = new Set(PERF_DATES[key] || []);
+  let matchedCard = false;
   document.querySelectorAll(".perf-card[data-id]").forEach(card => {
-    if (ids.has(card.dataset.id)) card.classList.remove("hidden-by-filter");
+    if (ids.has(card.dataset.id)) { card.classList.remove("hidden-by-filter"); matchedCard = true; }
     else card.classList.add("hidden-by-filter");
   });
+
+  const label = `已筛选：${calYear}年${MONTH_NAMES[calMonth]}${d}日的演出`;
+  document.getElementById("cal-filter-text").textContent =
+    matchedCard ? label : `${label}（演出已结束，仅在日历可见）`;
 
   document.querySelectorAll(".date-divider").forEach(div => {
     const nextSibling = div.nextElementSibling;
