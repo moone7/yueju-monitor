@@ -520,5 +520,50 @@
     "price": "¥180/280/380/480/680",
     "is_star": false,
     "cancelled": false
+  },
+  {
+    "id": "p54",
+    "date": "2026-11-01",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "南京保利大剧院·大剧场",
+    "price": "¥180/280/380/480",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p55",
+    "date": "2026-11-03",
+    "title": "越剧《红楼梦》",
+    "venue": "常熟大剧院",
+    "price": "¥80/180/280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p56",
+    "date": "2026-11-04",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "常熟大剧院",
+    "price": "¥80/180/280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p57",
+    "date": "2026-11-10",
+    "title": "越剧《红楼梦》",
+    "venue": "闽南戏曲艺术中心·小剧场",
+    "price": "¥180/280/380/480",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p58",
+    "date": "2026-11-11",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "闽南戏曲艺术中心·小剧场",
+    "price": "¥180/280/380/480",
+    "is_star": false,
+    "cancelled": false
   }
 ]
