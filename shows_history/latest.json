@@ -565,5 +565,23 @@
     "price": "¥180/280/380/480",
     "is_star": false,
     "cancelled": false
+  },
+  {
+    "id": "p59",
+    "date": "2026-12-05",
+    "title": "越剧《红楼梦》",
+    "venue": "苏州狮山大剧院·大剧场",
+    "price": "¥80 — 480（公益票）",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p60",
+    "date": "2026-12-06",
+    "title": "越剧《红楼梦》",
+    "venue": "苏州狮山大剧院·大剧场",
+    "price": "¥80 — 480（公益票）",
+    "is_star": false,
+    "cancelled": false
   }
 ]
