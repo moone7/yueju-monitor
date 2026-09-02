@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 63,
+    "total_shows": 65,
     "star_shows": 4,
     "cities": 13,
-    "scraped_at": "2026-09-01T17:09:14.793837",
+    "scraped_at": "2026-09-02T02:16:28.859559",
     "sources": [
       "df962388",
       "wiki66",
@@ -840,6 +840,32 @@
       "cast": "王柔桑（梁山伯）、王婕（祝英台）、吴群（祝公远）",
       "troupe": "上海越剧院红楼团",
       "price": "¥180/280/380/480",
+      "is_star": false
+    },
+    {
+      "id": "p59",
+      "date": "2026-12-05",
+      "time": "14:30",
+      "title": "越剧《红楼梦》",
+      "subtitle": "上海越剧院四大经典 · 苏州站（徐王版）",
+      "venue": "苏州狮山大剧院·大剧场",
+      "city": "苏州",
+      "cast": "王婉娜（贾宝玉）、李旭丹（林黛玉）",
+      "troupe": "上海越剧院",
+      "price": "¥80 — 480（公益票）",
+      "is_star": false
+    },
+    {
+      "id": "p60",
+      "date": "2026-12-06",
+      "time": "14:30",
+      "title": "越剧《红楼梦》",
+      "subtitle": "上海越剧院四大经典 · 苏州站（徐王版）",
+      "venue": "苏州狮山大剧院·大剧场",
+      "city": "苏州",
+      "cast": "王婉娜（贾宝玉）、李旭丹（林黛玉）",
+      "troupe": "上海越剧院",
+      "price": "¥80 — 480（公益票）",
       "is_star": false
     }
   ]
