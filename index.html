@@ -1175,8 +1175,8 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat" data-num="69">
-<div class="stat-num">69</div>
+<div class="stat" data-num="70">
+<div class="stat-num">70</div>
 <div class="stat-label">近期演出场次</div>
 </div>
 <div class="stat" data-num="4">
@@ -1228,7 +1228,10 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
-      · 数据已是最新，暂无新动态。<br/>
+      <strong>🔔 本次数据更新：新增 1 场</strong><br/><br/>
+      <strong>🆕 新上线 / 开票 1 场</strong>（对比昨日）：<br/>
+        · 上海《情探》（9月14日） — ¥80<br/>
+      <br/>
     </div>
 </div>
 <!-- ===== ⭐ 陆志艳特别关注区 ===== -->
@@ -1396,6 +1399,25 @@
 <span class="tag tag-on-sale">售票中</span>
 <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
 <div class="perf-price">¥180/280/380/480</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-09-14" data-id="p65" data-time="09:00" data-title="越剧《情探》" data-venue="宛平剧院">
+<div class="perf-info">
+<div class="perf-title">越剧《情探》 <em>浙江小百花越剧院（浙越团）· 经典传承版</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>9月14日（周一）09:00</span>
+<span><span class="meta-icon">📍</span>宛平剧院</span>
+<span><span class="meta-icon">🏙️</span>上海</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>谢莉莉（敫桂英）、黄剑勋（王魁）、吕家祺（张行简）、高清（判官）、徐子涵（李大人）、王春燕（鸨儿）、刘丽英（彩屏）、蒋晨曦（小菊）等<br/>
+<strong>演出单位：</strong>浙江小百花越剧院（浙越团）
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80</div></div>
 
 </div>
 <div class="perf-card" data-date="2026-09-16" data-id="p61" data-time="19:30" data-title="越剧《假如我不是嵇康》" data-venue="苏州开明大戏院·大剧场">
@@ -1989,7 +2011,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-09-03 05:28 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-09-03 16:35 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2031,6 +2053,7 @@ const PERF_DATES = {
   "2026-09-06": ["p29"],
   "2026-09-12": ["p30", "lzy-04"],
   "2026-09-13": ["p31"],
+  "2026-09-14": ["p65"],
   "2026-09-16": ["p61"],
   "2026-09-17": ["p46"],
   "2026-09-18": ["p62"],
@@ -2565,6 +2588,20 @@ const CAL_SHOWS = {
     "isCancelled": false,
     "group": "",
     "fp": "flksie9"
+  },
+  "p65": {
+    "date": "2026-09-14",
+    "title": "越剧《情探》",
+    "venue": "宛平剧院",
+    "time": "09:00",
+    "price": "¥80",
+    "cast": "谢莉莉（敫桂英）、黄剑勋（王魁）、吕家祺（张行简）、高清（判官）、徐子涵（李大人）、王春燕（鸨儿）、刘丽英（彩屏）、蒋晨曦（小菊）等",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "",
+    "fp": "f6drngu"
   },
   "p61": {
     "date": "2026-09-16",

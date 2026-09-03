@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 69,
+    "total_shows": 70,
     "star_shows": 4,
     "cities": 14,
-    "scraped_at": "2026-09-03T05:28:42.902955",
+    "scraped_at": "2026-09-03T16:35:07.490236",
     "sources": [
       "df962388",
       "wiki66",
@@ -541,6 +541,19 @@
       "cast": "",
       "troupe": "上海越剧院",
       "price": "¥180/280/380/480",
+      "is_star": false
+    },
+    {
+      "id": "p65",
+      "date": "2026-09-14",
+      "time": "09:00",
+      "title": "越剧《情探》",
+      "subtitle": "浙江小百花越剧院（浙越团）· 经典传承版",
+      "venue": "宛平剧院",
+      "city": "上海",
+      "cast": "谢莉莉（敫桂英）、黄剑勋（王魁）、吕家祺（张行简）、高清（判官）、徐子涵（李大人）、王春燕（鸨儿）、刘丽英（彩屏）、蒋晨曦（小菊）等",
+      "troupe": "浙江小百花越剧院（浙越团）",
+      "price": "¥80",
       "is_star": false
     },
     {
