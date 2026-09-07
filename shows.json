@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 70,
-    "star_shows": 4,
+    "total_shows": 74,
+    "star_shows": 8,
     "cities": 14,
-    "scraped_at": "2026-09-07T05:41:41.403904",
+    "scraped_at": "2026-09-07T16:34:23.943833",
     "sources": [
       "df962388",
       "wiki66",
@@ -906,6 +906,58 @@
       "troupe": "上海越剧院红楼团",
       "price": "¥180/280/380/480",
       "is_star": false
+    },
+    {
+      "id": "lzy-05",
+      "date": "2026-11-26",
+      "time": "19:15",
+      "title": "环境式越剧《红楼梦》",
+      "subtitle": "",
+      "venue": "长江剧场-黑匣子",
+      "city": "上海",
+      "cast": "陆志艳、俞果",
+      "troupe": "上海越剧院三团",
+      "price": "318元",
+      "is_star": true
+    },
+    {
+      "id": "lzy-06",
+      "date": "2026-11-27",
+      "time": "19:15",
+      "title": "环境式越剧《红楼梦》",
+      "subtitle": "",
+      "venue": "长江剧场-黑匣子",
+      "city": "上海",
+      "cast": "陆志艳、俞果",
+      "troupe": "上海越剧院三团",
+      "price": "318元",
+      "is_star": true
+    },
+    {
+      "id": "lzy-07",
+      "date": "2026-11-28",
+      "time": "14:00",
+      "title": "环境式越剧《红楼梦》",
+      "subtitle": "",
+      "venue": "长江剧场-黑匣子",
+      "city": "上海",
+      "cast": "陆志艳、俞果",
+      "troupe": "上海越剧院三团",
+      "price": "318元",
+      "is_star": true
+    },
+    {
+      "id": "lzy-08",
+      "date": "2026-11-29",
+      "time": "14:00",
+      "title": "环境式越剧《红楼梦》",
+      "subtitle": "",
+      "venue": "长江剧场-黑匣子",
+      "city": "上海",
+      "cast": "陆志艳、俞果",
+      "troupe": "上海越剧院三团",
+      "price": "318元",
+      "is_star": true
     },
     {
       "id": "p59",
