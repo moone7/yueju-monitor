@@ -612,6 +612,42 @@
     "cancelled": false
   },
   {
+    "id": "lzy-05",
+    "date": "2026-11-26",
+    "title": "环境式越剧《红楼梦》",
+    "venue": "长江剧场-黑匣子",
+    "price": "318元",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
+    "id": "lzy-06",
+    "date": "2026-11-27",
+    "title": "环境式越剧《红楼梦》",
+    "venue": "长江剧场-黑匣子",
+    "price": "318元",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
+    "id": "lzy-07",
+    "date": "2026-11-28",
+    "title": "环境式越剧《红楼梦》",
+    "venue": "长江剧场-黑匣子",
+    "price": "318元",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
+    "id": "lzy-08",
+    "date": "2026-11-29",
+    "title": "环境式越剧《红楼梦》",
+    "venue": "长江剧场-黑匣子",
+    "price": "318元",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
     "id": "p59",
     "date": "2026-12-05",
     "title": "越剧《红楼梦》",
