@@ -1175,8 +1175,8 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat" data-num="74">
-<div class="stat-num">74</div>
+<div class="stat" data-num="76">
+<div class="stat-num">76</div>
 <div class="stat-label">近期演出场次</div>
 </div>
 <div class="stat" data-num="8">
@@ -1187,8 +1187,8 @@
 <div class="stat-num" id="stat-bought">0</div>
 <div class="stat-label">🎟️ 已购场次</div>
 </div>
-<div class="stat" data-num="14">
-<div class="stat-num">14</div>
+<div class="stat" data-num="15">
+<div class="stat-num">15</div>
 <div class="stat-label">涉及城市</div>
 </div>
 </div>
@@ -1227,7 +1227,11 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
-      · 数据已是最新，暂无新动态。<br/>
+      <strong>🔔 本次数据更新：新增 2 场</strong><br/><br/>
+      <strong>🆕 新上线 / 开票 2 场</strong>（对比昨日）：<br/>
+        · 启东《珍珠塔》（10月23日） — ¥380/280/180/120/50<br/>
+        · 启东《玉蜻蜓》（10月24日） — ¥380/280/180/120/50<br/>
+      <br/>
     </div>
 </div>
 <!-- ===== ⭐ 陆志艳特别关注区 ===== -->
@@ -1798,6 +1802,25 @@
 <div class="perf-price">¥80/180/280/380/580/680</div></div>
 
 </div>
+<div class="perf-card" data-date="2026-10-23" data-id="p66" data-time="19:30" data-title="越剧《珍珠塔》" data-venue="启东保利大剧院·大剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《珍珠塔》 <em>上海越剧院一团 · 启东保利大剧院（长三角巡演）</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>10月23日（周五）19:30</span>
+<span><span class="meta-icon">📍</span>启东保利大剧院·大剧场</span>
+<span><span class="meta-icon">🏙️</span>启东</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>徐标新（方卿）、邓华蔚（陈翠娥）、周燕儿（方朵花）<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥380/280/180/120/50</div></div>
+
+</div>
 <div class="perf-card" data-date="2026-10-24" data-id="p50" data-time="19:15" data-title="新编越剧《明月清泉》" data-venue="上海宛平剧院·大剧场">
 <div class="perf-info">
 <div class="perf-title">新编越剧《明月清泉》 <em>绍兴小百花越剧团 · 宛平剧院大剧场 · 第二十五届中国上海国际艺术节</em></div>
@@ -1815,6 +1838,25 @@
 <span class="tag tag-on-sale">售票中</span>
 <button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
 <div class="perf-price">¥180/280/380/580/680</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-10-24" data-id="p67" data-time="19:30" data-title="越剧《玉蜻蜓》" data-venue="启东保利大剧院·大剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《玉蜻蜓》 <em>上海越剧院一团 · 启东保利大剧院（长三角巡演）</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>10月24日（周六）19:30</span>
+<span><span class="meta-icon">📍</span>启东保利大剧院·大剧场</span>
+<span><span class="meta-icon">🏙️</span>启东</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>王清（申贵升/徐元宰）、邓华蔚（王志贞·前）、徐莱（王志贞·后）、樊婷婷（张雅云）<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥380/280/180/120/50</div></div>
 
 </div>
 <div class="perf-card" data-date="2026-10-25" data-id="p51" data-time="19:15" data-title="新编越剧《明月清泉》" data-venue="上海宛平剧院·大剧场">
@@ -2063,7 +2105,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-09-09 05:43 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-09-09 16:34 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2119,7 +2161,8 @@ const PERF_DATES = {
   "2026-09-30": ["p43"],
   "2026-10-16": ["p48"],
   "2026-10-17": ["p49"],
-  "2026-10-24": ["p50"],
+  "2026-10-23": ["p66"],
+  "2026-10-24": ["p50", "p67"],
   "2026-10-25": ["p51"],
   "2026-10-30": ["p52"],
   "2026-10-31": ["p32", "p53"],
@@ -2897,6 +2940,20 @@ const CAL_SHOWS = {
     "group": "一",
     "fp": "fqoosam"
   },
+  "p66": {
+    "date": "2026-10-23",
+    "title": "越剧《珍珠塔》",
+    "venue": "启东保利大剧院·大剧场",
+    "time": "19:30",
+    "price": "¥380/280/180/120/50",
+    "cast": "徐标新（方卿）、邓华蔚（陈翠娥）、周燕儿（方朵花）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "一",
+    "fp": "f1msrrj"
+  },
   "p50": {
     "date": "2026-10-24",
     "title": "新编越剧《明月清泉》",
@@ -2910,6 +2967,20 @@ const CAL_SHOWS = {
     "isCancelled": false,
     "group": "",
     "fp": "f7cpide"
+  },
+  "p67": {
+    "date": "2026-10-24",
+    "title": "越剧《玉蜻蜓》",
+    "venue": "启东保利大剧院·大剧场",
+    "time": "19:30",
+    "price": "¥380/280/180/120/50",
+    "cast": "王清（申贵升/徐元宰）、邓华蔚（王志贞·前）、徐莱（王志贞·后）、樊婷婷（张雅云）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "一",
+    "fp": "fho20s0"
   },
   "p51": {
     "date": "2026-10-25",
