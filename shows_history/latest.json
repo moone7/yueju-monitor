@@ -504,6 +504,33 @@
     "cancelled": false
   },
   {
+    "id": "lzy-09",
+    "date": "2026-10-01",
+    "title": "“天上掉下个林妹妹”——王文娟诞辰百年主题演出",
+    "venue": "上海宛平剧院·大剧场",
+    "price": "¥80/180/280/380/480/680/880",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
+    "id": "lzy-10",
+    "date": "2026-10-04",
+    "title": "新编历史故事剧《虞美人》",
+    "venue": "上海宛平剧院·大剧场",
+    "price": "¥80/180/280/380/580/680",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
+    "id": "p68",
+    "date": "2026-10-06",
+    "title": "大型神话越剧《追鱼》",
+    "venue": "上海宛平剧院·大剧场",
+    "price": "¥80/180/280/380/580/680",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p48",
     "date": "2026-10-16",
     "title": "越剧《华山奇缘》",
@@ -680,6 +707,33 @@
     "title": "越剧《红楼梦》",
     "venue": "苏州狮山大剧院·大剧场",
     "price": "¥80 — 480（公益票）",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p69",
+    "date": "2026-12-06",
+    "title": "越剧《红楼梦》",
+    "venue": "上海东方艺术中心·歌剧厅",
+    "price": "¥180/280/380/480/580/680",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p70",
+    "date": "2026-12-07",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "上海东方艺术中心·歌剧厅",
+    "price": "¥180/280/380/480/580/680",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p71",
+    "date": "2026-12-08",
+    "title": "越剧《碧玉簪》",
+    "venue": "上海东方艺术中心·歌剧厅",
+    "price": "¥180/280/380/480/580/680",
     "is_star": false,
     "cancelled": false
   }
