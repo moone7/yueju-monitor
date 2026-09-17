@@ -693,6 +693,15 @@
     "cancelled": false
   },
   {
+    "id": "p75",
+    "date": "2026-11-28",
+    "title": "越剧《华山奇缘》",
+    "venue": "温岭大剧院·大剧场",
+    "price": "¥680/580/480/380/220/150",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "lzy-08",
     "date": "2026-11-29",
     "title": "环境式越剧《红楼梦》",
