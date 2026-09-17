@@ -1175,8 +1175,8 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat" data-num="85">
-<div class="stat-num">85</div>
+<div class="stat" data-num="86">
+<div class="stat-num">86</div>
 <div class="stat-label">近期演出场次</div>
 </div>
 <div class="stat" data-num="10">
@@ -1187,8 +1187,8 @@
 <div class="stat-num" id="stat-bought">0</div>
 <div class="stat-label">🎟️ 已购场次</div>
 </div>
-<div class="stat" data-num="16">
-<div class="stat-num">16</div>
+<div class="stat" data-num="17">
+<div class="stat-num">17</div>
 <div class="stat-label">涉及城市</div>
 </div>
 </div>
@@ -1236,6 +1236,10 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
+      <strong>🔔 本次数据更新：新增 1 场</strong><br/><br/>
+      <strong>🆕 新上线 / 开票 1 场</strong>（对比昨日）：<br/>
+        · 温岭《华山奇缘》（11月28日） — ¥680/580/480/380/220/150<br/>
+      <br/>
       <strong>✅ 昨日演出</strong>（2026-09-16）：<br/>
         · 苏州开明大戏院·大剧场《假如我不是嵇康》已上演<br/>
       <br/>
@@ -2044,6 +2048,25 @@
 <div class="perf-price">¥180/280/380/480</div></div>
 
 </div>
+<div class="perf-card" data-date="2026-11-28" data-id="p75" data-time="19:30" data-title="越剧《华山奇缘》" data-venue="温岭大剧院·大剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《华山奇缘》 <em>上海越剧院一团新创 · 温岭大剧院（长三角巡演）</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>11月28日（周六）19:30</span>
+<span><span class="meta-icon">📍</span>温岭大剧院·大剧场</span>
+<span><span class="meta-icon">🏙️</span>温岭</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>樊婷婷（三圣母/王桂英）、徐标新（刘彦昌·前）、吴群（刘彦昌·后）、赵志刚（特邀·二郎神）、方亚芬（石矶娘娘）、郭茜云（沉香）、张艾嘉（月老）、叶元蓓（灵芝）、朱洋（秋儿）<br/>
+<strong>演出单位：</strong>上海越剧院一团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥680/580/480/380/220/150</div></div>
+
+</div>
 </div>
 <div class="date-divider">12 月</div>
 <div class="perf-grid">
@@ -2211,7 +2234,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-09-17 05:45 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-09-17 16:35 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2282,7 +2305,7 @@ const PERF_DATES = {
   "2026-11-11": ["p58"],
   "2026-11-26": ["lzy-05"],
   "2026-11-27": ["lzy-06"],
-  "2026-11-28": ["lzy-07"],
+  "2026-11-28": ["lzy-07", "p75"],
   "2026-11-29": ["lzy-08"],
   "2026-12-05": ["p59"],
   "2026-12-06": ["p60", "p69"],
@@ -3318,6 +3341,20 @@ const CAL_SHOWS = {
     "isCancelled": false,
     "group": "三",
     "fp": "f938qlh"
+  },
+  "p75": {
+    "date": "2026-11-28",
+    "title": "越剧《华山奇缘》",
+    "venue": "温岭大剧院·大剧场",
+    "time": "19:30",
+    "price": "¥680/580/480/380/220/150",
+    "cast": "樊婷婷（三圣母/王桂英）、徐标新（刘彦昌·前）、吴群（刘彦昌·后）、赵志刚（特邀·二郎神）、方亚芬（石矶娘娘）、郭茜云（沉香）、张艾嘉（月老）、叶元蓓（灵芝）、朱洋（秋儿）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "一",
+    "fp": "fuxv8d9"
   },
   "lzy-08": {
     "date": "2026-11-29",
