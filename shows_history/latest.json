@@ -594,6 +594,24 @@
     "cancelled": false
   },
   {
+    "id": "p76",
+    "date": "2026-10-29",
+    "title": "越剧《钟馗传》",
+    "venue": "上海天蟾逸夫舞台",
+    "price": "¥380/280/180/120/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p77",
+    "date": "2026-10-30",
+    "title": "越剧《盘夫索夫》",
+    "venue": "上海天蟾逸夫舞台",
+    "price": "¥380/280/180/120/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p52",
     "date": "2026-10-30",
     "title": "越剧《虎踞龙盘》",
