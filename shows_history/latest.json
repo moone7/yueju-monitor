@@ -531,6 +531,24 @@
     "cancelled": false
   },
   {
+    "id": "p78",
+    "date": "2026-10-10",
+    "title": "越剧《追鱼》",
+    "venue": "宁波逸夫剧院",
+    "price": "¥680/480/380/280/180/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p79",
+    "date": "2026-10-11",
+    "title": "越剧《孟丽君》",
+    "venue": "宁波逸夫剧院",
+    "price": "¥580/480/380/280/180/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p48",
     "date": "2026-10-16",
     "title": "越剧《华山奇缘》",
@@ -590,6 +608,24 @@
     "title": "新编越剧《明月清泉》",
     "venue": "上海宛平剧院·大剧场",
     "price": "¥80/180/280/480",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p80",
+    "date": "2026-10-27",
+    "title": "越剧《红楼梦》",
+    "venue": "宜兴保利大剧院·歌剧厅",
+    "price": "¥380/280/180/80（另设9.9元特惠票）",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p81",
+    "date": "2026-10-28",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "宜兴保利大剧院·歌剧厅",
+    "price": "¥380/280/180/80（另设9.9元特惠票）",
     "is_star": false,
     "cancelled": false
   },
@@ -684,6 +720,42 @@
     "cancelled": false
   },
   {
+    "id": "p82",
+    "date": "2026-11-21",
+    "title": "小剧场实验越剧《再生·缘》",
+    "venue": "广州大剧院·实验剧场",
+    "price": "¥280",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p83",
+    "date": "2026-11-22",
+    "title": "小剧场实验越剧《再生·缘》",
+    "venue": "广州大剧院·实验剧场",
+    "price": "¥280",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p84",
+    "date": "2026-11-24",
+    "title": "小剧场越剧《假如我不是嵇康》",
+    "venue": "广州大剧院·实验剧场",
+    "price": "¥180/280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p85",
+    "date": "2026-11-25",
+    "title": "小剧场越剧《假如我不是嵇康》",
+    "venue": "广州大剧院·实验剧场",
+    "price": "¥180/280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "lzy-05",
     "date": "2026-11-26",
     "title": "环境式越剧《红楼梦》",
@@ -702,6 +774,15 @@
     "cancelled": false
   },
   {
+    "id": "p86",
+    "date": "2026-11-27",
+    "title": "徐王版小剧场越剧《梁山伯与祝英台》",
+    "venue": "广州大剧院·实验剧场",
+    "price": "¥180/280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "lzy-07",
     "date": "2026-11-28",
     "title": "环境式越剧《红楼梦》",
@@ -716,6 +797,15 @@
     "title": "越剧《华山奇缘》",
     "venue": "温岭大剧院·大剧场",
     "price": "¥680/580/480/380/220/150",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p87",
+    "date": "2026-11-28",
+    "title": "徐王版小剧场越剧《梁山伯与祝英台》",
+    "venue": "广州大剧院·实验剧场",
+    "price": "¥180/280/380",
     "is_star": false,
     "cancelled": false
   },
