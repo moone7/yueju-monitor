@@ -5,7 +5,7 @@
     "total_shows": 101,
     "star_shows": 10,
     "cities": 19,
-    "scraped_at": "2026-10-04T06:37:23.647604",
+    "scraped_at": "2026-10-04T17:17:42.525619",
     "sources": [
       "df962388",
       "wiki66",
@@ -765,19 +765,6 @@
       "is_star": true
     },
     {
-      "id": "auto-63904615",
-      "date": "2026-10-04",
-      "time": "",
-      "title": "查看演出详情",
-      "subtitle": "",
-      "venue": "",
-      "city": "",
-      "cast": "",
-      "troupe": "上海越剧院",
-      "price": "",
-      "is_star": false
-    },
-    {
       "id": "lzy-10",
       "date": "2026-10-04",
       "time": "19:15",
@@ -789,6 +776,19 @@
       "troupe": "上海越剧院红楼团",
       "price": "¥80/180/280/380/580/680",
       "is_star": true
+    },
+    {
+      "id": "auto-8c29ca37",
+      "date": "2026-10-06",
+      "time": "",
+      "title": "查看演出详情",
+      "subtitle": "",
+      "venue": "",
+      "city": "",
+      "cast": "",
+      "troupe": "上海越剧院",
+      "price": "",
+      "is_star": false
     },
     {
       "id": "p68",

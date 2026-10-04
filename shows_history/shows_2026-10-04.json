@@ -456,20 +456,20 @@
     "is_star": true
   },
   {
-    "id": "auto-63904615",
-    "date": "2026-10-04",
-    "title": "查看演出详情",
-    "venue": "",
-    "price": "",
-    "is_star": false
-  },
-  {
     "id": "lzy-10",
     "date": "2026-10-04",
     "title": "新编历史故事剧《虞美人》",
     "venue": "上海宛平剧院·大剧场",
     "price": "¥80/180/280/380/580/680",
     "is_star": true
+  },
+  {
+    "id": "auto-8c29ca37",
+    "date": "2026-10-06",
+    "title": "查看演出详情",
+    "venue": "",
+    "price": "",
+    "is_star": false
   },
   {
     "id": "p68",
