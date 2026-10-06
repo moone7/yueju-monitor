@@ -5,7 +5,7 @@
     "total_shows": 101,
     "star_shows": 10,
     "cities": 19,
-    "scraped_at": "2026-10-06T07:11:35.264348",
+    "scraped_at": "2026-10-06T18:46:47.586496",
     "sources": [
       "df962388",
       "wiki66",
@@ -778,19 +778,6 @@
       "is_star": true
     },
     {
-      "id": "auto-8c29ca37",
-      "date": "2026-10-06",
-      "time": "",
-      "title": "查看演出详情",
-      "subtitle": "",
-      "venue": "",
-      "city": "",
-      "cast": "",
-      "troupe": "上海越剧院",
-      "price": "",
-      "is_star": false
-    },
-    {
       "id": "p68",
       "date": "2026-10-06",
       "time": "19:15",
@@ -827,6 +814,19 @@
       "cast": "忻雅琴（孟丽君）、王柔桑（皇甫少华）、杨婷娜（皇帝）",
       "troupe": "上海越剧院红楼团",
       "price": "¥580/480/380/280/180/80",
+      "is_star": false
+    },
+    {
+      "id": "auto-2f006280",
+      "date": "2026-10-16",
+      "time": "",
+      "title": "查看演出详情",
+      "subtitle": "",
+      "venue": "",
+      "city": "",
+      "cast": "",
+      "troupe": "上海越剧院",
+      "price": "",
       "is_star": false
     },
     {
