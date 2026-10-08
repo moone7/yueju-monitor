@@ -456,14 +456,6 @@
     "is_star": true
   },
   {
-    "id": "auto-63904615",
-    "date": "2026-10-04",
-    "title": "查看演出详情",
-    "venue": "",
-    "price": "",
-    "is_star": false
-  },
-  {
     "id": "lzy-10",
     "date": "2026-10-04",
     "title": "新编历史故事剧《虞美人》",
@@ -493,6 +485,14 @@
     "title": "越剧《孟丽君》",
     "venue": "宁波逸夫剧院",
     "price": "¥580/480/380/280/180/80",
+    "is_star": false
+  },
+  {
+    "id": "auto-2f006280",
+    "date": "2026-10-16",
+    "title": "查看演出详情",
+    "venue": "",
+    "price": "",
     "is_star": false
   },
   {
