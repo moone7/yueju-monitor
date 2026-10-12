@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 100,
+    "total_shows": 101,
     "star_shows": 10,
-    "cities": 19,
-    "scraped_at": "2026-10-12T06:58:39.177059",
+    "cities": 20,
+    "scraped_at": "2026-10-12T16:37:23.862570",
     "sources": [
       "df962388",
       "wiki66",
@@ -1074,6 +1074,19 @@
       "cast": "王柔桑（梁山伯）、王婕（祝英台）、吴群（祝公远）",
       "troupe": "上海越剧院红楼团",
       "price": "¥180/280/380/480",
+      "is_star": false
+    },
+    {
+      "id": "p90",
+      "date": "2026-11-14",
+      "time": "14:00",
+      "title": "越剧《红楼梦》",
+      "subtitle": "上海越剧院·深圳站（王婉娜/李旭丹）",
+      "venue": "深圳·鹭湖艺术中心 大剧场",
+      "city": "深圳",
+      "cast": "贾宝玉：王婉娜；林黛玉：李旭丹",
+      "troupe": "上海越剧院",
+      "price": "¥80-768",
       "is_star": false
     },
     {

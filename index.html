@@ -1175,8 +1175,8 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat" data-num="39">
-<div class="stat-num">39</div>
+<div class="stat" data-num="40">
+<div class="stat-num">40</div>
 <div class="stat-label">近期演出场次</div>
 </div>
 <div class="stat" data-num="4">
@@ -1187,8 +1187,8 @@
 <div class="stat-num" id="stat-bought">0</div>
 <div class="stat-label">🎟️ 已购场次</div>
 </div>
-<div class="stat" data-num="11">
-<div class="stat-num">11</div>
+<div class="stat" data-num="12">
+<div class="stat-num">12</div>
 <div class="stat-label">涉及城市</div>
 </div>
 </div>
@@ -1198,8 +1198,12 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
+      <strong>🔔 本次数据更新：新增 1 场</strong><br/><br/>
       <strong>✅ 昨日演出</strong>（2026-10-11）：<br/>
         · 宁波逸夫剧院《孟丽君》已上演<br/>
+      <br/>
+      <strong>🆕 新上线 / 开票 1 场</strong>（对比昨日）：<br/>
+        · 深圳《红楼梦》（11月14日） — ¥80-768<br/>
       <br/>
     </div>
 </div>
@@ -1751,6 +1755,25 @@
 <div class="perf-price">¥180/280/380/480</div></div>
 
 </div>
+<div class="perf-card" data-date="2026-11-14" data-id="p90" data-time="14:00" data-title="越剧《红楼梦》" data-venue="深圳·鹭湖艺术中心 大剧场">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》 <em>上海越剧院·深圳站（王婉娜/李旭丹）</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>11月14日（周六）14:00</span>
+<span><span class="meta-icon">📍</span>深圳·鹭湖艺术中心 大剧场</span>
+<span><span class="meta-icon">🏙️</span>深圳</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>贾宝玉：王婉娜；林黛玉：李旭丹<br/>
+<strong>演出单位：</strong>上海越剧院
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥80-768</div></div>
+
+</div>
 <div class="perf-card" data-date="2026-11-20" data-id="p89" data-time="19:30" data-title="越剧《盘夫索夫》" data-venue="大零号湾文化艺术中心">
 <div class="perf-info">
 <div class="perf-title">越剧《盘夫索夫》 <em>嵊州市越剧艺术保护传承中心(嵊州市越剧团)·大零号湾文化艺术中心（张宇峰特邀领衔）</em></div>
@@ -2069,7 +2092,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-10-12 06:58 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-10-12 16:37 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2143,6 +2166,7 @@ const PERF_DATES = {
   "2026-11-04": ["p56"],
   "2026-11-10": ["p57"],
   "2026-11-11": ["p58"],
+  "2026-11-14": ["p90"],
   "2026-11-20": ["p89"],
   "2026-11-21": ["p82"],
   "2026-11-22": ["p83"],
@@ -3242,6 +3266,20 @@ const CAL_SHOWS = {
     "isCancelled": false,
     "group": "二",
     "fp": "facfiu6"
+  },
+  "p90": {
+    "date": "2026-11-14",
+    "title": "越剧《红楼梦》",
+    "venue": "深圳·鹭湖艺术中心 大剧场",
+    "time": "14:00",
+    "price": "¥80-768",
+    "cast": "贾宝玉：王婉娜；林黛玉：李旭丹",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "",
+    "fp": "fimr1ok"
   },
   "p89": {
     "date": "2026-11-20",
