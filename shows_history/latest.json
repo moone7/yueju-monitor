@@ -729,6 +729,15 @@
     "cancelled": false
   },
   {
+    "id": "p90",
+    "date": "2026-11-14",
+    "title": "越剧《红楼梦》",
+    "venue": "深圳·鹭湖艺术中心 大剧场",
+    "price": "¥80-768",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p89",
     "date": "2026-11-20",
     "title": "越剧《盘夫索夫》",
