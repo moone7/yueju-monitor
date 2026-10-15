@@ -711,6 +711,24 @@
     "cancelled": false
   },
   {
+    "id": "p91",
+    "date": "2026-11-06",
+    "title": "越剧《珍珠塔》",
+    "venue": "衢州保利大剧院 大剧场",
+    "price": "¥50-380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p92",
+    "date": "2026-11-07",
+    "title": "越剧《玉蜻蜓》",
+    "venue": "衢州保利大剧院 大剧场",
+    "price": "¥50-380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p57",
     "date": "2026-11-10",
     "title": "越剧《红楼梦》",
