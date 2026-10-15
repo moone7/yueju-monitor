@@ -2,10 +2,10 @@
   "metadata": {
     "report_date": "auto",
     "data_updated": "auto",
-    "total_shows": 101,
+    "total_shows": 103,
     "star_shows": 10,
-    "cities": 20,
-    "scraped_at": "2026-10-14T17:47:00.988636",
+    "cities": 21,
+    "scraped_at": "2026-10-15T01:42:05.064606",
     "sources": [
       "df962388",
       "wiki66",
@@ -1048,6 +1048,32 @@
       "cast": "王柔桑（梁山伯）、王婕（祝英台）、吴群（祝公远）",
       "troupe": "上海越剧院红楼团",
       "price": "¥80/180/280/380",
+      "is_star": false
+    },
+    {
+      "id": "p91",
+      "date": "2026-11-06",
+      "time": "19:00",
+      "title": "越剧《珍珠塔》",
+      "subtitle": "中华“衢”韵戏曲月 · 上海越剧院",
+      "venue": "衢州保利大剧院 大剧场",
+      "city": "衢州",
+      "cast": "",
+      "troupe": "上海越剧院",
+      "price": "¥50-380",
+      "is_star": false
+    },
+    {
+      "id": "p92",
+      "date": "2026-11-07",
+      "time": "19:00",
+      "title": "越剧《玉蜻蜓》",
+      "subtitle": "中华“衢”韵戏曲月 · 上海越剧院",
+      "venue": "衢州保利大剧院 大剧场",
+      "city": "衢州",
+      "cast": "",
+      "troupe": "上海越剧院",
+      "price": "¥50-380",
       "is_star": false
     },
     {
