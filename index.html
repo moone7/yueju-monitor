@@ -1175,8 +1175,8 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat" data-num="41">
-<div class="stat-num">41</div>
+<div class="stat" data-num="42">
+<div class="stat-num">42</div>
 <div class="stat-label">近期演出场次</div>
 </div>
 <div class="stat" data-num="4">
@@ -1187,8 +1187,8 @@
 <div class="stat-num" id="stat-bought">0</div>
 <div class="stat-label">🎟️ 已购场次</div>
 </div>
-<div class="stat" data-num="13">
-<div class="stat-num">13</div>
+<div class="stat" data-num="14">
+<div class="stat-num">14</div>
 <div class="stat-label">涉及城市</div>
 </div>
 </div>
@@ -1198,7 +1198,10 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
-      · 数据已是最新，近三日暂无演出动态。<br/>
+      <strong>🔔 本次数据更新：新增 1 场</strong><br/><br/>
+      <strong>🆕 新上线 / 开票 1 场</strong>（对比昨日）：<br/>
+        · 杭州《红楼梦》(尹袁版)》（10月31日） — ¥180/280/380/480/680<br/>
+      <br/>
     </div>
 </div>
 <!-- ===== 🔥 近期高优提醒 ===== -->
@@ -1590,6 +1593,25 @@
 <div class="perf-cast">
 <strong>主演：</strong>李晓旭（诸葛亮）、裘赛琳（孙权）、丁沛孜（陆逊）、郦晨烨（诸葛瑾）、罗佳佳（周瑜）、蔡奇奇（曹操）、鲁易梦（凌统）、钟柯迪（甘宁）等<br/>
 <strong>演出单位：</strong>南京市越剧团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥180/280/380/480/680</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-10-31" data-id="p94" data-time="19:30" data-title="越剧《红楼梦》(尹袁版)" data-venue="杭州蝴蝶剧场(小百花越剧场)">
+<div class="perf-info">
+<div class="perf-title">越剧《红楼梦》(尹袁版) <em>「百廿流芳」百越文创第五届越剧优秀剧目邀请展</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>10月31日（周六）19:30</span>
+<span><span class="meta-icon">📍</span>杭州蝴蝶剧场(小百花越剧场)</span>
+<span><span class="meta-icon">🏙️</span>杭州</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>赵志刚(特邀)/王清 饰贾宝玉, 方亚芬/俞景岚 饰林黛玉<br/>
+<strong>演出单位：</strong>上海越剧院一团
         </div>
 </div>
 <div class="perf-side">
@@ -2090,7 +2112,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-10-20 05:40 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-10-20 17:46 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2158,7 +2180,7 @@ const PERF_DATES = {
   "2026-10-28": ["p81"],
   "2026-10-29": ["p76"],
   "2026-10-30": ["p77", "p52"],
-  "2026-10-31": ["p32", "p53"],
+  "2026-10-31": ["p32", "p53", "p94"],
   "2026-11-01": ["p54"],
   "2026-11-03": ["p55"],
   "2026-11-04": ["p56"],
@@ -3196,6 +3218,20 @@ const CAL_SHOWS = {
     "isCancelled": false,
     "group": "",
     "fp": "fuluu8l"
+  },
+  "p94": {
+    "date": "2026-10-31",
+    "title": "越剧《红楼梦》(尹袁版)",
+    "venue": "杭州蝴蝶剧场(小百花越剧场)",
+    "time": "19:30",
+    "price": "¥180/280/380/480/680",
+    "cast": "赵志刚(特邀)/王清 饰贾宝玉, 方亚芬/俞景岚 饰林黛玉",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "一",
+    "fp": "frmyyoo"
   },
   "p54": {
     "date": "2026-11-01",
