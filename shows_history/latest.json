@@ -945,6 +945,15 @@
     "cancelled": false
   },
   {
+    "id": "lzy-11",
+    "date": "2026-12-11",
+    "title": "越剧《舞台姐妹》",
+    "venue": "宁波逸夫剧院",
+    "price": "380/280/180/80元",
+    "is_star": true,
+    "cancelled": false
+  },
+  {
     "id": "p74",
     "date": "2026-12-11",
     "title": "越剧《梁山伯与祝英台》",
@@ -959,6 +968,15 @@
     "title": "异次元越剧《花妖》",
     "venue": "长江剧场-黑匣子（黄浦区黄河路35号）",
     "price": "¥280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p98",
+    "date": "2026-12-13",
+    "title": "越剧《桃李梅》",
+    "venue": "宁波逸夫剧院",
+    "price": "380/280/180/80元",
     "is_star": false,
     "cancelled": false
   },
