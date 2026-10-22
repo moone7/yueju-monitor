@@ -765,6 +765,15 @@
     "cancelled": false
   },
   {
+    "id": "p97",
+    "date": "2026-11-15",
+    "title": "越剧《梁山伯与祝英台》",
+    "venue": "深圳·鹭湖艺术中心 大剧场",
+    "price": "¥80/180/280/380/480",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p89",
     "date": "2026-11-20",
     "title": "越剧《盘夫索夫》",
@@ -941,6 +950,24 @@
     "title": "越剧《梁山伯与祝英台》",
     "venue": "温州大剧院·歌剧厅",
     "price": "¥480/380/280/180/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p95",
+    "date": "2026-12-12",
+    "title": "异次元越剧《花妖》",
+    "venue": "长江剧场-黑匣子（黄浦区黄河路35号）",
+    "price": "¥280/380",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p96",
+    "date": "2026-12-13",
+    "title": "异次元越剧《花妖》",
+    "venue": "长江剧场-黑匣子（黄浦区黄河路35号）",
+    "price": "¥280/380",
     "is_star": false,
     "cancelled": false
   }
