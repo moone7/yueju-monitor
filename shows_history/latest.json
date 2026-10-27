@@ -585,6 +585,15 @@
     "cancelled": false
   },
   {
+    "id": "p106",
+    "date": "2026-10-23",
+    "title": "越剧《追鱼》",
+    "venue": "南平大剧院·大剧场",
+    "price": "¥380/260/100/60",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p50",
     "date": "2026-10-24",
     "title": "新编越剧《明月清泉》",
@@ -842,6 +851,15 @@
     "title": "小剧场实验越剧《再生·缘》",
     "venue": "广州大剧院·实验剧场",
     "price": "¥280",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p105",
+    "date": "2026-11-23",
+    "title": "越剧《纪念越剧王文娟宗师诞辰100周年演唱会》",
+    "venue": "兰心大戏院（黄浦区茂名南路57号）",
+    "price": "¥100-280",
     "is_star": false,
     "cancelled": false
   },
