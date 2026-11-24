@@ -1175,8 +1175,8 @@
 <div class="cal-tooltip" id="cal-tooltip"></div>
 <!-- ===== STATS ===== -->
 <div class="stats-bar">
-<div class="stat" data-num="31">
-<div class="stat-num">31</div>
+<div class="stat" data-num="33">
+<div class="stat-num">33</div>
 <div class="stat-label">近期演出场次</div>
 </div>
 <div class="stat" data-num="5">
@@ -1198,6 +1198,7 @@
 <span class="alert-icon">🆕</span> 今日新动态
     </div>
 <div class="alert-body">
+      <strong>🔔 本次数据更新：新增 2 场</strong><br/><br/>
       <strong>🎭 今日开演</strong>（2026-11-24）：<br/>
         · 广州大剧院·实验剧场《假如我不是嵇康》<br/>
       <br/>
@@ -1206,6 +1207,10 @@
       <br/>
       <strong>✅ 昨日演出</strong>（2026-11-23）：<br/>
         · 兰心大戏院（黄浦区茂名南路57号）《纪念越剧王文娟宗师诞辰100周年演唱会》已上演<br/>
+      <br/>
+      <strong>🆕 新上线 / 开票 2 场</strong>（对比昨日）：<br/>
+        · 上海《甄嬛》（12月30日） — ¥380/280/180/80<br/>
+        · 上海《甄嬛》（12月31日） — ¥380/280/180/80<br/>
       <br/>
     </div>
 </div>
@@ -1932,6 +1937,44 @@
 <div class="perf-price">¥100/150/200</div></div>
 
 </div>
+<div class="perf-card" data-date="2026-12-30" data-id="p119" data-time="19:15" data-title="越剧《甄嬛》" data-venue="上海天蟾逸夫舞台">
+<div class="perf-info">
+<div class="perf-title">越剧《甄嬛》 <em>连台本戏 · 上本</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>12月30日（周三）19:15</span>
+<span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
+<span><span class="meta-icon">🏙️</span>上海</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、史燕彬（沈眉庄）、王柔桑（温实初）、裘丹莉（华贵妃）、陈慧迪（安陵容）、王婕（槿汐）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥380/280/180/80</div></div>
+
+</div>
+<div class="perf-card" data-date="2026-12-31" data-id="p120" data-time="19:15" data-title="越剧《甄嬛》" data-venue="上海天蟾逸夫舞台">
+<div class="perf-info">
+<div class="perf-title">越剧《甄嬛》 <em>连台本戏 · 下本</em></div>
+<div class="perf-meta">
+<span><span class="meta-icon">📅</span>12月31日（周四）19:15</span>
+<span><span class="meta-icon">📍</span>上海天蟾逸夫舞台</span>
+<span><span class="meta-icon">🏙️</span>上海</span>
+</div>
+<div class="perf-cast">
+<strong>主演：</strong>忻雅琴（甄嬛）、杨婷娜（皇帝）、王清（清河王）、裘丹莉（华贵妃）<br/>
+<strong>演出单位：</strong>上海越剧院红楼团
+        </div>
+</div>
+<div class="perf-side">
+<span class="tag tag-on-sale">售票中</span>
+<button class="buy-btn" onclick="toggleBought(this)"><span class="btn-icon">🎟️</span><span class="btn-text">标记已购</span></button>
+<div class="perf-price">¥380/280/180/80</div></div>
+
+</div>
 </div>
 <div class="date-divider">1 月</div>
 <div class="perf-grid">
@@ -1984,7 +2027,7 @@
 <span>🎓 北京大学</span>
 </div>
 <p>报告由 WorkBuddy 自动化生成 · 监控范围：上海越剧院全域演出（不限城市）+ 大麦网 + 东方演出网 + 各大剧场官方渠道</p>
-<p style="margin-top:6px;">数据截至 2026-11-24 10:40 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
+<p style="margin-top:6px;">数据截至 2026-11-24 16:34 GMT+8 · 票价/余票以官方购票页面实时显示为准</p>
 </div>
 </div>
 <script>
@@ -2087,6 +2130,8 @@ const PERF_DATES = {
   "2026-12-26": ["p111"],
   "2026-12-27": ["p112"],
   "2026-12-29": ["p113"],
+  "2026-12-30": ["p119"],
+  "2026-12-31": ["p120"],
   "2027-01-01": ["p114"],
 };
 
@@ -3816,6 +3861,34 @@ const CAL_SHOWS = {
     "isCancelled": false,
     "group": "三",
     "fp": "ftwi8eg"
+  },
+  "p119": {
+    "date": "2026-12-30",
+    "title": "越剧《甄嬛》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥380/280/180/80",
+    "cast": "李旭丹（甄嬛）、杨婷娜（皇帝）、王清（清河王）、史燕彬（沈眉庄）、王柔桑（温实初）、裘丹莉（华贵妃）、陈慧迪（安陵容）、王婕（槿汐）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "二",
+    "fp": "fnbfi8y"
+  },
+  "p120": {
+    "date": "2026-12-31",
+    "title": "越剧《甄嬛》",
+    "venue": "上海天蟾逸夫舞台",
+    "time": "19:15",
+    "price": "¥380/280/180/80",
+    "cast": "忻雅琴（甄嬛）、杨婷娜（皇帝）、王清（清河王）、裘丹莉（华贵妃）",
+    "isStar": false,
+    "isEvent": false,
+    "eventType": "",
+    "isCancelled": false,
+    "group": "二",
+    "fp": "fxpdsx"
   },
   "p114": {
     "date": "2027-01-01",
