@@ -1143,6 +1143,24 @@
     "cancelled": false
   },
   {
+    "id": "p119",
+    "date": "2026-12-30",
+    "title": "越剧《甄嬛》",
+    "venue": "上海天蟾逸夫舞台",
+    "price": "¥380/280/180/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
+    "id": "p120",
+    "date": "2026-12-31",
+    "title": "越剧《甄嬛》",
+    "venue": "上海天蟾逸夫舞台",
+    "price": "¥380/280/180/80",
+    "is_star": false,
+    "cancelled": false
+  },
+  {
     "id": "p114",
     "date": "2027-01-01",
     "title": "越剧《梁山伯与祝英台》",
